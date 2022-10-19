@@ -33,7 +33,7 @@ namespace Nwd.Sales.Infrastructure.Data.Repositories
         /// <summary>
         ///     Cosmos DB container
         /// </summary>
-        private readonly Microsoft.Azure.Cosmos.Container _container;
+        internal readonly Microsoft.Azure.Cosmos.Container _container;
 
 
         public CosmosDbRepository(ICosmosDbContainerFactory cosmosDbContainerFactory)
@@ -42,10 +42,10 @@ namespace Nwd.Sales.Infrastructure.Data.Repositories
             this._container = this._cosmosDbContainerFactory.GetContainer(ContainerName)._container;
         }
 
-        public async Task AddAsync(T item)
+        public virtual async Task AddAsync(T item)
         {
-            item.Id = GenerateId(item);
-            await _container.CreateItemAsync<T>(item, ResolvePartitionKey(item.Id));
+            var id = GenerateId(item);
+            await _container.CreateItemAsync<T>(item, ResolvePartitionKey(id));
         }
 
         public async Task DeleteAsync(string id)
@@ -53,7 +53,7 @@ namespace Nwd.Sales.Infrastructure.Data.Repositories
             await this._container.DeleteItemAsync<T>(id.ToString(), ResolvePartitionKey(id));
         }
 
-        public async Task<T> GetByIdAsync(string id)
+        public virtual async Task<T> GetByIdAsync(string id)
         {
             try
             {

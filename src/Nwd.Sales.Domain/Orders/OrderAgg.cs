@@ -17,7 +17,6 @@ namespace Nwd.Sales.Domain.Orders
             _ = orderItemCollection ?? throw new ArgumentNullException(nameof(orderItemCollection));
 
             _validator = validator;
-            Id = Guid.NewGuid().ToString();
             CustomerId = customer.Id;
             ShipTo = shipTo;
             Status = OrderStatus.Processing;
@@ -35,8 +34,6 @@ namespace Nwd.Sales.Domain.Orders
                 Items.Add(new OrderItem(this, item.Key, item.Value));
             }
         }
-
-        public string Id { get; private set; }
 
         public string CustomerId { get; private set; }
 

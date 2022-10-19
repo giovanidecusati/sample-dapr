@@ -19,5 +19,11 @@ namespace Nwd.Sales.Infrastructure.Data.Repositories
         {
             _mapper = mapper;
         }
+
+        public override async Task AddAsync(OrderAgg item)
+        {
+            var id = GenerateId(item);
+            await _container.CreateItemAsync<Entities.Order>(_mapper.Map<Entities.Order>(item), ResolvePartitionKey(id));
+        }
     }
 }
