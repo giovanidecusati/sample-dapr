@@ -17,6 +17,13 @@ namespace Nwd.Sales.Application.Commands.CreateOrder
             _customerRepository = customerRepository;
 
             RuleFor(x => x.Items).NotNull();
+            RuleForEach(x => x.Items).ChildRules(x =>
+            {
+                x.RuleFor(item => item.ProductId).NotNull();
+                x.RuleFor(item => item.ProductId).MustAsync(BeExistentProduct);
+
+                x.RuleFor(item => item.Quantity).GreaterThan(0);
+            });
 
             RuleFor(x => x.CustomerId).NotNull();
             RuleFor(x => x.CustomerId).MustAsync(BeExistentCustomer);
@@ -31,6 +38,11 @@ namespace Nwd.Sales.Application.Commands.CreateOrder
         private async Task<bool> BeExistentCustomer(Guid customerId, CancellationToken cancellationToken = default)
         {
             return await _customerRepository.GetByIdAsync(customerId) != null;
+        }
+
+        private async Task<bool> BeExistentProduct(Guid productId, CancellationToken cancellationToken = default)
+        {
+            return await _productRepository.GetByIdAsync(productId) != null;
         }
     }
 }

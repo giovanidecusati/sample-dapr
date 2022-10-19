@@ -5,12 +5,12 @@ namespace Nwd.Sales.Commands.CreateOrder
     public class CreateOrderCommand
     {
         [Required]
-        public List<OrderItem> Items = new List<OrderItem>();
+        public List<OrderItem> Items { get; set; }
 
         [Required]
         public Guid CustomerId { get; set; }
 
         [Required]
-        public Address ShipTo = new Address();
-    }
+        public Address ShipTo { get; set; }
+}
 }

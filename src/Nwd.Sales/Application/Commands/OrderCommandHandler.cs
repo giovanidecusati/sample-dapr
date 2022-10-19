@@ -8,28 +8,30 @@ namespace Nwd.Sales.Application.Commands
 {
     public class OrderCommandHandler
     {
-        public readonly IOrderRepository _orderRepository;
-        public readonly IProductRepository _productRepository;
-        public readonly CreateOrderValidator _createOrderValidation;
+        private readonly IValidator<CreateOrderCommand> _createOrderValidator;
+        private readonly OrderAggBuilder _orderAggBuilder;
+        private readonly IOrderRepository _orderRepository;
 
-        public OrderCommandHandler(IOrderRepository orderRepository, CreateOrderValidator createOrderValidation, IProductRepository productRepository)
+        public OrderCommandHandler(IValidator<CreateOrderCommand> createOrderValidation, OrderAggBuilder orderAggBuilder, IOrderRepository orderRepository)
         {
+            _createOrderValidator = createOrderValidation;
+            _orderAggBuilder = orderAggBuilder;
             _orderRepository = orderRepository;
-            _productRepository = productRepository;
-            _createOrderValidation = createOrderValidation;
         }
 
         public async Task<CreateOrderCommandResult> CreateOrder(CreateOrderCommand createOrderCommand)
         {
-            await _createOrderValidation.ValidateAndThrowAsync(createOrderCommand);
+            _ = createOrderCommand ?? throw new ArgumentNullException(nameof(createOrderCommand));
 
-            var order = new OrderAgg(createOrderCommand.CustomerId);
-            createOrderCommand.Items.ForEach(async item =>
+            await _createOrderValidator.ValidateAndThrowAsync(createOrderCommand);
+            _orderAggBuilder.WithShipTo(createOrderCommand.ShipTo.State, createOrderCommand.ShipTo.Region, createOrderCommand.ShipTo.PostalCode, createOrderCommand.ShipTo.AddressLine1);
+            await _orderAggBuilder.WithCustomerAsync(createOrderCommand.CustomerId);
+            foreach (var item in createOrderCommand.Items)
             {
-                var product = await _productRepository.GetByIdAsync(item.ProductId);
-                order.AddItem(product, item.Quantity);
-            });
+                await _orderAggBuilder.WithItemAsync(item.ProductId, item.Quantity);
+            }
 
+            var order = _orderAggBuilder.Build();
             await _orderRepository.SaveAsync(order);
             return new CreateOrderCommandResult(order.Id);
         }
@@ -40,3 +42,4 @@ namespace Nwd.Sales.Application.Commands
         }
     }
 }
+

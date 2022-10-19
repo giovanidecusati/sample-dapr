@@ -1,12 +1,12 @@
-﻿using AutoMapper;
+﻿using FluentValidation;
 using Microsoft.Azure.Cosmos;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Nwd.Sales.Application.Commands;
 using Nwd.Sales.Application.Commands.CreateOrder;
+using Nwd.Sales.Commands.CreateOrder;
 using Nwd.Sales.Domain.Orders;
 using Nwd.Sales.Infrastructure.Data;
-using System.Reflection;
 
 namespace Nwd.Sales
 {
@@ -52,8 +52,6 @@ namespace Nwd.Sales
 
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
             // CosmosClient
             services.AddTransient(sp =>
             {
@@ -66,40 +64,37 @@ namespace Nwd.Sales
             // ICustomerRepository
             services.AddTransient<ICustomerRepository>(sp =>
             {
-                var mapper = sp.GetService<IMapper>();
                 var cosmosClient = sp.GetService<CosmosClient>();
                 var configuration = sp.GetService<IConfiguration>();
                 string databaseName = configuration.GetSection("COSMOS_DATABASENAME").Value;
                 string containerName = "customers";
                 var database = cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName).GetAwaiter().GetResult();
                 var container = database.Database.CreateContainerIfNotExistsAsync(containerName, "/id").GetAwaiter().GetResult();
-                return new CustomerRepository(container, mapper);
+                return new CustomerRepository(container);
             });
 
             // IProductRepository
             services.AddTransient<IProductRepository>(sp =>
             {
-                var mapper = sp.GetService<IMapper>();
                 var cosmosClient = sp.GetService<CosmosClient>();
                 var configuration = sp.GetService<IConfiguration>();
                 string databaseName = configuration.GetSection("COSMOS_DATABASENAME").Value;
                 string containerName = "products";
                 var database = cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName).GetAwaiter().GetResult();
                 var container = database.Database.CreateContainerIfNotExistsAsync(containerName, "/id").GetAwaiter().GetResult();
-                return new ProductRepository(container, mapper);
+                return new ProductRepository(container);
             });
 
             // IOrderRepository
             services.AddTransient<IOrderRepository>(sp =>
             {
-                var mapper = sp.GetService<IMapper>();
                 var cosmosClient = sp.GetService<CosmosClient>();
                 var configuration = sp.GetService<IConfiguration>();
                 string databaseName = configuration.GetSection("COSMOS_DATABASENAME").Value;
                 string containerName = "orders";
                 var database = cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName).GetAwaiter().GetResult();
                 var container = database.Database.CreateContainerIfNotExistsAsync(containerName, "/customerId").GetAwaiter().GetResult();
-                return new OrderRepository(container, mapper);
+                return new OrderRepository(container);
             });
 
             return services;
@@ -107,8 +102,15 @@ namespace Nwd.Sales
 
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            // Validators
-            services.AddTransient<CreateOrderValidator>();
+            // Validators            
+            // :: Commands
+            services.AddTransient<IValidator<CreateOrderCommand>, CreateOrderValidator>();
+            
+            // :: Domain :: Aggegates
+            services.AddTransient<IValidator<OrderAgg>, OrderAggValidator>();
+
+            // :: Domain :: Builder
+            services.AddTransient<OrderAggBuilder>();
 
             // Command Handler
             services.AddTransient<OrderCommandHandler>();

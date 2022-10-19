@@ -1,4 +1,6 @@
-﻿namespace Nwd.Sales.Domain.Orders
+﻿using Newtonsoft.Json;
+
+namespace Nwd.Sales.Domain.Orders
 {
     public class Customer
     {
@@ -9,10 +11,13 @@
             Email = email;
         }
 
+        [JsonProperty("id")]
         public Guid Id { get; private set; }
 
+        [JsonProperty("name")]
         public string Name { get; private set; }
 
+        [JsonProperty("email")]
         public string Email { get; private set; }
     }
 }
