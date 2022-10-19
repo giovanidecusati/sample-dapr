@@ -1,21 +1,39 @@
-using Nwd.Sales;
+using Nwd.Sales.Infrastructure.Extensions;
+using Nwd.Sales.WebApi.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSwagger();
-builder.Services.AddInfrastructure();
-builder.Services.AddApplication();
+// Cosmos DB for application data
+builder.Services.SetupInfrastructure(builder.Configuration);
 
+// Swagger
+builder.Services.SetupSwagger();
+
+// SetupApplicationLayer
+builder.Services.SetupApplicationLayer();
+
+// API controllers
+builder.Services.SetupControllers();
+
+// HttpContext
+builder.Services.AddHttpContextAccessor();
+
+// TODO: Only in Developement
 builder.Configuration.AddUserSecrets<Program>();
-
-// Add services to the container.
-builder.Services.AddControllers();
 
 var app = builder.Build();
 
+// TODO: Only in Developement
+app.EnsureCosmosDbIsCreated();
+
+await app.SeedIfEmptyAsync();
+
 // Add OpenAPI/Swagger middlewares
-app.UseOpenApi(); // Serves the registered OpenAPI/Swagger documents by default on `/swagger/{documentName}/swagger.json`
-app.UseSwaggerUi3(); // Serves the Swagger UI 3 web ui to view the OpenAPI/Swagger documents by default on `/swagger`
+// Serves the registered OpenAPI/Swagger documents by default on `/swagger/{documentName}/swagger.json`
+app.UseOpenApi();
+
+// Serves the Swagger UI 3 web ui to view the OpenAPI/Swagger documents by default on `/swagger`
+app.UseSwaggerUi3();
 
 app.UseHttpsRedirection();
 

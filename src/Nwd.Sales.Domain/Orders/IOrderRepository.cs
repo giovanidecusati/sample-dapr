@@ -2,6 +2,6 @@
 {
     public interface IOrderRepository
     {
-        Task SaveAsync(OrderAgg entity);                
+        Task AddAsync(OrderAgg entity);                
     }
 }

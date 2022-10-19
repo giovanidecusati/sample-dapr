@@ -32,7 +32,7 @@ namespace Nwd.Sales.Application.Commands
             }
 
             var order = _orderAggBuilder.Build();
-            await _orderRepository.SaveAsync(order);
+            await _orderRepository.AddAsync(order);
             return new CreateOrderCommandResult(order.Id);
         }
 

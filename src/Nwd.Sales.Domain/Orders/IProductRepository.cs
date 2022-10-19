@@ -2,6 +2,7 @@
 {
     public interface IProductRepository
     {
-        Task<Product> GetByIdAsync(Guid productId);
+        Task<Product> GetByIdAsync(string productId);
+        Task AddAsync(Product item);
     }
 }

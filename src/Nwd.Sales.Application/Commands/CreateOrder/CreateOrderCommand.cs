@@ -8,7 +8,7 @@ namespace Nwd.Sales.Commands.CreateOrder
         public List<OrderItem> Items { get; set; }
 
         [Required]
-        public Guid CustomerId { get; set; }
+        public string CustomerId { get; set; }
 
         [Required]
         public Address ShipTo { get; set; }

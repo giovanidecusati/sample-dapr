@@ -2,11 +2,11 @@
 {
     public class CreateOrderCommandResult
     {
-        public CreateOrderCommandResult(Guid orderId)
+        public CreateOrderCommandResult(string orderId)
         {
             OrderId = orderId;
         }
 
-        public Guid OrderId { get; private set; }
+        public string OrderId { get; private set; }
     }
 }

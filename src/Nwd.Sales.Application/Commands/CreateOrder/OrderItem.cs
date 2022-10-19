@@ -5,7 +5,7 @@ namespace Nwd.Sales.Commands.CreateOrder
     public class OrderItem
     {
         [Required]
-        public Guid ProductId { get; set; }
+        public string ProductId { get; set; }
 
         [Required]
         [Range(0, 999)]

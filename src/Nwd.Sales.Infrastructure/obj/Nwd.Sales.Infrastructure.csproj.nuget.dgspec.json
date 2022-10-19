@@ -49,6 +49,10 @@
             "FluentValidation": {
               "target": "Package",
               "version": "[11.2.2, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[10.0.2, )"
             }
           },
           "imports": [
@@ -121,9 +125,17 @@
               "target": "Package",
               "version": "[12.0.0, )"
             },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.Azure.Cosmos": {
               "target": "Package",
               "version": "[3.31.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[6.0.0, )"
             }
           },
           "imports": [

@@ -1,13 +1,11 @@
-﻿using AutoMapper;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Nwd.Sales.Infrastructure.Data.Entities
 {
     internal class OrderItem
     {
-
         [JsonProperty("id")]
-        public Guid Id { get; private set; }
+        public string Id { get; set; }
 
         [JsonProperty("orderId")]
         public Guid OrderId { get; private set; }

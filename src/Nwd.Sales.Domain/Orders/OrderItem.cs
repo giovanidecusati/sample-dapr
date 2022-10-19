@@ -1,6 +1,8 @@
-﻿namespace Nwd.Sales.Domain.Orders
+﻿using Nwd.Sales.Domain.Common;
+
+namespace Nwd.Sales.Domain.Orders
 {
-    public class OrderItem
+    public class OrderItem : BaseEntity
     {
         private OrderItem() { }
 
@@ -9,7 +11,7 @@
             _ = order ?? throw new ArgumentNullException(nameof(order));
             _ = product ?? throw new ArgumentNullException(nameof(product));
 
-            Id = Guid.NewGuid();
+            Id = Guid.NewGuid().ToString();
             OrderId = order.Id;
             ProductId = product.Id;
             Quantity = quantity;
@@ -18,11 +20,9 @@
             GST = Total * 0.10m;
         }
 
-        public Guid Id { get; private set; }
+        public string OrderId { get; private set; }
 
-        public Guid OrderId { get; private set; }
-
-        public Guid ProductId { get; private set; }
+        public string ProductId { get; private set; }
 
         public int Quantity { get; private set; }
 

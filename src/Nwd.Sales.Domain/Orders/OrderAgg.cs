@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
+using Nwd.Sales.Domain.Common;
 
 namespace Nwd.Sales.Domain.Orders
 {
-    public class OrderAgg
+    public class OrderAgg : BaseEntity
     {
         private readonly IValidator<OrderAgg> _validator;
 
@@ -16,7 +17,7 @@ namespace Nwd.Sales.Domain.Orders
             _ = orderItemCollection ?? throw new ArgumentNullException(nameof(orderItemCollection));
 
             _validator = validator;
-            Id = Guid.NewGuid();
+            Id = Guid.NewGuid().ToString();
             CustomerId = customer.Id;
             ShipTo = shipTo;
             Status = OrderStatus.Processing;
@@ -35,9 +36,9 @@ namespace Nwd.Sales.Domain.Orders
             }
         }
 
-        public Guid Id { get; private set; }
+        public string Id { get; private set; }
 
-        public Guid CustomerId { get; private set; }
+        public string CustomerId { get; private set; }
 
         public List<OrderItem> Items { get; private set; }
 

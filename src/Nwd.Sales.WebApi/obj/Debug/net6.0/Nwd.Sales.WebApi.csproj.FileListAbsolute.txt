@@ -3,7 +3,6 @@ C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\obj\Debug\net6.0\Nwd.Sales.WebApi.Gener
 C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\obj\Debug\net6.0\Nwd.Sales.WebApi.AssemblyInfoInputs.cache
 C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\obj\Debug\net6.0\Nwd.Sales.WebApi.AssemblyInfo.cs
 C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\obj\Debug\net6.0\Nwd.Sales.WebApi.csproj.CoreCompileInputs.cache
-C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\obj\Debug\net6.0\Nwd.Sales.WebApi.MvcApplicationPartsAssemblyInfo.cs
 C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\obj\Debug\net6.0\Nwd.Sales.WebApi.MvcApplicationPartsAssemblyInfo.cache
 C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\bin\Debug\net6.0\Microsoft.Azure.Cosmos.ServiceInterop.dll
 C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\bin\Debug\net6.0\Cosmos.CRTCompat.dll

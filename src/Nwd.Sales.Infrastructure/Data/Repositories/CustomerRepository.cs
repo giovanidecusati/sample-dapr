@@ -1,32 +1,23 @@
 ﻿using AutoMapper;
 using Microsoft.Azure.Cosmos;
 using Nwd.Sales.Domain.Orders;
+using Nwd.Sales.Infrastructure.Data.Interfaces;
 
 namespace Nwd.Sales.Infrastructure.Data.Repositories
 {
-    public class CustomerRepository : ICustomerRepository
+    public class CustomerRepository : CosmosDbRepository<Customer>, ICustomerRepository
     {
-        private readonly Container _container;
         private readonly IMapper _mapper;
+        
+        public override string ContainerName { get; } = "Customers";
 
-        public CustomerRepository(Container container, IMapper mapper)
+        public override string GenerateId(Customer entity) => $"{entity.Id}";
+
+        public override PartitionKey ResolvePartitionKey(string entityId) => new PartitionKey(entityId.Split(':')[0]);
+
+        public CustomerRepository(IMapper mapper, ICosmosDbContainerFactory factory) : base(factory)
         {
-            _container = container;
             _mapper = mapper;
-        }
-
-        public async Task<Customer> GetByIdAsync(Guid customerId)
-        {
-            try
-            {
-                var response = await _container.ReadItemAsync<Entities.Customer>(customerId.ToString(), new PartitionKey(customerId.ToString()));
-                return _mapper.Map<Customer>(response.Resource);
-
-            }
-            catch (CosmosException ex)
-            {
-                return null;
-            }
-        }
+        }     
     }
 }

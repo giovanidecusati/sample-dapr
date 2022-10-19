@@ -1,24 +1,23 @@
 ﻿using AutoMapper;
 using Microsoft.Azure.Cosmos;
 using Nwd.Sales.Domain.Orders;
+using Nwd.Sales.Infrastructure.Data.Interfaces;
 
 namespace Nwd.Sales.Infrastructure.Data.Repositories
 {
-    public class OrderRepository : IOrderRepository
+    public class OrderRepository : CosmosDbRepository<OrderAgg>, IOrderRepository
     {
-        private readonly Container _container;
         private readonly IMapper _mapper;
 
-        public OrderRepository(Container container, IMapper mapper)
-        {
-            _container = container;
-            _mapper = mapper;
-        }
+        public override string ContainerName { get; } = "Orders";
 
-        public async Task SaveAsync(OrderAgg orderAgg)
+        public override string GenerateId(OrderAgg entity) => $"{entity.Id}";
+
+        public override PartitionKey ResolvePartitionKey(string entityId) => new PartitionKey(entityId.Split(':')[0]);
+
+        public OrderRepository(IMapper mapper, ICosmosDbContainerFactory factory) : base(factory)
         {
-            var entity = _mapper.Map<Entities.Order>(orderAgg);
-            await _container.CreateItemAsync(entity);
+            _mapper = mapper;
         }
     }
 }

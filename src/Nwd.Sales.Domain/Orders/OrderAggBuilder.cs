@@ -26,13 +26,13 @@ namespace Nwd.Sales.Domain.Orders
             return this;
         }
 
-        public async Task<OrderAggBuilder> WithCustomerAsync(Guid customerId)
+        public async Task<OrderAggBuilder> WithCustomerAsync(string customerId)
         {
             _customer = await _customerRepository.GetByIdAsync(customerId);
             return this;
         }
 
-        public async Task<OrderAggBuilder> WithItemAsync(Guid producId, int quantity)
+        public async Task<OrderAggBuilder> WithItemAsync(string producId, int quantity)
         {
             var product = await _productRepository.GetByIdAsync(producId);
             _orderItemCollection.Add(product, quantity);

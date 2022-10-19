@@ -14,4 +14,7 @@
     <SourceRoot Include="C:\Program Files\DevExpress 22.1\Components\Offline Packages\" />
     <SourceRoot Include="c:\program files\dotnet\sdk\NuGetFallbackFolder\" />
   </ItemGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgNewtonsoft_Json Condition=" '$(PkgNewtonsoft_Json)' == '' ">C:\Users\giovani.local\.nuget\packages\newtonsoft.json\10.0.2</PkgNewtonsoft_Json>
+  </PropertyGroup>
 </Project>

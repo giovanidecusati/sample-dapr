@@ -35,12 +35,12 @@ namespace Nwd.Sales.Application.Commands.CreateOrder
             RuleFor(x => x.ShipTo.Region).NotEmpty().When(x => x.ShipTo != null);
         }
 
-        private async Task<bool> BeExistentCustomer(Guid customerId, CancellationToken cancellationToken = default)
+        private async Task<bool> BeExistentCustomer(string customerId, CancellationToken cancellationToken = default)
         {
             return await _customerRepository.GetByIdAsync(customerId) != null;
         }
 
-        private async Task<bool> BeExistentProduct(Guid productId, CancellationToken cancellationToken = default)
+        private async Task<bool> BeExistentProduct(string productId, CancellationToken cancellationToken = default)
         {
             return await _productRepository.GetByIdAsync(productId) != null;
         }
