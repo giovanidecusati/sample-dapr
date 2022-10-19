@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "aosbmZPdeECcpycDEgbW+qF9tc3QKBjT+7SXxu0xSJy4ODvj4b8VQ6qkJUZTFAOaC8iVSa3ISFay79IUrDkO5A==",
+  "success": true,
+  "projectFilePath": "C:\\dev\\giovani\\dapr\\src\\Nwd.Sales.Application\\Nwd.Sales.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\giovani.local\\.nuget\\packages\\fluentvalidation\\11.2.2\\fluentvalidation.11.2.2.nupkg.sha512"
+  ],
+  "logs": []
+}
