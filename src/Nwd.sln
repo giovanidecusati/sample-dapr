@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nwd.Sales", "Nwd.Sales\Nwd.Sales.csproj", "{A269CBE1-2EC0-4158-8F13-7CF2A04CA66D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nwd.Sales", "Nwd.Sales.WebApi\Nwd.Sales.WebApi.csproj", "{A269CBE1-2EC0-4158-8F13-7CF2A04CA66D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nwd.Sales.Application", "Nwd.Sales.Application\Nwd.Sales.Application.csproj", "{AAF78F68-8A36-4CE3-B79B-4913D3F92390}"
 EndProject
