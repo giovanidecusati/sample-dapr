@@ -23,18 +23,7 @@ namespace Nwd.Sales.Infrastructure.Extensions
                                                      string databaseName,
                                                      List<ContainerInfo> containers)
         {
-            CosmosSerializationOptions cosmosSerializationOptions = new()
-            {
-                PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase,
-                IgnoreNullValues = true
-            };
-
-            Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(endpointUrl, primaryKey, new CosmosClientOptions()
-            {
-                ConnectionMode = ConnectionMode.Gateway,
-                SerializerOptions = cosmosSerializationOptions,
-                AllowBulkExecution = true
-            });
+            Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(endpointUrl, primaryKey);
 
             CosmosDbContainerFactory cosmosDbClientFactory = new CosmosDbContainerFactory(client, databaseName, containers);
 

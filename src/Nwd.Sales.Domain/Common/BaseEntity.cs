@@ -6,5 +6,10 @@ namespace Nwd.Sales.Domain.Common
     {
         [JsonProperty(PropertyName = "id")]
         public virtual string Id { get; set; }
+
+        public BaseEntity()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
     }
 }
