@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Nwd.Sales.Domain.Orders;
+﻿using Nwd.Sales.Domain.Orders;
 using Nwd.Sales.Infrastructure.Data.Configuration;
 using Nwd.Sales.Infrastructure.Data.Repositories;
 using Nwd.Sales.Infrastructure.Extensions;
