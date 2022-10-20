@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
+using Nwd.Sales.Infrastructure.Configuration;
+using Nwd.Sales.Infrastructure.Data.Configuration;
 using Nwd.Sales.Infrastructure.Extensions;
-using Nwd.Sales.WebApi.Config;
+using Nwd.Sales.WebApi.Configuration;
 using Nwd.Sales.WebApi.Services;
 using Serilog;
 
@@ -16,13 +18,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
 
 // Setup Infrastructure
-builder.Services.SetupInfrastructure(builder.Configuration);
+builder.Services.SetupInfrastructure(builder.Configuration.GetSection("ConnectionStrings:CosmosDB").Get<CosmosDbSettings>());
 
 // Setup ApplicationLayer
 builder.Services.SetupApplicationLayer();
 
 // Setup Swagger
-builder.Services.SetupSwagger();
+builder.Services.SetupNSwag();
 
 // Setup Controllers
 builder.Services.SetupControllers();
@@ -42,7 +44,7 @@ builder.Services.AddHealthChecks()
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     app.EnsureCosmosDbIsCreated();
 
@@ -54,6 +56,8 @@ if (!app.Environment.IsDevelopment())
 
     // Serves the Swagger UI 3 web ui to view the OpenAPI/Swagger documents by default on `/swagger`
     app.UseSwaggerUi3();
+
+    app.UseReDoc();
 }
 
 // MapHealthChecks
@@ -86,9 +90,9 @@ Log.Information("Middleware configuration completed.");
 
 try
 {
-    Log.Information("Starting app up.");
+    Log.Information("Starting up.");
     app.Run();
-    Log.Information("Shutting app down.");
+    Log.Information("Shutting down.");
 }
 catch (Exception ex)
 {
