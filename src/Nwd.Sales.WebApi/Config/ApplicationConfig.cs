@@ -19,13 +19,6 @@ namespace Nwd.Sales.WebApi.Config
         /// <param name="services"></param>
         public static void SetupApplicationLayer(this IServiceCollection services)
         {
-            // Validators            
-            // :: Commands
-            services.AddTransient<IValidator<CreateOrderCommand>, CreateOrderValidator>();
-
-            // :: Domain :: Aggegates
-            services.AddTransient<IValidator<OrderAgg>, OrderAggValidator>();
-
             // :: Domain :: Builder
             services.AddTransient<OrderAggBuilder>();
 

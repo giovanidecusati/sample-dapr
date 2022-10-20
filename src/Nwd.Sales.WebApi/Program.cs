@@ -12,17 +12,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
 
-// SetupInfrastructure
+// Setup Infrastructure
 builder.Services.SetupInfrastructure(builder.Configuration);
 
-// SetupApplicationLayer
+// Setup ApplicationLayer
 builder.Services.SetupApplicationLayer();
 
-// Swagger
+// Setup Swagger
 builder.Services.SetupSwagger();
 
-// API controllers
+// Setup Controllers
 builder.Services.SetupControllers();
+
+// Setup FluentValidators
+builder.Services.SetupFluentValidators();
 
 // HttpContext
 builder.Services.AddHttpContextAccessor();

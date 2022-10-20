@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/pCLFUngMn1o5hJhqhzAWHmRaZgwlpVy/cWaTaQImSBxNEHYSyneVYfLSUU88YtVmLkaMALFVAeqkdw63YclGQ==",
+  "dgSpecHash": "6OO4+JIEmez//I5HYFcYCB/Un0+mKhluHp0Jn9AIIKIL15Q0UiBNMRbxCzaCJ+T2KKGKsvhfYs37fIivtG16Aw==",
   "success": true,
   "projectFilePath": "C:\\dev\\giovani\\dapr\\src\\Nwd.Sales.WebApi\\Nwd.Sales.WebApi.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\giovani.local\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "C:\\Users\\giovani.local\\.nuget\\packages\\azure.core\\1.19.0\\azure.core.1.19.0.nupkg.sha512",
     "C:\\Users\\giovani.local\\.nuget\\packages\\fluentvalidation\\11.2.2\\fluentvalidation.11.2.2.nupkg.sha512",
+    "C:\\Users\\giovani.local\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.2.2\\fluentvalidation.dependencyinjectionextensions.11.2.2.nupkg.sha512",
     "C:\\Users\\giovani.local\\.nuget\\packages\\microsoft.applicationinsights\\2.20.0\\microsoft.applicationinsights.2.20.0.nupkg.sha512",
     "C:\\Users\\giovani.local\\.nuget\\packages\\microsoft.aspnetcore.http\\2.2.2\\microsoft.aspnetcore.http.2.2.2.nupkg.sha512",
     "c:\\program files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",

@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using Nwd.Sales.Application.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Nwd.Sales.WebApi.Filters
 {
@@ -13,7 +12,7 @@ namespace Nwd.Sales.WebApi.Filters
             // Register known exception types and handlers.
             _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
-                { typeof(ValidationException), HandleValidationException }
+                { typeof(FluentValidation.ValidationException), HandleFluentValidationException }
             };
         }
 
@@ -39,45 +38,41 @@ namespace Nwd.Sales.WebApi.Filters
                 return;
             }
         }
-
-        private void HandleValidationException(ExceptionContext context)
+        private void HandleFluentValidationException(ExceptionContext context)
         {
-            var exception = (ValidationException)context.Exception;
+            var result = (FluentValidation.ValidationException)context.Exception;
 
-            var details = new ValidationProblemDetails(exception.Errors)
+            foreach (var error in result.Errors)
+                context.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+
+            var details = new ValidationProblemDetails(context.ModelState)
             {
+                Instance = context.HttpContext.Request.Path,
+                Detail = "Please refer to the errors property for additional details.",
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
             };
 
-            context.Result = new BadRequestObjectResult(details);
+            context.Result = new BadRequestObjectResult(details)
+            {
+                ContentTypes = { "application/problem+json", }
+            };
 
             context.ExceptionHandled = true;
         }
-
-        //private void HandleNotFoundException(ExceptionContext context)
-        //{
-        //    var exception = (NotFoundException)context.Exception;
-
-        //    var details = new ProblemDetails()
-        //    {
-        //        Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
-        //        Title = "The specified resource was not found.",
-        //        Detail = exception.Message
-        //    };
-
-        //    context.Result = new NotFoundObjectResult(details);
-
-        //    context.ExceptionHandled = true;
-        //}
 
         private void HandleInvalidModelStateException(ExceptionContext context)
         {
             var details = new ValidationProblemDetails(context.ModelState)
             {
+                Instance = context.HttpContext.Request.Path,
+                Detail = "Please refer to the errors property for additional details.",
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
             };
 
-            context.Result = new BadRequestObjectResult(details);
+            context.Result = new BadRequestObjectResult(details)
+            {
+                ContentTypes = { "application/problem+json", }
+            };
 
             context.ExceptionHandled = true;
         }

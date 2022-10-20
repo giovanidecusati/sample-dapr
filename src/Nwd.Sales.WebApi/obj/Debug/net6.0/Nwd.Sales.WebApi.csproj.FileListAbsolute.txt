@@ -92,3 +92,4 @@ C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\bin\Debug\net6.0\Microsoft.ApplicationI
 C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\bin\Debug\net6.0\Serilog.Sinks.ApplicationInsights.dll
 C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\bin\Debug\net6.0\Serilog.Enrichers.CorrelationId.dll
 C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\bin\Debug\net6.0\Serilog.Enrichers.Sensitive.dll
+C:\dev\giovani\dapr\src\Nwd.Sales.WebApi\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll

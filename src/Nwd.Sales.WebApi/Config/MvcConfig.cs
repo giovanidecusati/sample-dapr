@@ -1,6 +1,6 @@
-﻿using NSwag.Generation.Processors.Security;
+﻿using FluentValidation;
 using NSwag;
-using Serilog;
+using NSwag.Generation.Processors.Security;
 
 namespace Nwd.Sales.WebApi.Config
 {
@@ -17,6 +17,16 @@ namespace Nwd.Sales.WebApi.Config
         {
             // API controllers
             services.AddControllers();
+        }
+
+        public static void SetupFluentValidators(this IServiceCollection services)
+        {
+            // Add Validators
+            services.AddValidatorsFromAssemblies(new[]
+                    {
+                        typeof(Application.Commands.OrderCommandHandler).Assembly,
+                        typeof(Domain.Orders.OrderAgg).Assembly,
+                    });
         }
 
         public static IServiceCollection SetupSwagger(this IServiceCollection services)
