@@ -21,9 +21,6 @@ namespace Nwd.Sales.WebApi.Config
         {
             // :: Domain :: Builder
             services.AddTransient<OrderAggBuilder>();
-
-            // Command Handler
-            services.AddTransient<OrderCommandHandler>();
         }
     }
 }

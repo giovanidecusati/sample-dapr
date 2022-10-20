@@ -1,6 +1,9 @@
 ﻿using FluentValidation;
+using MediatR;
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using Nwd.Sales.WebApi.Behaviors;
+using System.Reflection;
 
 namespace Nwd.Sales.WebApi.Config
 {
@@ -27,6 +30,14 @@ namespace Nwd.Sales.WebApi.Config
                         typeof(Application.Commands.OrderCommandHandler).Assembly,
                         typeof(Domain.Orders.OrderAgg).Assembly,
                     });
+        }
+
+        public static void SetupMediatR(this IServiceCollection services)
+        {
+            // Add Validators
+            services.AddMediatR(typeof(Application.Commands.OrderCommandHandler).Assembly);
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         }
 
         public static IServiceCollection SetupSwagger(this IServiceCollection services)

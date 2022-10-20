@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MediatR;
+using Nwd.Sales.Application.Commands.CreateOrder;
+using System.ComponentModel.DataAnnotations;
 
 namespace Nwd.Sales.Commands.CreateOrder
 {
-    public class CreateOrderCommand
+    public class CreateOrderCommand : IRequest<CreateOrderCommandResult>
     {
         [Required]
         public List<OrderItem> Items { get; set; }
@@ -12,5 +14,5 @@ namespace Nwd.Sales.Commands.CreateOrder
 
         [Required]
         public Address ShipTo { get; set; }
-}
+    }
 }

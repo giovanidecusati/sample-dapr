@@ -27,6 +27,9 @@ builder.Services.SetupControllers();
 // Setup FluentValidators
 builder.Services.SetupFluentValidators();
 
+// Setup MediatR
+builder.Services.SetupMediatR();
+
 // HttpContext
 builder.Services.AddHttpContextAccessor();
 

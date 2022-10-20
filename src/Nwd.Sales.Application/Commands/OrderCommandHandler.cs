@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Nwd.Sales.Application.Commands.CreateOrder;
 using Nwd.Sales.Application.Queries.GetOrderStatus;
@@ -7,8 +8,8 @@ using Nwd.Sales.Domain.Orders;
 
 namespace Nwd.Sales.Application.Commands
 {
-    public class OrderCommandHandler
-    {
+    public class OrderCommandHandler : IRequestHandler<CreateOrderCommand, CreateOrderCommandResult>
+    {    
         private readonly IValidator<CreateOrderCommand> _createOrderValidator;
         private readonly OrderAggBuilder _orderAggBuilder;
         private readonly IOrderRepository _orderRepository;
@@ -22,15 +23,14 @@ namespace Nwd.Sales.Application.Commands
             _logger = logger;
         }
 
-        public async Task<CreateOrderCommandResult> CreateOrder(CreateOrderCommand createOrderCommand)
+        public async Task<CreateOrderCommandResult> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            _ = createOrderCommand ?? throw new ArgumentNullException(nameof(createOrderCommand));
-            _logger.LogDebug("CreateOrder: {@createOrderCommand}", createOrderCommand);
+            _ = request ?? throw new ArgumentNullException(nameof(request));            
 
-            await _createOrderValidator.ValidateAndThrowAsync(createOrderCommand);
-            _orderAggBuilder.WithShipTo(createOrderCommand.ShipTo.State, createOrderCommand.ShipTo.Region, createOrderCommand.ShipTo.PostalCode, createOrderCommand.ShipTo.AddressLine1);
-            await _orderAggBuilder.WithCustomerAsync(createOrderCommand.CustomerId);
-            foreach (var item in createOrderCommand.Items)
+            await _createOrderValidator.ValidateAndThrowAsync(request);
+            _orderAggBuilder.WithShipTo(request.ShipTo.State, request.ShipTo.Region, request.ShipTo.PostalCode, request.ShipTo.AddressLine1);
+            await _orderAggBuilder.WithCustomerAsync(request.CustomerId);
+            foreach (var item in request.Items)
             {
                 await _orderAggBuilder.WithItemAsync(item.ProductId, item.Quantity);
             }
