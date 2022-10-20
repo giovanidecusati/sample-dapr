@@ -14,5 +14,12 @@
         /// </summary>
         /// <returns></returns>
         Task EnsureDbSetupAsync();
+
+        /// <summary>
+        ///     Check health
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task CheckHealthAsync(CancellationToken cancellationToken = default);
     }
 }

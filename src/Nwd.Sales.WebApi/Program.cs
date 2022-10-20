@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Newtonsoft.Json;
 using Nwd.Sales.Infrastructure.Extensions;
 using Nwd.Sales.WebApi.Config;
+using Nwd.Sales.WebApi.Services;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -33,6 +36,9 @@ builder.Services.SetupMediatR();
 // HttpContext
 builder.Services.AddHttpContextAccessor();
 
+// HealthChecks
+builder.Services.AddHealthChecks()
+    .AddCheck<HealthCheck>("System");
 
 var app = builder.Build();
 
@@ -49,6 +55,17 @@ if (!app.Environment.IsDevelopment())
     // Serves the Swagger UI 3 web ui to view the OpenAPI/Swagger documents by default on `/swagger`
     app.UseSwaggerUi3();
 }
+
+// MapHealthChecks
+var healthCheckOptions = new HealthCheckOptions();
+healthCheckOptions.ResponseWriter = async (c, r) =>
+{
+    c.Response.ContentType = "application/json";
+    var result = JsonConvert.SerializeObject(r);
+    await c.Response.WriteAsync(result);
+};
+
+app.MapHealthChecks("/health", healthCheckOptions);
 
 // UseSerilogRequestLogging
 app.UseSerilogRequestLogging();

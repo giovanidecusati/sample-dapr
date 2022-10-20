@@ -1,6 +1,8 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Nwd.Sales.Infrastructure.Data.Configuration;
 using Nwd.Sales.Infrastructure.Data.Interfaces;
+using System.ComponentModel;
+using System.Threading;
 
 namespace Nwd.Sales.Infrastructure.Data
 {
@@ -45,6 +47,21 @@ namespace Nwd.Sales.Infrastructure.Data
             foreach (ContainerInfo container in _containers)
             {
                 await database.Database.CreateContainerIfNotExistsAsync(container.Name, $"{container.PartitionKey}");
+            }
+        }
+
+        public async Task CheckHealthAsync(CancellationToken cancellationToken = default)
+        {
+            Microsoft.Azure.Cosmos.DatabaseResponse database = await _cosmosClient.CreateDatabaseIfNotExistsAsync(_databaseName);
+
+            foreach (ContainerInfo container in _containers)
+            {
+                await database.Database
+                    .ReadAsync(cancellationToken: cancellationToken);
+
+                await database.Database
+                    .GetContainer(container.Name)
+                    .ReadContainerAsync(cancellationToken: cancellationToken);
             }
         }
     }
