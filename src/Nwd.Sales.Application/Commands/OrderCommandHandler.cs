@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Nwd.Sales.Application.Commands.CreateOrder;
 using Nwd.Sales.Application.Queries.GetOrderStatus;
 using Nwd.Sales.Commands.CreateOrder;
@@ -11,17 +12,20 @@ namespace Nwd.Sales.Application.Commands
         private readonly IValidator<CreateOrderCommand> _createOrderValidator;
         private readonly OrderAggBuilder _orderAggBuilder;
         private readonly IOrderRepository _orderRepository;
+        private readonly ILogger<OrderCommandHandler> _logger;
 
-        public OrderCommandHandler(IValidator<CreateOrderCommand> createOrderValidation, OrderAggBuilder orderAggBuilder, IOrderRepository orderRepository)
+        public OrderCommandHandler(IValidator<CreateOrderCommand> createOrderValidation, OrderAggBuilder orderAggBuilder, IOrderRepository orderRepository, ILogger<OrderCommandHandler> logger)
         {
             _createOrderValidator = createOrderValidation;
             _orderAggBuilder = orderAggBuilder;
             _orderRepository = orderRepository;
+            _logger = logger;
         }
 
         public async Task<CreateOrderCommandResult> CreateOrder(CreateOrderCommand createOrderCommand)
         {
             _ = createOrderCommand ?? throw new ArgumentNullException(nameof(createOrderCommand));
+            _logger.LogDebug("CreateOrder: {@createOrderCommand}", createOrderCommand);
 
             await _createOrderValidator.ValidateAndThrowAsync(createOrderCommand);
             _orderAggBuilder.WithShipTo(createOrderCommand.ShipTo.State, createOrderCommand.ShipTo.Region, createOrderCommand.ShipTo.PostalCode, createOrderCommand.ShipTo.AddressLine1);

@@ -1,5 +1,6 @@
 ﻿using NSwag.Generation.Processors.Security;
 using NSwag;
+using Serilog;
 
 namespace Nwd.Sales.WebApi.Config
 {
