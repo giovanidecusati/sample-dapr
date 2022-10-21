@@ -5,19 +5,17 @@ using Nwd.Sales.Infrastructure.Data.Interfaces;
 
 namespace Nwd.Sales.Infrastructure.Data.Repositories
 {
-    public class ProductRepository : CosmosDbRepository<Product>, IProductRepository
-    {
-        private readonly IMapper _mapper;
-
+    internal class ProductRepository : CosmosDbRepository<Product, Entities.Product>, IProductRepository
+    {        
         public override string ContainerName { get; } = "Products";
 
         public override string GenerateId(Product entity) => $"{entity.Id}";
 
         public override PartitionKey ResolvePartitionKey(string entityId) => new PartitionKey(entityId.Split(':')[0]);
 
-        public ProductRepository(IMapper mapper, ICosmosDbContainerFactory factory) : base(factory)
+        public ProductRepository(ICosmosDbContainerFactory factory, IMapper mapper) : base(factory, mapper)
         {
-            _mapper = mapper;
+
         }
     }
 }

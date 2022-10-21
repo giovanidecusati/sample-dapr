@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-
-namespace Nwd.Sales.Infrastructure.Data.Entities
+﻿namespace Nwd.Sales.Infrastructure.Data.Entities
 {
-     internal class Address
+    internal class Address
     {
         public string State { get; set; } = null!;
 

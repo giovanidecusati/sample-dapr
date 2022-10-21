@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Nwd.Sales.Domain.Orders;
+using Nwd.Sales.Infrastructure.Data.Entities;
 using Nwd.Sales.Infrastructure.Data.Interfaces;
+using Nwd.Sales.Infrastructure.Data.Seed;
 
 namespace Nwd.Sales.Infrastructure.Extensions
 {
@@ -33,11 +34,10 @@ namespace Nwd.Sales.Infrastructure.Extensions
         {
             using (IServiceScope serviceScope = builder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var productRepository = serviceScope.ServiceProvider.GetService<IProductRepository>();
-                await productRepository.AddAsync(new Product("Dell XPS 15", 3599.89m, "Laptop"));
+                ICosmosDbContainerFactory factory = serviceScope.ServiceProvider.GetService<ICosmosDbContainerFactory>();
 
-                var customerRepository = serviceScope.ServiceProvider.GetService<ICustomerRepository>();
-                await customerRepository.AddAsync(new Customer("John Doe", "john.doe@nwdsales.ie"));
+                var customerSeed = new SeedDataReader(factory);
+                await customerSeed.SeedAllAsync();
             }
         }
     }

@@ -1,10 +1,11 @@
-﻿using Microsoft.Azure.Cosmos;
+﻿using AutoMapper;
+using Microsoft.Azure.Cosmos;
 using Nwd.Sales.Domain.Common;
 using Nwd.Sales.Infrastructure.Data.Interfaces;
 
 namespace Nwd.Sales.Infrastructure.Data.Repositories
 {
-    public abstract class CosmosDbRepository<T> where T : BaseEntity
+    public abstract class CosmosDbRepository<Tdomain, Tentity> where Tdomain : BaseEntity where Tentity : class
     {
         /// <summary>
         ///     Name of the CosmosDB container
@@ -16,7 +17,7 @@ namespace Nwd.Sales.Infrastructure.Data.Repositories
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public abstract string GenerateId(T entity);
+        public abstract string GenerateId(Tdomain entity);
 
         /// <summary>
         ///     Resolve the partition key
@@ -35,30 +36,32 @@ namespace Nwd.Sales.Infrastructure.Data.Repositories
         /// </summary>
         internal readonly Microsoft.Azure.Cosmos.Container _container;
 
+        private readonly IMapper _mapper;
 
-        public CosmosDbRepository(ICosmosDbContainerFactory cosmosDbContainerFactory)
+        public CosmosDbRepository(ICosmosDbContainerFactory cosmosDbContainerFactory, IMapper mapper)
         {
             this._cosmosDbContainerFactory = cosmosDbContainerFactory ?? throw new ArgumentNullException(nameof(ICosmosDbContainerFactory));
             this._container = this._cosmosDbContainerFactory.GetContainer(ContainerName)._container;
+            _mapper = mapper;
         }
 
-        public virtual async Task AddAsync(T item)
+        public virtual async Task AddAsync(Tdomain item)
         {
             var id = GenerateId(item);
-            await _container.CreateItemAsync<T>(item, ResolvePartitionKey(id));
+            await _container.CreateItemAsync<Tentity>(_mapper.Map<Tentity>(item), ResolvePartitionKey(id));
         }
 
         public async Task DeleteAsync(string id)
         {
-            await this._container.DeleteItemAsync<T>(id.ToString(), ResolvePartitionKey(id));
+            await this._container.DeleteItemAsync<Tentity>(id.ToString(), ResolvePartitionKey(id));
         }
 
-        public virtual async Task<T> GetByIdAsync(string id)
+        public virtual async Task<Tdomain> GetByIdAsync(string id)
         {
             try
             {
-                ItemResponse<T> response = await _container.ReadItemAsync<T>(id, ResolvePartitionKey(id));
-                return response.Resource;
+                ItemResponse<Tentity> response = await _container.ReadItemAsync<Tentity>(id, ResolvePartitionKey(id));
+                return _mapper.Map<Tdomain>(response.Resource);
             }
             catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
             {

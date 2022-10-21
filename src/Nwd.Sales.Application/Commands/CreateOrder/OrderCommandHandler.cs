@@ -41,8 +41,11 @@ namespace Nwd.Sales.Application.Commands.CreateOrder
             }
 
             var order = _orderAggBuilder.Build();
+
             await _orderRepository.AddAsync(order);
+
             await _mediator.Publish(new OrderCreatedEvent(order.Id));
+
             return new CreateOrderCommandResult(order.Id);  
         }
 
