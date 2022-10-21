@@ -15,8 +15,8 @@ namespace Nwd.Sales.Infrastructure.Data.Seed
         }
         internal async Task SeedAllAsync()
         {
-            await SeedAsync<Customer>("Customers");
-            await SeedAsync<Customer>("Products");
+            await SeedAsync<Customer>(CosmosDbContainer.CustomersContainerName);
+            await SeedAsync<Customer>(CosmosDbContainer.ProductsContainerName);
         }
 
         private async Task SeedAsync<T>(string containerName) where T : class

@@ -6,8 +6,8 @@ using Nwd.Sales.Infrastructure.Data.Interfaces;
 namespace Nwd.Sales.Infrastructure.Data.Repositories
 {
     internal class ProductRepository : CosmosDbRepository<Product, Entities.Product>, IProductRepository
-    {        
-        public override string ContainerName { get; } = "Products";
+    {
+        public override string ContainerName { get; } = CosmosDbContainer.ProductsContainerName;
 
         public override string GenerateId(Product entity) => $"{entity.Id}";
 

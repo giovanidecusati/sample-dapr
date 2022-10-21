@@ -7,7 +7,7 @@ namespace Nwd.Sales.Infrastructure.Data.Repositories
 {
     internal class OrderRepository : CosmosDbRepository<Order, Entities.Order>, IOrderRepository
     {
-        public override string ContainerName { get; } = "Orders";
+        public override string ContainerName { get; } = CosmosDbContainer.OrdersContainerName;
 
         public override string GenerateId(Order entity) => $"{entity.Id}";
 

@@ -11,7 +11,7 @@ namespace Nwd.Sales.Infrastructure.Data.Repositories
         private readonly ICosmosDbContainerFactory _cosmosDbContainerFactory;
         private readonly IMapper _mapper;
 
-        public string ContainerName { get; } = "Orders";
+        public string ContainerName { get; } = CosmosDbContainer.OrdersContainerName;
 
         public OrderReadOnlyRepository(ICosmosDbContainerFactory cosmosDbContainerFactory, IMapper mapper)
         {
