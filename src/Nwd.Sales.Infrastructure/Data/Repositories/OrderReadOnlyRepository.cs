@@ -5,7 +5,7 @@ using Nwd.Sales.Infrastructure.Data.Interfaces;
 
 namespace Nwd.Sales.Infrastructure.Data.Repositories
 {
-    public class OrderReadOnlyRepository : IOrderReadOnlyRepository
+    internal class OrderReadOnlyRepository : IOrderReadOnlyRepository
     {
         private readonly Microsoft.Azure.Cosmos.Container _container;
         private readonly ICosmosDbContainerFactory _cosmosDbContainerFactory;
@@ -16,7 +16,7 @@ namespace Nwd.Sales.Infrastructure.Data.Repositories
         public OrderReadOnlyRepository(ICosmosDbContainerFactory cosmosDbContainerFactory, IMapper mapper)
         {
             _cosmosDbContainerFactory = cosmosDbContainerFactory ?? throw new ArgumentNullException(nameof(ICosmosDbContainerFactory));
-            _container = this._cosmosDbContainerFactory.GetContainer(ContainerName)._container;
+            _container = _cosmosDbContainerFactory.GetContainer(ContainerName)._container;
             _mapper = mapper;
         }
 
