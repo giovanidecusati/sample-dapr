@@ -9,9 +9,7 @@ namespace Nwd.Sales.Domain.Orders
             Name = name;
             UnitPrice = unitPrice;
             Category = category;
-        }
-
-        private Product() { }
+        }        
 
         public string Name { get; private set; }
 

@@ -14,7 +14,7 @@ namespace Nwd.Sales.WebApi.Configuration
         public static void SetupApplicationLayer(this IServiceCollection services)
         {
             // :: Domain :: Builder
-            services.AddTransient<OrderAggBuilder>();
+            services.AddTransient<OrderBuilder>();
         }
     }
 }

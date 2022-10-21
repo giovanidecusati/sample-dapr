@@ -5,11 +5,11 @@
         /// <summary>
         ///     Container Name
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         /// <summary>
         ///     Container partition Key
         /// </summary>
-        public string PartitionKey { get; set; }
+        public string PartitionKey { get; set; } = null!;
     }
 
 }

@@ -2,8 +2,6 @@
 {
     public class Address
     {
-        private Address() { }
-
         public Address(string state, string region, string postalCode, string addressLine1)
         {
             State = state;

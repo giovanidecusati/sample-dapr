@@ -5,13 +5,13 @@ using Nwd.Sales.Infrastructure.Data.Interfaces;
 
 namespace Nwd.Sales.Infrastructure.Data.Repositories
 {
-    public class OrderRepository : CosmosDbRepository<OrderAgg>, IOrderRepository
+    public class OrderRepository : CosmosDbRepository<Order>, IOrderRepository
     {
         private readonly IMapper _mapper;
 
         public override string ContainerName { get; } = "Orders";
 
-        public override string GenerateId(OrderAgg entity) => $"{entity.Id}";
+        public override string GenerateId(Order entity) => $"{entity.Id}";
 
         public override PartitionKey ResolvePartitionKey(string entityId) => new PartitionKey(entityId.Split(':')[0]);
 
@@ -20,7 +20,7 @@ namespace Nwd.Sales.Infrastructure.Data.Repositories
             _mapper = mapper;
         }
 
-        public override async Task AddAsync(OrderAgg item)
+        public override async Task AddAsync(Order item)
         {
             var id = GenerateId(item);
             await _container.CreateItemAsync<Entities.Order>(_mapper.Map<Entities.Order>(item), ResolvePartitionKey(id));

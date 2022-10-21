@@ -2,9 +2,9 @@
 
 namespace Nwd.Sales.Domain.Orders
 {
-    public class OrderAggBuilder
+    public class OrderBuilder
     {
-        private readonly IValidator<OrderAgg> _orderAggValidator;
+        private readonly IValidator<Order> _orderAggValidator;
         private readonly IProductRepository _productRepository;
         private readonly ICustomerRepository _customerRepository;
 
@@ -12,7 +12,7 @@ namespace Nwd.Sales.Domain.Orders
         private Customer? _customer;
         private OrderItemCollection _orderItemCollection;
 
-        public OrderAggBuilder(IValidator<OrderAgg> orderAggValidator, IProductRepository productRepository, ICustomerRepository customerRepository)
+        public OrderBuilder(IValidator<Order> orderAggValidator, IProductRepository productRepository, ICustomerRepository customerRepository)
         {
             _orderAggValidator = orderAggValidator;
             _productRepository = productRepository;
@@ -20,31 +20,31 @@ namespace Nwd.Sales.Domain.Orders
             _orderItemCollection = new OrderItemCollection();
         }
 
-        public OrderAggBuilder WithShipTo(string state, string region, string postalCode, string addressLine1)
+        public OrderBuilder WithShipTo(string state, string region, string postalCode, string addressLine1)
         {
             _shipTo = new Address(state, region, postalCode, addressLine1);
             return this;
         }
 
-        public async Task<OrderAggBuilder> WithCustomerAsync(string customerId)
+        public async Task<OrderBuilder> WithCustomerAsync(string customerId)
         {
             _customer = await _customerRepository.GetByIdAsync(customerId);
             return this;
         }
 
-        public async Task<OrderAggBuilder> WithItemAsync(string producId, int quantity)
+        public async Task<OrderBuilder> WithItemAsync(string producId, int quantity)
         {
             var product = await _productRepository.GetByIdAsync(producId);
             _orderItemCollection.Add(product, quantity);
             return this;
         }
 
-        public OrderAgg Build()
+        public Order Build()
         {
             _ = _customer ?? throw new ArgumentNullException(nameof(_customer));
             _ = _shipTo ?? throw new ArgumentNullException(nameof(_shipTo));
 
-            return new OrderAgg(_orderAggValidator, _customer, _shipTo, _orderItemCollection);
+            return new Order(_orderAggValidator, _customer, _shipTo, _orderItemCollection);
 
         }
     }

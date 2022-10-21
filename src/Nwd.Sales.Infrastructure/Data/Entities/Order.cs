@@ -8,7 +8,7 @@ namespace Nwd.Sales.Infrastructure.Data.Entities
         public string Id { get; set; }
 
         [JsonProperty("customerId")]
-        public Guid CustomerId { get; set; }
+        public string CustomerId { get; set; }
 
         [JsonProperty("items")]
         public List<OrderItem> Items { get; set; }
@@ -18,5 +18,8 @@ namespace Nwd.Sales.Infrastructure.Data.Entities
 
         [JsonProperty("shipTo")]
         public Address ShipTo { get; set; }
+
+        [JsonProperty("createdAt")]
+        public DateTime CreatedAt { get; private set; }
     }
 }

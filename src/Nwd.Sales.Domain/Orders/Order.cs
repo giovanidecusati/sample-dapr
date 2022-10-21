@@ -3,13 +3,11 @@ using Nwd.Sales.Domain.Common;
 
 namespace Nwd.Sales.Domain.Orders
 {
-    public class OrderAgg : BaseEntity
+    public class Order : BaseEntity
     {
-        private readonly IValidator<OrderAgg> _validator;
+        private readonly IValidator<Order> _validator;
 
-        private OrderAgg() { }
-
-        public OrderAgg(IValidator<OrderAgg> validator, Customer customer, Address shipTo, OrderItemCollection orderItemCollection)
+        public Order(IValidator<Order> validator, Customer customer, Address shipTo, OrderItemCollection orderItemCollection)
         {
             _ = validator ?? throw new ArgumentNullException(nameof(validator));
             _ = customer ?? throw new ArgumentNullException(nameof(customer));
@@ -21,6 +19,8 @@ namespace Nwd.Sales.Domain.Orders
             ShipTo = shipTo;
             Status = OrderStatus.Processing;
             Items = new List<OrderItem>();
+            CreatedAt = DateTime.UtcNow;
+
 
             AddItems(orderItemCollection);
 
@@ -36,6 +36,8 @@ namespace Nwd.Sales.Domain.Orders
         }
 
         public string CustomerId { get; private set; }
+
+        public DateTime CreatedAt { get; private set; }
 
         public List<OrderItem> Items { get; private set; }
 

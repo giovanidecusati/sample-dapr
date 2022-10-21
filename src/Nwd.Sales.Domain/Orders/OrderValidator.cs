@@ -2,9 +2,9 @@
 
 namespace Nwd.Sales.Domain.Orders
 {
-    public class OrderAggValidator : AbstractValidator<OrderAgg>
+    public class OrderValidator : AbstractValidator<Order>
     {
-        public OrderAggValidator()
+        public OrderValidator()
         {
             RuleFor(i => i.Items.Count).GreaterThan(0);
         }

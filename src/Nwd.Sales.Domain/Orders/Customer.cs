@@ -4,8 +4,6 @@ namespace Nwd.Sales.Domain.Orders
 {
     public class Customer : BaseEntity
     {
-        private Customer() { }
-
         public Customer(string name, string email)
         {
             Name = name;

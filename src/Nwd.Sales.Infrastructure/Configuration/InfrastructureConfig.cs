@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Nwd.Sales.Application.Queries.GetOrder;
 using Nwd.Sales.Domain.Orders;
 using Nwd.Sales.Infrastructure.Data.Configuration;
 using Nwd.Sales.Infrastructure.Data.Repositories;
@@ -27,6 +28,8 @@ namespace Nwd.Sales.Infrastructure.Configuration
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddScoped<IOrderReadOnlyRepository, OrderReadOnlyRepository>();
 
             // Autommaper
             services.AddAutoMapper(typeof(ProductRepository).Assembly);

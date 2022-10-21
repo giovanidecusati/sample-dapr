@@ -8,6 +8,8 @@ namespace Nwd.Sales.Infrastructure.Data.Mappers
         {
             CreateMap<Domain.Orders.OrderItem, Entities.OrderItem>();
             CreateMap<Entities.OrderItem, Domain.Orders.OrderItem>();
+
+            CreateMap<Entities.OrderItem, Application.Queries.GetOrder.GetSingleOrderItemQueryResult>();
         }
     }
 }

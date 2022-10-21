@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-
-namespace Nwd.Sales.Infrastructure.Data.Entities
+﻿namespace Nwd.Sales.Application.Queries.GetOrder
 {
-     internal class Address
+    public class Address
     {
         public string State { get; set; } = null!;
 

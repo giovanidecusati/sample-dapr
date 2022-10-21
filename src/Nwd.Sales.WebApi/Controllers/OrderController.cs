@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Nwd.Sales.Application.Commands.CreateOrder;
+using Nwd.Sales.Application.Queries.GetOrder;
 using Nwd.Sales.Commands.CreateOrder;
 
 namespace Nwd.Sales.WebApi.Controllers
@@ -9,7 +10,7 @@ namespace Nwd.Sales.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CreateOrderCommandResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(object))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedObjectResult))]
         public async Task<ActionResult<CreateOrderCommandResult>> Create(CreateOrderCommand createOrderCommand)
         {
             var result = await Mediator.Send(createOrderCommand);
@@ -17,12 +18,13 @@ namespace Nwd.Sales.WebApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CreateOrderCommandResult))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetSingleOrderQueryResult))]
+        [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(NoContentResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(object))]
-        public async Task<OkResult> Get(Guid orderId)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedObjectResult))]
+        public async Task<ActionResult<GetSingleOrderQueryResult>> Get([FromQuery] GetSingleOrderQuery getSingleOrderQuery)
         {
-            return await Task.FromResult(Ok());
+            return await Mediator.Send(getSingleOrderQuery);
         }
     }
 }

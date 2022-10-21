@@ -6,8 +6,10 @@ namespace Nwd.Sales.Infrastructure.Data.Mappers
     {
         public OrderProfile()
         {
-            CreateMap<Domain.Orders.OrderAgg, Entities.Order>();
-            CreateMap<Entities.Order, Domain.Orders.OrderAgg>();
+            CreateMap<Domain.Orders.Order, Entities.Order>();
+            CreateMap<Entities.Order, Domain.Orders.Order>();
+
+            CreateMap<Entities.Order, Application.Queries.GetOrder.GetSingleOrderQueryResult>();
         }
     }
 }

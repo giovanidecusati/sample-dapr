@@ -4,9 +4,7 @@ namespace Nwd.Sales.Domain.Orders
 {
     public class OrderItem : BaseEntity
     {
-        private OrderItem() { }
-
-        public OrderItem(OrderAgg order, Product product, int quantity)
+        public OrderItem(Order order, Product product, int quantity)
         {
             _ = order ?? throw new ArgumentNullException(nameof(order));
             _ = product ?? throw new ArgumentNullException(nameof(product));

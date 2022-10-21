@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Nwd.Sales.Application.Commands.CreateOrder;
 
 namespace Nwd.Sales.WebApi.Configuration
 {
@@ -9,8 +10,8 @@ namespace Nwd.Sales.WebApi.Configuration
             // Add Validators
             services.AddValidatorsFromAssemblies(new[]
                     {
-                        typeof(Application.Commands.OrderCommandHandler).Assembly,
-                        typeof(Domain.Orders.OrderAgg).Assembly,
+                        typeof(OrderCommandHandler).Assembly,
+                        typeof(Domain.Orders.Order).Assembly,
                     });
         }
     }

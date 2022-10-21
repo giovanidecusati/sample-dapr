@@ -1,6 +1,6 @@
 ﻿namespace Nwd.Sales.Domain.Orders
 {
-    public enum OrderStatus
+    public enum OrderStatus : int
     {
         Processing,
         Created,
