@@ -19,14 +19,14 @@ namespace Nwd.Orders.Domain.Commands.CreateOrder
             RuleFor(x => x.Items).NotNull();
             RuleForEach(x => x.Items).ChildRules(x =>
             {
-                x.RuleFor(item => item.Product).NotNull();
-                x.RuleFor(item => item.Product.Id).MustAsync(BeExistentProduct);
+                x.RuleFor(item => item.ProductId).NotNull();
+                x.RuleFor(item => item.ProductId).MustAsync(BeExistentProduct);
 
                 x.RuleFor(item => item.Quantity).GreaterThan(0);
             });
 
-            RuleFor(x => x.Customer).NotNull();
-            RuleFor(x => x.Customer.Id).MustAsync(BeExistentCustomer);
+            RuleFor(x => x.CustomerId).NotNull();
+            RuleFor(x => x.CustomerId).MustAsync(BeExistentCustomer);
 
             RuleFor(x => x.ShipTo).NotNull();
             RuleFor(x => x.ShipTo.AddressLine1).NotEmpty().When(x => x.ShipTo != null);

@@ -31,7 +31,7 @@ namespace Nwd.Orders.Domain.Commands.CreateOrder
 
             await _createOrderValidator.ValidateAndThrowAsync(request);
 
-            var customer = await _customerRepository.GetByIdAsync(request.Customer.Id);
+            var customer = await _customerRepository.GetByIdAsync(request.CustomerId);
             var order = new Order()
             {
                 Customer = customer,
@@ -48,7 +48,7 @@ namespace Nwd.Orders.Domain.Commands.CreateOrder
             var sequence = 0;
             foreach (var item in request.Items)
             {
-                var product = await _productRepository.GetByIdAsync(item.Product.Id);
+                var product = await _productRepository.GetByIdAsync(item.ProductId);
                 order.Items.Add(new OrderItem()
                 {
                     Sequence = sequence++,

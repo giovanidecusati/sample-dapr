@@ -10,7 +10,7 @@ namespace Nwd.Orders.Commands.CreateOrder
         public List<CreateOrderItem> Items { get; set; } = null!;
 
         [Required]
-        public CreateOrderCustomer Customer { get; set; } = null!;
+        public string CustomerId { get; set; } = null!;
 
         [Required]
         public CreateOrderAddress ShipTo { get; set; } = null!;
