@@ -7,4 +7,4 @@ spec:
   version: v1
   metadata:
   - name: connectionString
-    value: "Endpoint=sb://sb-giovani.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=aMrP0A02LVrcsTagMmscLy8kBac2Sd9iQv5XOBq4MQY="
+    value: ""
