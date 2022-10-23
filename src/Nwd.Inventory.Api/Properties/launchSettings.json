@@ -1,14 +1,14 @@
 {
   "profiles": {
-    "Nwd.Sales": {
+    "Nwd.Inventory.Api": {
       "commandName": "Project",
-      "launchBrowser": false,
+      "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:44301;http://localhost:8001"
+      "applicationUrl": "https://localhost:7118;http://localhost:5118"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -31,8 +31,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:56512",
-      "sslPort": 44385
+      "applicationUrl": "http://localhost:26484",
+      "sslPort": 44339
     }
   }
 }

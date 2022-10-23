@@ -12,7 +12,8 @@
         public static void SetupControllers(this IServiceCollection services)
         {
             // API controllers
-            services.AddControllers();
+            services.AddControllers()
+                .AddDapr();
         }
     }
 }

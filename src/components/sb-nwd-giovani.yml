@@ -1,0 +1,12 @@
+﻿apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: queue-service
+spec:
+  type: pubsub.azure.servicebus
+  version: v1
+  metadata:
+  - name: connectionString # Required when not using Azure Authentication.
+    value: "Endpoint=sb://sb-giovani.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=aMrP0A02LVrcsTagMmscLy8kBac2Sd9iQv5XOBq4MQY="
+  - name: ContentType
+    value: "application/json"
