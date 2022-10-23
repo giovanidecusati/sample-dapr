@@ -1,10 +1,9 @@
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Builder;
+using Nwd.Orders.Api.Configuration;
+using Nwd.Orders.Api.Services;
 using Nwd.Orders.Infrastructure.Configuration;
 using Nwd.Orders.Infrastructure.Data.Configuration;
 using Nwd.Orders.Infrastructure.Extensions;
-using Nwd.Orders.Api.Configuration;
-using Nwd.Orders.Api.Services;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -15,6 +14,7 @@ Log.Information("Starting up...");
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Serilog
 builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
 
 // Setup Infrastructure
@@ -57,32 +57,27 @@ if (app.Environment.IsDevelopment())
     app.UseReDoc();
 }
 
-// MapHealthChecks
-var healthCheckOptions = new HealthCheckOptions();
-healthCheckOptions.ResponseWriter = async (c, r) =>
-{
-    c.Response.ContentType = "application/json";
-    var result = JsonConvert.SerializeObject(r);
-    await c.Response.WriteAsync(result);
-};
+// UseRouting
+app.UseRouting();
 
-app.MapHealthChecks("/health", healthCheckOptions);
+// UseDapr
+app.UseDapr();
+
+// MapAppHealthChecks
+app.MapAppHealthChecks();
 
 // UseSerilogRequestLogging
 app.UseSerilogRequestLogging();
 
+// UseCors
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
+// UseHttpsRedirection
 app.UseHttpsRedirection();
 
 // app.UseAuthorization();
 
 // app.UseAuthentication();
-
-app.UseRouting();
-
-// app.UseEndpoints(endpoints => endpoints.MapControllers());
-app.UseDapr();
 
 Log.Information("Middleware configuration completed.");
 

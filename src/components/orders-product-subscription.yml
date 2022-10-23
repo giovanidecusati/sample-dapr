@@ -5,6 +5,6 @@ metadata:
 spec:
   pubsubname: queue-service
   topic: new-product-topic
-  route: /api/product
+  route: /api/product/subscribe
 scopes:
 - nwd-orders-api

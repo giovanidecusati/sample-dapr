@@ -15,5 +15,5 @@
             services.AddControllers()
                 .AddDapr();
         }
-    }
+    }    
 }

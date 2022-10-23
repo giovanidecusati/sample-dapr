@@ -7,8 +7,8 @@
             app.UseCloudEvents();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
-                endpoints.MapSubscribeHandler();              
+                endpoints.MapSubscribeHandler();
+                endpoints.MapControllers();                
             });
         }
     }
