@@ -21,3 +21,8 @@ $\src\>dapr dashboard
 ```
 $\src> dapr run --app-id nwd-orders-api --components-path .\components\ --app-port 8001 --dapr-http-port 50001 -- dotnet run --project  .\Nwd.Orders.Api\Nwd.Orders.Api.csproj
 ```
+
+3. Pub/Sub
+```
+Invoke-WebRequest 'http://localhost:50001/v1.0/invoke/nwd-orders-api/method/api/product'
+```
