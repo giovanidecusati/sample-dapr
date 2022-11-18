@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Nwd.Orders.Api": {
+    "Nwd.Basket.Api": {
       "commandName": "Project",
       "launchBrowser": false,
       "launchUrl": "swagger",
@@ -8,7 +8,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:44301;http://localhost:8001"
+      "applicationUrl": "https://localhost:44303;http://localhost:8003"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -31,8 +31,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:56512",
-      "sslPort": 44385
+      "applicationUrl": "http://localhost:48735",
+      "sslPort": 44373
     }
   }
 }

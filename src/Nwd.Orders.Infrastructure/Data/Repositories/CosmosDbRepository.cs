@@ -49,7 +49,7 @@ namespace Nwd.Orders.Infrastructure.Data.Repositories
 
         public async Task DeleteAsync(string id)
         {
-            await this._container.DeleteItemAsync<T>(id.ToString(), ResolvePartitionKey(id));
+            await _container.DeleteItemAsync<T>(id.ToString(), ResolvePartitionKey(id));
         }
 
         public virtual async Task<T> GetByIdAsync(string id)

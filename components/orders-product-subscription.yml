@@ -3,7 +3,7 @@ kind: Subscription
 metadata:
   name: orders-product-subscription
 spec:
-  pubsubname: queue-service
+  pubsubname: queue-component
   topic: new-product-topic
   route: /api/product/subscribe
 scopes:

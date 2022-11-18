@@ -7,16 +7,18 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Nwd.Sales/Nwd.Sales.csproj", "Nwd.Sales/"]
-RUN dotnet restore "Nwd.Sales/Nwd.Sales.csproj"
+COPY ["Nwd.Orders.Api/Nwd.Orders.Api.csproj", "Nwd.Orders.Api/"]
+COPY ["Nwd.Orders.Domain/Nwd.Orders.Domain.csproj", "Nwd.Orders.Domain/"]
+COPY ["Nwd.Orders.Infrastructure/Nwd.Orders.Infrastructure.csproj", "Nwd.Orders.Infrastructure/"]
+RUN dotnet restore "Nwd.Orders.Api/Nwd.Orders.Api.csproj"
 COPY . .
-WORKDIR "/src/Nwd.Sales"
-RUN dotnet build "Nwd.Sales.csproj" -c Release -o /app/build
+WORKDIR "/src/Nwd.Orders.Api"
+RUN dotnet build "Nwd.Orders.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Nwd.Sales.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Nwd.Orders.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Nwd.Sales.dll"]
+ENTRYPOINT ["dotnet", "Nwd.Orders.Api.dll"]

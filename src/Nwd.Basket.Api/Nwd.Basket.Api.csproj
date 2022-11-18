@@ -4,18 +4,17 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>d0af3b35-5a06-4d45-afe8-7a150a605630</UserSecretsId>
+    <UserSecretsId>7a839ea0-0138-457c-a35d-a7cba4c1adad</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
     <PackageReference Include="Dapr.Client" Version="1.9.0" />
-    <PackageReference Include="FluentValidation" Version="11.2.2" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.2" />
-    <PackageReference Include="MediatR" Version="11.0.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.17.0" />
     <PackageReference Include="NSwag.MSBuild" Version="13.17.0">
       <PrivateAssets>all</PrivateAssets>
@@ -31,9 +30,5 @@
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Nwd.Inventory.Domain\Nwd.Inventory.Domain.csproj" />
-  </ItemGroup>
-
+  
 </Project>

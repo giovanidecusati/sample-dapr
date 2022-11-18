@@ -8,6 +8,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Nwd.Inventory.Api/Nwd.Inventory.Api.csproj", "Nwd.Inventory.Api/"]
+COPY ["Nwd.Inventory.Domain/Nwd.Inventory.Domain.csproj", "Nwd.Inventory.Domain/"]
+COPY ["Nwd.Inventory.Infrastructure/Nwd.Inventory.Infrastructure.csproj", "Nwd.Inventory.Infrastructure/"]
 RUN dotnet restore "Nwd.Inventory.Api/Nwd.Inventory.Api.csproj"
 COPY . .
 WORKDIR "/src/Nwd.Inventory.Api"

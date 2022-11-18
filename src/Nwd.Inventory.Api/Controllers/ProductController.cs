@@ -1,9 +1,8 @@
-﻿using Dapr;
-using Dapr.Client;
+﻿using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
-using Nwd.Orders.Domain.Events;
+using Nwd.Inventory.Domain.Events;
 
-namespace Nwd.Orders.Api.Controllers
+namespace Nwd.Inventory.Api.Controllers
 {
     public class ProductController : ApiControllerBase
     {
@@ -14,21 +13,11 @@ namespace Nwd.Orders.Api.Controllers
             _logger = logger;
         }
 
-        [Topic("queue-service", "new-product-topic")]
-        [HttpPost("subscribe")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(AcceptedResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedObjectResult))]
-        public async Task<IActionResult> Subscribe(ProductCreatedEvent productCreatedEvent)
-        {
-            _logger.LogInformation("ProductCreatedEvent {@productCreatedEvent}", productCreatedEvent);
-
-            await Mediator.Publish((ProductCreatedEvent)productCreatedEvent);
-            return Accepted();
-        }
-
-        [HttpGet()]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Post()
         {
             using var client = new DaprClientBuilder().Build();
 
@@ -41,7 +30,7 @@ namespace Nwd.Orders.Api.Controllers
             };
 
             // Publish an event/message using Dapr PubSub
-            await client.PublishEventAsync("queue-service", "new-product-topic", productCreatedEvent);
+            await client.PublishEventAsync("queue-component", "new-product-topic", productCreatedEvent);
             return Accepted();
         }
     }

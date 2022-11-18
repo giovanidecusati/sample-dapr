@@ -1,11 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Nwd.Orders.Api.Filters;
 
-namespace Nwd.Orders.Api.Controllers
+namespace Nwd.Inventory.Api.Controllers
 {
     [ApiController]
-    [ApiExceptionFilter]
     [Route("api/[controller]")]
     public abstract class ApiControllerBase : ControllerBase
     {

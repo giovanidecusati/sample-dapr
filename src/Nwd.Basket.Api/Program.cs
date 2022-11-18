@@ -1,8 +1,5 @@
-using Nwd.Orders.Api.Configuration;
-using Nwd.Orders.Api.Services;
-using Nwd.Orders.Infrastructure.Configuration;
-using Nwd.Orders.Infrastructure.Data.Configuration;
-using Nwd.Orders.Infrastructure.Extensions;
+using Nwd.Basket.Api.Configuration;
+using Nwd.Basket.Api.Services;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -17,19 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
 
 // Setup Infrastructure
-builder.Services.SetupInfrastructure(builder.Configuration.GetSection("ConnectionStrings:CosmosDB").Get<CosmosDbSettings>());
+// builder.Services.SetupInfrastructure(builder.Configuration.GetSection("ConnectionStrings:CosmosDB").Get<CosmosDbSettings>());
 
 // Setup Swagger
 builder.Services.SetupNSwag();
 
 // Setup Controllers
 builder.Services.SetupControllers();
-
-// Setup FluentValidators
-builder.Services.SetupFluentValidators();
-
-// Setup MediatR
-builder.Services.SetupMediatR();
 
 // HttpContext
 builder.Services.AddHttpContextAccessor();
@@ -40,12 +31,11 @@ builder.Services.AddHealthChecks()
 
 var app = builder.Build();
 
+// global error handler
+// app.UseMiddleware<ErrorHandlerMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
-    app.EnsureCosmosDbIsCreated();
-
-    await app.SeedIfEmptyAsync();
-
     // Add OpenAPI/Swagger middlewares
     // Serves the registered OpenAPI/Swagger documents by default on `/swagger/{documentName}/swagger.json`
     app.UseOpenApi();
