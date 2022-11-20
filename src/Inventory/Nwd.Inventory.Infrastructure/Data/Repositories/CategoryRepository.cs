@@ -1,4 +1,5 @@
-﻿using Nwd.Inventory.Domain.Entities;
+﻿using Dapr.Client;
+using Nwd.Inventory.Domain.Entities;
 using Nwd.Inventory.Domain.Repositories;
 
 namespace Nwd.Inventory.Infrastructure.Data.Repositories
@@ -9,7 +10,7 @@ namespace Nwd.Inventory.Infrastructure.Data.Repositories
 
         public override string StateKeyName => "id";
 
-        public CategoryRepository()
+        public CategoryRepository(DaprClient daprClient) : base(daprClient)
         {
 
         }

@@ -3,25 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Orders.Api", "Nwd.Orders.Api\Nwd.Orders.Api.csproj", "{5A45083B-D014-4F8E-AE47-BF98601E4A45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Orders.Api", "Orders\Nwd.Orders.Api\Nwd.Orders.Api.csproj", "{5A45083B-D014-4F8E-AE47-BF98601E4A45}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Orders.Domain", "Nwd.Orders.Domain\Nwd.Orders.Domain.csproj", "{F0A479A8-AA41-474D-BCA9-FDA39FA2D3AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Orders.Domain", "Orders\Nwd.Orders.Domain\Nwd.Orders.Domain.csproj", "{F0A479A8-AA41-474D-BCA9-FDA39FA2D3AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Orders.Infrastructure", "Nwd.Orders.Infrastructure\Nwd.Orders.Infrastructure.csproj", "{A7360DBA-3A2D-41F0-B593-BBEC27151A0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Orders.Infrastructure", "Orders\Nwd.Orders.Infrastructure\Nwd.Orders.Infrastructure.csproj", "{A7360DBA-3A2D-41F0-B593-BBEC27151A0A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Orders", "Orders", "{34D3D46D-0D53-44A6-93BE-8A535AAA75B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{6D9CC4B2-1CB1-4278-ACB3-5514E665CE59}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Inventory.Api", "Nwd.Inventory.Api\Nwd.Inventory.Api.csproj", "{6C5F8150-7E2C-41C1-AFF7-8F488A7C732D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Inventory.Api", "Inventory\Nwd.Inventory.Api\Nwd.Inventory.Api.csproj", "{6C5F8150-7E2C-41C1-AFF7-8F488A7C732D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Inventory.Domain", "Nwd.Inventory.Domain\Nwd.Inventory.Domain.csproj", "{96024E26-9C39-405F-A8D9-4B6D4E775153}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Inventory.Domain", "Inventory\Nwd.Inventory.Domain\Nwd.Inventory.Domain.csproj", "{96024E26-9C39-405F-A8D9-4B6D4E775153}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nwd.Inventory.Infrastructure", "Nwd.Inventory.Infrastructure\Nwd.Inventory.Infrastructure.csproj", "{A417F440-ACE6-4F2F-9304-4858A14AF25E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nwd.Inventory.Infrastructure", "Inventory\Nwd.Inventory.Infrastructure\Nwd.Inventory.Infrastructure.csproj", "{A417F440-ACE6-4F2F-9304-4858A14AF25E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basket", "Basket", "{01C37A25-01CE-4411-8562-393689D79847}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nwd.Basket.Api", "Nwd.Basket.Api\Nwd.Basket.Api.csproj", "{F13D0256-2369-4C99-A9D4-9ABEFC8A78CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nwd.Basket.Api", "Basket\Nwd.Basket.Api\Nwd.Basket.Api.csproj", "{F13D0256-2369-4C99-A9D4-9ABEFC8A78CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
