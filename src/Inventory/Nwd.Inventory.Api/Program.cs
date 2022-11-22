@@ -1,6 +1,6 @@
 using Nwd.Inventory.Api.Configuration;
 using Nwd.Inventory.Api.Services;
-using Nwd.Inventory.Domain.Configuration;
+using Nwd.Inventory.Application.Configuration;
 using Nwd.Inventory.Infrastructure.Configuration;
 using Serilog;
 
@@ -38,7 +38,7 @@ builder.Services.AddHealthChecks()
 builder.Services.SetupInfrastructure();
 
 // Setup Domain
-builder.Services.SetupDomain();
+builder.Services.SetupApplication();
 
 var app = builder.Build();
 

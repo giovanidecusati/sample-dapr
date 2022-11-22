@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Nwd.Inventory.Application\Nwd.Inventory.Application.csproj" />
     <ProjectReference Include="..\Nwd.Inventory.Domain\Nwd.Inventory.Domain.csproj" />
     <ProjectReference Include="..\Nwd.Inventory.Infrastructure\Nwd.Inventory.Infrastructure.csproj" />
   </ItemGroup>

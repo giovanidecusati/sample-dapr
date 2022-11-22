@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Nwd.Inventory.Domain.Commands.UpdateInventory;
+using Nwd.Inventory.Application.Commands.UpdateInventory;
 
 namespace Nwd.Inventory.Api.Controllers
 {

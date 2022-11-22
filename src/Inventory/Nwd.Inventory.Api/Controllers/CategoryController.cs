@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Nwd.Inventory.Domain.Commands.CreateCategory;
-using Nwd.Inventory.Domain.Queries.GetSingleCategory;
+using Nwd.Inventory.Application.Commands.CreateCategory;
+using Nwd.Inventory.Application.Queries.GetSingleCategory;
 
 namespace Nwd.Inventory.Api.Controllers
 {

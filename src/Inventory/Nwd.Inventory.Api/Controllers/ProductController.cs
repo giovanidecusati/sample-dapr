@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Nwd.Inventory.Domain.Commands.CreateCategory;
+using Nwd.Inventory.Application.Commands.CreateCategory;
 
 namespace Nwd.Inventory.Api.Controllers
 {
