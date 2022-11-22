@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Nwd.Orders.Domain.Interfaces;
-using Nwd.Orders.Domain.Queries.GetSingleOrder;
-using Nwd.Orders.Domain.Queries.ListOrder;
 using Nwd.Orders.Infrastructure.Data.Configuration;
 using Nwd.Orders.Infrastructure.Data.Repositories;
 using Nwd.Orders.Infrastructure.Extensions;
@@ -29,9 +27,6 @@ namespace Nwd.Orders.Infrastructure.Configuration
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
-
-            services.AddScoped<IOrderReadOnlyRepository, OrderReadOnlyRepository>();
-            services.AddScoped<IListOrderReadOnlyRepository, OrderReadOnlyRepository>();
         }
     }
 }

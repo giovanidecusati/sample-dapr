@@ -22,6 +22,7 @@ Why **Dapr**? It fits this architecture because it solves an essential part of c
 It handles basket operations.
 * It simulates a Data-Driven (CRUD) scenario. 
 * Consumes Dapr State Service API.
+* TODO: Once basket is submitted to checkout it publishes a message in the topic *order-submitted*.
 
 ## Inventory microservice
 It handles product and inventory operations.
@@ -29,38 +30,12 @@ It handles product and inventory operations.
 * Pusblishes a *ProductCreatedEvent* into a topic *new-product-topic* for every new product created.
 * Uses isolation level to deal with concurrency transactions due to stock level operations.
 
-
-### Inventory microservice layers 
-* Web Api
-  * HealthCheck
-  * Monitorig
-    * Serilog
-  * Swagger
-* Application Layer
-  * CQRS
-* Domain Layer
-  * Domain-Driven Design
-  * FluentValidator
-* Data Layer
-  * SQL Server
-
-
 ## Orders microservice
-It handle order operations.
+It handles orders operations.
 * It simulates a CRUD. 
 * Subscribes a topic *new-product-topic*.
-
-### Orders microservice layers 
-* Web Api
-  * HealthCheck
-  * Monitorig
-    * Serilog
-  * Swagger
-* Domain Layer
-  * CQRS using MediaT
-  * FluentValidator
-* Data Layer
-  * CosmosDB
+* Once a order is submitted a state machine (SAGA) starts to reserve the items in the inventory and process payment. 
+* TODO: Subscribes a topic *order-submitted*.
 
 ## Development
 Follow the steps below to setup you development enviroment.

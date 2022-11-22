@@ -1,6 +1,6 @@
 ﻿using Dapr;
 using Microsoft.AspNetCore.Mvc;
-using Nwd.Orders.Domain.Events;
+using Nwd.Orders.Application.Events;
 
 namespace Nwd.Orders.Api.Controllers
 {

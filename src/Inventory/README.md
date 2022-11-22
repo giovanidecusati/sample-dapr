@@ -1,5 +1,18 @@
 # Inventory
 
+### Inventory microservice layers 
+* Web Api
+  * HealthCheck
+  * Monitorig
+    * Serilog
+  * Swagger
+* Application Layer
+  * CQRS
+* Domain Layer
+  * Domain-Driven Design
+  * FluentValidator
+* Data Layer
+  * SQL Server
 
 1. Run Inventory microservice
 ```

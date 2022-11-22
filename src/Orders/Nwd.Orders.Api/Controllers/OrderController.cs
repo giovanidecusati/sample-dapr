@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Nwd.Orders.Commands.CreateOrder;
+using Nwd.Orders.Application.CreateOrder;
+using Nwd.Orders.Application.Queries.GetSingleOrder;
+using Nwd.Orders.Application.Queries.ListOrder;
 using Nwd.Orders.Domain.Commands.CreateOrder;
-using Nwd.Orders.Domain.Queries.GetSingleOrder;
-using Nwd.Orders.Domain.Queries.ListOrder;
 
 namespace Nwd.Orders.Api.Controllers
 {
