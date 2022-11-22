@@ -6,7 +6,7 @@ namespace Nwd.Inventory.Infrastructure.Data.Repositories
 {
     public abstract class DaprStateMgmtRepository<T> where T : BaseEntity
     {
-        private IUnitOfWork _unitOfWork;
+        private IUnitOfWork? _unitOfWork;
         private readonly DaprClient _client;
         public abstract string StoreName { get; }
         public abstract string StoreKeyName(T entity);

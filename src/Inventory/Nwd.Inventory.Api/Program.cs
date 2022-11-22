@@ -1,6 +1,5 @@
 using Nwd.Inventory.Api.Configuration;
 using Nwd.Inventory.Api.Services;
-using Nwd.Inventory.Application.Configuration;
 using Nwd.Inventory.Infrastructure.Configuration;
 using Serilog;
 
@@ -14,9 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Serilog
 builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
-
-// Setup EventHandlers
-builder.Services.SetupMediatR();
 
 // Setup Swagger
 builder.Services.SetupNSwag();

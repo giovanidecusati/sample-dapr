@@ -6,5 +6,6 @@ namespace Nwd.Inventory.Domain.Repositories
     {
         Task<T> GetByIdAsync(string categoryId, CancellationToken cancellationToken = default);
         Task AddAsync(T item, CancellationToken cancellationToken = default);
+        void SetUnitOfWork(IUnitOfWork unitOfWork);
     }
 }

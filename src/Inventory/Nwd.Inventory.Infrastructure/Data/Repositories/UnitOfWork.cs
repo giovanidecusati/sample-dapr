@@ -30,14 +30,11 @@ namespace Nwd.Inventory.Infrastructure.Data.Repositories
         public void EnlistTransaction<T>(string storeName, string storeKeyName, T item) where T : BaseEntity
         {
             _logger.LogDebug("Enlist transaction into {storeKey} with content {@item}", storeKeyName, item);
-            lock (_requests)
-            {
-                _requests.TryGetValue(storeName, out var transactions);
-                transactions = transactions ?? new List<StateTransactionRequest>();
-                var binaryItem = JsonSerializer.SerializeToUtf8Bytes(item);
-                transactions.Add(new StateTransactionRequest(storeKeyName, binaryItem, StateOperationType.Upsert));
-                _requests.TryAdd(storeName, transactions);
-            }
+            _requests.TryGetValue(storeName, out var transactions);
+            transactions = transactions ?? new List<StateTransactionRequest>();
+            var binaryItem = JsonSerializer.SerializeToUtf8Bytes(item);
+            transactions.Add(new StateTransactionRequest(storeKeyName, binaryItem, StateOperationType.Upsert));
+            _requests.TryAdd(storeName, transactions);
         }
 
         public void Dispose()
