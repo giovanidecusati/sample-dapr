@@ -24,7 +24,8 @@ namespace Nwd.Orders.Domain.Events
                 {
                     Id = productCreatedEvent.Id,
                     Name = productCreatedEvent.Name,
-                    Category = productCreatedEvent.Category
+                    Category = productCreatedEvent.CategoryName,
+                    UnitPrice = productCreatedEvent.UnitPrice
                 });
         }
     }

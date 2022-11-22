@@ -1,6 +1,7 @@
 using Nwd.Inventory.Api.Configuration;
-using Nwd.Inventory.Api.Middlewares;
 using Nwd.Inventory.Api.Services;
+using Nwd.Inventory.Domain.Configuration;
+using Nwd.Inventory.Infrastructure.Configuration;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -14,8 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Serilog
 builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
 
-// Setup Infrastructure
-// builder.Services.SetupInfrastructure(builder.Configuration.GetSection("ConnectionStrings:CosmosDB").Get<CosmosDbSettings>());
+// Setup EventHandlers
+builder.Services.SetupMediatR();
 
 // Setup Swagger
 builder.Services.SetupNSwag();
@@ -26,9 +27,6 @@ builder.Services.SetupControllers();
 // Setup FluentValidators
 builder.Services.SetupFluentValidators();
 
-// Setup MediatR
-builder.Services.SetupMediatR();
-
 // HttpContext
 builder.Services.AddHttpContextAccessor();
 
@@ -36,10 +34,16 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks()
     .AddCheck<HealthCheck>("System");
 
+// Setup Infrastructure
+builder.Services.SetupInfrastructure();
+
+// Setup Domain
+builder.Services.SetupDomain();
+
 var app = builder.Build();
 
-// global error handler
-app.UseMiddleware<ErrorHandlerMiddleware>();
+// TODO: replace Erro API Filter to global error handler ??
+// app.UseMiddleware<ErrorHandlerMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

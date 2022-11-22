@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Nwd.Inventory.Domain.Commands.CreateCategory;
+using Nwd.Inventory.Domain.Queries.GetSingleCategory;
 
 namespace Nwd.Inventory.Api.Controllers
 {
@@ -20,6 +21,17 @@ namespace Nwd.Inventory.Api.Controllers
         {
             var result = await Mediator.Send(createCategoryCommand);
             return CreatedAtRoute(new { id = result.CategoryId }, result);
+        }
+
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetSingleCategoryQueryResult))]
+        [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(NoContentResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedObjectResult))]
+        public async Task<GetSingleCategoryQueryResult> Get([FromQuery] GetSingleCategoryQuery getSingleCategoryQuery)
+        {
+            return await Mediator.Send(getSingleCategoryQuery);
         }
     }
 }

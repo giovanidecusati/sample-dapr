@@ -20,13 +20,15 @@ Why **Dapr**? It fits this architecture because it solves an essential part of c
 
 ## Basket microservice
 It handles basket operations.
-* It simulates a Data-Driven scenario. 
+* It simulates a Data-Driven (CRUD) scenario. 
+* Consumes Dapr State Service API.
 
 ## Inventory microservice
 It handles product and inventory operations.
 * It simulates a very complext domain. 
 * Pusblishes a *ProductCreatedEvent* into a topic *new-product-topic* for every new product created.
 * Uses isolation level to deal with concurrency transactions due to stock level operations.
+
 
 ### Inventory microservice layers 
 * Web Api
@@ -101,32 +103,6 @@ dapr init
 dapr dashboard
 ```
 
-3. Run Basket microservice. 
-```
-dapr run --app-id nwd-basket-api --components-path .\src\.components\ --app-port 8003 --dapr-http-port 50001 -- dotnet run --project  .\src\Nwd.Basket.Api\Nwd.Basket.Api.csproj
-```
-
-3. Run Orders microservice. 
-```
-dapr run --app-id nwd-orders-api --components-path .\src\.components\ --app-port 8001 --dapr-http-port 50001 -- dotnet run --project  .\src\Nwd.Orders.Api\Nwd.Orders.Api.csproj
-```
-
-4. Run Inventory microservice. 
-```
-dapr run --app-id nwd-inventory-api --components-path .\src\.components\ --app-port 8002 --dapr-http-port 50001 -- dotnet run --project  .\src\Nwd.Orders.Api\Nwd.Orders.Api.csproj
-```
-
-6. Cleanup
-
-```
-dapr stop --app-id nwd-orders-api
-dapr stop --app-id nwd-inventory-api
-```
-
-3. Pub/Sub
-```
-Invoke-WebRequest 'http://localhost:50001/v1.0/invoke/nwd-orders-api/method/api/product'
-```
 
 ## References
 1. Getting started - [https:/docs.dapr.io/getting-started/](https://docs.dapr.io/getting-started/)

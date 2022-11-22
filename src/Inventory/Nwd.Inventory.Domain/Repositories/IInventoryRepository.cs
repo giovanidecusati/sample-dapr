@@ -1,8 +1,9 @@
-﻿namespace Nwd.Inventory.Domain.Repositories
+﻿using Nwd.Inventory.Domain.Entities;
+
+namespace Nwd.Inventory.Domain.Repositories
 {
-    public interface IInventoryRepository
+    public interface IInventoryRepository : IAggRootRepository<Entities.Inventory>
     {
-        Task<Entities.Inventory> GetByIdAsync(string productId);
-        Task AddAsync(Entities.Inventory item);
+        void EnlistAddOrUpdateTransaction(Entities.Inventory item);
     }
 }

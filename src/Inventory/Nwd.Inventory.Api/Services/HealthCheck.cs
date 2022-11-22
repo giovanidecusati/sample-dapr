@@ -1,57 +1,60 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Dapr.Client;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Nwd.Inventory.Api.Services
 {
     public class HealthCheck : IHealthCheck
     {
         private readonly ILogger<HealthCheck> _logger;
-        private static readonly string Component_CosmosDbName = "CosmosDB";
+        private readonly DaprClient _daprClient;
+        private static readonly string Component_Dapr = "Dapr";
         private static readonly string Component_HealthyStatus = "Healthy";
         private static readonly string Component_UnhealthyStatus = "Unhealthy";
         private static readonly string Message_Degraded = "Our application is still running, but not responding within an expected timeframe.";
         private static readonly string Message_Healthy = "Our application is healthy and in a normal, working state.";
         private static readonly string Message_Unhealthy = "Our application is unhealthy and is offline or an unhandled exception was thrown while executing the check.";
-        private Dictionary<string, string> _components;
+        private Dictionary<string, object> _components;
 
-        public HealthCheck(ILogger<HealthCheck> logger)
+        public HealthCheck(ILogger<HealthCheck> logger, DaprClient daprClient)
         {
             _logger = logger;
-            _components = new Dictionary<string, string>(new[] {
-                new KeyValuePair<string, string>(Component_CosmosDbName, Component_UnhealthyStatus)
-            });
+            _daprClient = daprClient;
+            _components = new Dictionary<string, object>(new[] { new KeyValuePair<string, object>(Component_Dapr, Component_UnhealthyStatus) });
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
+            await DaprHealthCheck(cancellationToken);
+            return await Task.FromResult(HealthCheckResult.Healthy(Message_Healthy, _components));
+        }
+
+        private async Task DaprHealthCheck(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation($"Checking {Component_Dapr} component health.");
+            var helathStatus = Component_UnhealthyStatus;
+
             try
             {
-                if (_components.Values.Contains(Component_UnhealthyStatus))
-                    return HealthCheckResult.Healthy(Message_Degraded);
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
+                var result = await _daprClient.CheckHealthAsync();
+                stopWatch.Stop();
+
+                if (result)
+                    helathStatus = stopWatch.ElapsedMilliseconds < 300 ? Component_HealthyStatus : Message_Degraded;
                 else
-                    return await Task.FromResult(HealthCheckResult.Healthy(Message_Healthy));
+                    helathStatus = Component_UnhealthyStatus;
+
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, Message_Unhealthy);
-                return HealthCheckResult.Unhealthy(Message_Unhealthy, ex);
-
+                _logger.LogError(ex, $"{Component_Dapr} is {helathStatus}.");
             }
-        }
 
-        private async Task CosmosDBHealthcheck(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation($"Checking {Component_CosmosDbName} component health.");
-
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-            // await _cosmosDbContainerFactory.CheckHealthAsync(cancellationToken);
-            stopWatch.Stop();
-
-            var helathStatus = stopWatch.ElapsedMilliseconds < 300 ? Component_HealthyStatus : Component_UnhealthyStatus;
-            _components[Component_CosmosDbName] = helathStatus;
-
-            _logger.LogInformation($"{Component_CosmosDbName} is {helathStatus}.");
+            _components[Component_Dapr] = helathStatus;
+            _logger.LogInformation($"{Component_Dapr} is {helathStatus}.");
         }
     }
 }

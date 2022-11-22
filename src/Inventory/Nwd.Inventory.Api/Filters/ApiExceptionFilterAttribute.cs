@@ -1,74 +1,42 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Net;
-using System.Text.Json;
 
-namespace Nwd.Inventory.Api.Middlewares
+namespace Nwd.Inventory.Api.Filters
 {
-    public class ErrorHandlerMiddleware
+    public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
-        private readonly RequestDelegate _next;
         private readonly IDictionary<Type, Action<ExceptionContext>> _exceptionHandlers;
 
-        public ErrorHandlerMiddleware(RequestDelegate next)
+        public ApiExceptionFilterAttribute()
         {
             // Register known exception types and handlers.
             _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
                 { typeof(FluentValidation.ValidationException), HandleFluentValidationException }
             };
-
-            _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public override void OnException(ExceptionContext context)
         {
-            try
-            {
-                await _next(context);
-            }
-            catch (Exception error)
-            {
-                HandleException(context);
+            HandleException(context);
 
-                var response = context.Response;
-                response.ContentType = "application/json";
-
-                //switch (error)
-                //{
-                //    case AppException e:
-                //        // custom application error
-                //        response.StatusCode = (int)HttpStatusCode.BadRequest;
-                //        break;
-                //    case KeyNotFoundException e:
-                //        // not found error
-                //        response.StatusCode = (int)HttpStatusCode.NotFound;
-                //        break;
-                //    default:
-                //        // unhandled error
-                //        response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                //        break;
-                //}
-
-                var result = JsonSerializer.Serialize(new { message = error?.Message });
-                await response.WriteAsync(result);
-            }
+            base.OnException(context);
         }
 
-        private void HandleException(HttpContext context)
+        private void HandleException(ExceptionContext context)
         {
-            //var type = context.Exception.GetType();
-            //if (_exceptionHandlers.ContainsKey(type))
-            //{
-            //    _exceptionHandlers[type].Invoke(context);
-            //    return;
-            //}
+            var type = context.Exception.GetType();
+            if (_exceptionHandlers.ContainsKey(type))
+            {
+                _exceptionHandlers[type].Invoke(context);
+                return;
+            }
 
-            //if (!context.Response.ModelState.IsValid)
-            //{
-            //    HandleInvalidModelStateException(context);
-            //    return;
-            //}
+            if (!context.ModelState.IsValid)
+            {
+                HandleInvalidModelStateException(context);
+                return;
+            }
         }
         private void HandleFluentValidationException(ExceptionContext context)
         {

@@ -1,6 +1,5 @@
-﻿using Dapr.Client;
-using Microsoft.AspNetCore.Mvc;
-using Nwd.Inventory.Domain.Events;
+﻿using Microsoft.AspNetCore.Mvc;
+using Nwd.Inventory.Domain.Commands.CreateCategory;
 
 namespace Nwd.Inventory.Api.Controllers
 {
@@ -17,21 +16,10 @@ namespace Nwd.Inventory.Api.Controllers
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(AcceptedResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedObjectResult))]
-        public async Task<IActionResult> Post()
+        public async Task<IActionResult> Post(CreateProductCommand createProductCommand)
         {
-            using var client = new DaprClientBuilder().Build();
-
-            var productCreatedEvent = new ProductCreatedEvent()
-            {
-                Category = "Monitor",
-                Id = Guid.NewGuid().ToString(),
-                Name = "Monitor Kogan",
-                UnitPrice = 1.99m
-            };
-
-            // Publish an event/message using Dapr PubSub
-            await client.PublishEventAsync("queue-component", "new-product-topic", productCreatedEvent);
-            return Accepted();
+            var result = await Mediator.Send(createProductCommand);
+            return CreatedAtRoute(new { id = result.ProductId }, result);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Nwd.Orders.Infrastructure.Data.Repositories
     {
         public override string ContainerName { get; } = CosmosDbContainer.CustomersContainerName;
 
-        public override string GenerateId(Customer entity) => $"{entity.Id}";
+        public override string GenerateId(Customer entity) => $"{Guid.NewGuid()}";
 
         public override PartitionKey ResolvePartitionKey(string entityId) => new PartitionKey(entityId.Split(':')[0]);
 

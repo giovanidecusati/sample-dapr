@@ -2,9 +2,7 @@
 
 namespace Nwd.Inventory.Domain.Repositories
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IAggRootRepository<Category>
     {
-        Task<Category> GetByIdAsync(string categoryId, CancellationToken cancellationToken = default);
-        Task AddAsync(Category item, CancellationToken cancellationToken = default);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Nwd.Inventory.Domain.Entities
 {
-    public class Inventory
+    public class Inventory: BaseEntity
     {
         private List<InventoryUpdatedEvent> _inventoryEvents;
 

@@ -1,10 +1,11 @@
-﻿namespace Nwd.Inventory.Domain.Entities
+﻿using MediatR;
+
+namespace Nwd.Inventory.Domain.Commands.CreateCategory
 {
-    public class Product : BaseEntity
+    public class CreateProductCommand : IRequest<CreateProductCommandResult>
     {
         public string Name { get; set; }
         public string CategoryId { get; set; }
         public decimal UnitPrice { get; set; }
-        public bool Enabled { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Nwd.Inventory.Domain.Events;
-
-namespace Nwd.Inventory.Domain.Entities
+﻿namespace Nwd.Inventory.Domain.Entities
 {
     public class Transaction
     {

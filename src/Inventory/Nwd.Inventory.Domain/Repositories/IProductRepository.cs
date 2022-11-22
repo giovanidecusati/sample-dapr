@@ -2,9 +2,8 @@
 
 namespace Nwd.Inventory.Domain.Repositories
 {
-    public interface IProductRepository
+    public interface IProductRepository : IAggRootRepository<Product>
     {
-        Task<Product> GetByIdAsync(string productId);
-        Task AddAsync(Product item);
+
     }
 }
