@@ -13,7 +13,7 @@ namespace Nwd.Inventory.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(AcceptedResult))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CreateProductCommandResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedObjectResult))]
         public async Task<IActionResult> Post(CreateProductCommand createProductCommand)

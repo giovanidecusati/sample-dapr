@@ -1,7 +1,12 @@
-﻿namespace Nwd.Inventory.Domain.Events
+﻿using MediatR;
+
+namespace Nwd.Inventory.Domain.Events
 {
-    public class InventoryUpdatedHandler
+    public class InventoryUpdatedHandler : INotificationHandler<InventoryUpdatedEvent>
     {
-        
+        public async Task Handle(InventoryUpdatedEvent notification, CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask;
+        }
     }
 }

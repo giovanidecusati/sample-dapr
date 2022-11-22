@@ -4,6 +4,6 @@ namespace Nwd.Inventory.Domain.Repositories
 {
     public interface IInventoryRepository : IAggRootRepository<Entities.Inventory>
     {
-        void EnlistAddOrUpdateTransaction(Entities.Inventory item);
+        void SetUnitOfWork(IUnitOfWork unitOfWork);
     }
 }

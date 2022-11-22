@@ -11,7 +11,6 @@ namespace Nwd.Inventory.Infrastructure.Data.Repositories
         private readonly ILogger<UnitOfWork> _logger;
         private readonly DaprClient _client;
         private Dictionary<string, List<StateTransactionRequest>> _requests;
-        private bool disposedValue;
 
         public UnitOfWork(DaprClient client, ILogger<UnitOfWork> logger)
         {
@@ -22,54 +21,28 @@ namespace Nwd.Inventory.Infrastructure.Data.Repositories
 
         public async Task ExecuteStateTransactionAsync(CancellationToken cancellationToken = default)
         {
+            _logger.LogDebug("Executing ExecuteStateTransactionAsync {@requests}", _requests);
             foreach (var storeKey in _requests.Keys)
-                await _client.ExecuteStateTransactionAsync(storeKey, _requests[storeKey]);
+                await _client.ExecuteStateTransactionAsync(storeKey, _requests[storeKey], cancellationToken: cancellationToken);
             _logger.LogDebug("ExecuteStateTransactionAsync has been completed.");
         }
 
-        public void EnlistTransaction<T>(string storeKey, T item) where T : BaseEntity
+        public void EnlistTransaction<T>(string storeName, string storeKeyName, T item) where T : BaseEntity
         {
-            _logger.LogDebug("Enlist transaction into {storeKey} with content {@item}");
+            _logger.LogDebug("Enlist transaction into {storeKey} with content {@item}", storeKeyName, item);
             lock (_requests)
             {
-                _requests.TryGetValue(storeKey, out var transactions);
+                _requests.TryGetValue(storeName, out var transactions);
                 transactions = transactions ?? new List<StateTransactionRequest>();
                 var binaryItem = JsonSerializer.SerializeToUtf8Bytes(item);
-                transactions.Add(new StateTransactionRequest(storeKey, binaryItem, StateOperationType.Upsert));
-                _requests.TryAdd(storeKey, transactions);
+                transactions.Add(new StateTransactionRequest(storeKeyName, binaryItem, StateOperationType.Upsert));
+                _requests.TryAdd(storeName, transactions);
             }
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                    _client.Dispose();
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                _requests.Clear();
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        ~UnitOfWork()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: false);
         }
 
         public void Dispose()
         {
-            _logger.LogDebug("Disposing unit of work.");
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            ExecuteStateTransactionAsync().GetAwaiter().GetResult();
         }
     }
 }

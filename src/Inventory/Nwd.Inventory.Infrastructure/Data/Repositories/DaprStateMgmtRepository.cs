@@ -36,7 +36,7 @@ namespace Nwd.Inventory.Infrastructure.Data.Repositories
 
         private void EnlistAddOrUpdateTransaction(T item)
         {
-            _unitOfWork.EnlistTransaction(StoreName, item);
+            _unitOfWork.EnlistTransaction(StoreName, StoreKeyName(item), item);
         }
     }
 }

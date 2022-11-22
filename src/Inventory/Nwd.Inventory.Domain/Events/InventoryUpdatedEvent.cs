@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MediatR;
 
 namespace Nwd.Inventory.Domain.Events
 {
-    public class InventoryUpdatedEvent
+    public class InventoryUpdatedEvent : INotification
     {
         public InventoryUpdatedEvent(string productId, int stockLevel, int quantity, TransactionType transactionType)
         {

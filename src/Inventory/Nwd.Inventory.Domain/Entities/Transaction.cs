@@ -4,12 +4,12 @@
     {
         public static Transaction AddItem(Inventory inventory, int quantity)
         {
-            return new Transaction(inventory.ProductId, inventory.StockLevel, TransactionType.AddItem, Math.Abs(quantity));
+            return new Transaction(inventory.Id, inventory.StockLevel, TransactionType.AddItem, Math.Abs(quantity));
         }
 
         public static Transaction RemoveItem(Inventory inventory, int quantity)
         {
-            return new Transaction(inventory.ProductId, inventory.StockLevel, TransactionType.RemoveItem, Math.Abs(quantity));
+            return new Transaction(inventory.Id, inventory.StockLevel, TransactionType.RemoveItem, Math.Abs(quantity));
         }
 
         private Transaction(string productId, int stockLevel, TransactionType transactionType, int quantity)
