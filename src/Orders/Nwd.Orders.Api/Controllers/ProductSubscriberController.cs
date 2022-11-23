@@ -1,6 +1,6 @@
 ﻿using Dapr;
 using Microsoft.AspNetCore.Mvc;
-using Nwd.Orders.Application.Events;
+using Nws.BuildingBlocks.Events;
 
 namespace Nwd.Orders.Api.Controllers
 {
@@ -14,7 +14,7 @@ namespace Nwd.Orders.Api.Controllers
         }
 
         [Topic("queue-component", "new-product-topic")]
-        [HttpPost("subscribe")]
+        [HttpPut("subscribe")]
         [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(AcceptedResult))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedObjectResult))]

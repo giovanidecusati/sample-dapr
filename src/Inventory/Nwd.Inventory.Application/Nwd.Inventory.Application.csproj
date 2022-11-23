@@ -17,6 +17,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\Nws.BuildingBlocks\Nws.BuildingBlocks.csproj" />
     <ProjectReference Include="..\Nwd.Inventory.Domain\Nwd.Inventory.Domain.csproj" />
   </ItemGroup>
 

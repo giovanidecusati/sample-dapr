@@ -2,15 +2,16 @@
 using Microsoft.Extensions.Logging;
 using Nwd.Orders.Domain.Entities;
 using Nwd.Orders.Domain.Interfaces;
+using Nws.BuildingBlocks.Events;
 
-namespace Nwd.Orders.Application.Events
+namespace Nwd.Orders.Application.EventHandlers
 {
-    public class ProductHandler : INotificationHandler<ProductCreatedEvent>
+    public class ProductCreatedEventHandler : INotificationHandler<ProductCreatedEvent>
     {
         private readonly IProductRepository _productRepository;
-        private readonly ILogger<ProductHandler> _logger;
+        private readonly ILogger<ProductCreatedEventHandler> _logger;
 
-        public ProductHandler(IProductRepository productRepository, ILogger<ProductHandler> logger)
+        public ProductCreatedEventHandler(IProductRepository productRepository, ILogger<ProductCreatedEventHandler> logger)
         {
             _productRepository = productRepository;
             _logger = logger;

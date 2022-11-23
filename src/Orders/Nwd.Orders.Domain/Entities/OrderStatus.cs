@@ -2,8 +2,9 @@
 {
     public enum OrderStatus : int
     {
+        Submitted,
         Processing,
-        Created,
+        Completed,
         Error
     }
 }

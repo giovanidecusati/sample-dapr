@@ -1,7 +1,6 @@
 ﻿using Dapr.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Nwd.Inventory.Api.Services
 {
@@ -11,9 +10,10 @@ namespace Nwd.Inventory.Api.Services
         private readonly DaprClient _daprClient;
         private static readonly string Component_Dapr = "Dapr";
         private static readonly string Component_HealthyStatus = "Healthy";
+        private static readonly string Component_DegradedStatus = "Degraded";
         private static readonly string Component_UnhealthyStatus = "Unhealthy";
-        private static readonly string Message_Degraded = "Our application is still running, but not responding within an expected timeframe.";
         private static readonly string Message_Healthy = "Our application is healthy and in a normal, working state.";
+        private static readonly string Message_Degraded = "Our application is still running, but not responding within an expected timeframe.";
         private static readonly string Message_Unhealthy = "Our application is unhealthy and is offline or an unhandled exception was thrown while executing the check.";
         private Dictionary<string, object> _components;
 
@@ -27,7 +27,13 @@ namespace Nwd.Inventory.Api.Services
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             await DaprHealthCheck(cancellationToken);
-            return await Task.FromResult(HealthCheckResult.Healthy(Message_Healthy, _components));
+
+            if (_components.Values.Contains(Component_UnhealthyStatus))
+                return await Task.FromResult(HealthCheckResult.Healthy(Message_Unhealthy, _components));
+            else if (_components.Values.Contains(Component_DegradedStatus))
+                return await Task.FromResult(HealthCheckResult.Healthy(Message_Degraded, _components));
+            else
+                return await Task.FromResult(HealthCheckResult.Healthy(Message_Healthy, _components));
         }
 
         private async Task DaprHealthCheck(CancellationToken cancellationToken)

@@ -1,9 +1,11 @@
-﻿using FluentValidation;
+﻿using Dapr.Client;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Nwd.Orders.Application.CreateOrder;
 using Nwd.Orders.Domain.Entities;
 using Nwd.Orders.Domain.Interfaces;
+using Nws.BuildingBlocks.Events;
 
 namespace Nwd.Orders.Domain.Commands.CreateOrder
 {
@@ -12,17 +14,19 @@ namespace Nwd.Orders.Domain.Commands.CreateOrder
     {
         private readonly IValidator<CreateOrderCommand> _createOrderValidator;
         private readonly IOrderRepository _orderRepository;
-        public readonly IProductRepository _productRepository;
-        public readonly ICustomerRepository _customerRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly ILogger<CreateOrderCommandHandler> _logger;
+        private readonly DaprClient _daprClient;
 
-        public CreateOrderCommandHandler(IValidator<CreateOrderCommand> createOrderValidator, IOrderRepository orderRepository, IProductRepository productRepository, ICustomerRepository customerRepository, ILogger<CreateOrderCommandHandler> logger)
+        public CreateOrderCommandHandler(IValidator<CreateOrderCommand> createOrderValidator, IOrderRepository orderRepository, IProductRepository productRepository, ICustomerRepository customerRepository, ILogger<CreateOrderCommandHandler> logger, DaprClient daprClient)
         {
             _createOrderValidator = createOrderValidator;
             _orderRepository = orderRepository;
             _productRepository = productRepository;
             _customerRepository = customerRepository;
             _logger = logger;
+            _daprClient = daprClient;
         }
 
         public async Task<CreateOrderCommandResult> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -34,6 +38,7 @@ namespace Nwd.Orders.Domain.Commands.CreateOrder
             var customer = await _customerRepository.GetByIdAsync(request.CustomerId);
             var order = new Order()
             {
+                Status = OrderStatus.Submitted,
                 Customer = customer,
                 CreatedAt = DateTime.UtcNow,
                 ShipTo = new Address()
@@ -61,6 +66,9 @@ namespace Nwd.Orders.Domain.Commands.CreateOrder
             }
 
             await _orderRepository.AddAsync(order);
+
+            // Publish an event/message using Dapr PubSub
+            await _daprClient.PublishEventAsync("queue-component", "order-submitted-topic", new OrderSubmittedEvent(order.Id));
 
             return new CreateOrderCommandResult(order.Id);
         }

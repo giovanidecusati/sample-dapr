@@ -29,6 +29,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks()
     .AddCheck<HealthCheck>("System");
 
+// Dapr Actors
+builder.Services.AddDaprActors();
+
 // Setup Infrastructure
 builder.Services.SetupInfrastructure(builder.Configuration.GetSection("ConnectionStrings:CosmosDB").Get<CosmosDbSettings>());
 
@@ -66,7 +69,8 @@ app.UseSerilogRequestLogging();
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 // UseHttpsRedirection
-app.UseHttpsRedirection();
+// Dapr Actors doesn't support UseHttpsRedirection  
+// app.UseHttpsRedirection();
 
 // app.UseAuthorization();
 

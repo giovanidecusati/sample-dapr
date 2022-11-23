@@ -11,5 +11,6 @@
         public OrderStatus Status { get; set; }
 
         public Address ShipTo { get; set; }
+        public string Message { get; set; }
     }
 }

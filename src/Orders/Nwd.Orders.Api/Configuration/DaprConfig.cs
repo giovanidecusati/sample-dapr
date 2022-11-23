@@ -1,4 +1,6 @@
-﻿namespace Nwd.Orders.Api.Configuration
+﻿using Nwd.Orders.Application.Actors;
+
+namespace Nwd.Orders.Api.Configuration
 {
     public static class DaprConfig
     {
@@ -8,7 +10,17 @@
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapSubscribeHandler();
-                endpoints.MapControllers();                
+                endpoints.MapControllers();
+                endpoints.MapActorsHandlers();
+            });
+
+        }
+
+        public static void AddDaprActors(this IServiceCollection services)
+        {
+            services.AddActors(options =>
+            {
+                options.Actors.RegisterActor<OrderProcessorActor>();
             });
         }
     }

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Nwd.Inventory.Domain.Entities;
 using Nwd.Inventory.Domain.Repositories;
+using Nws.BuildingBlocks.Events;
 
 namespace Nwd.Inventory.Application.Commands.CreateProduct
 {
@@ -32,15 +33,7 @@ namespace Nwd.Inventory.Application.Commands.CreateProduct
 
             await _productRepository.AddAsync(product);
 
-            var productCreatedEvent = new ProductCreatedEvent()
-            {
-                CategoryName = category.Name,
-                Id = product.Id,
-                Name = product.Name,
-                UnitPrice = product.UnitPrice
-            };
-
-            await _mediator.Publish(productCreatedEvent);
+            await _mediator.Publish(new ProductCreatedEvent(product.Id, product.Name, category.Name, product.UnitPrice));
 
             return new CreateProductCommandResult(product.Id);
         }

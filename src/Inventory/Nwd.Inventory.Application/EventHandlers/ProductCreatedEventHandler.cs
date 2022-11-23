@@ -1,6 +1,6 @@
 ﻿using Dapr.Client;
 using MediatR;
-using Nwd.Inventory.Application.Commands.CreateProduct;
+using Nws.BuildingBlocks.Events;
 
 namespace Nwd.Inventory.Application.EventHandlers
 {
