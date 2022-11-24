@@ -4,6 +4,8 @@ namespace Nws.BuildingBlocks.Events
 {
     public class OrderSubmittedEvent : INotification
     {
+        public OrderSubmittedEvent() { }
+
         public OrderSubmittedEvent(string orderId)
         {
             OrderId = orderId;

@@ -1,7 +1,8 @@
 ﻿apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: queue-component
+  name: nwd-queue
+  namespace: nwd
 # spec:
 #   type: pubsub.azure.servicebus
 #   version: v1

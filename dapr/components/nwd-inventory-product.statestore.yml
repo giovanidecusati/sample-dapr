@@ -1,7 +1,8 @@
-﻿apiVersion: dapr.io/v1alpha1
+apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: OrderProcessorActor
+  name: product
+  namespace: nwd-inventory
 spec:
   type: state.redis
   version: v1
@@ -10,5 +11,5 @@ spec:
     value: localhost:6379
   - name: redisPassword
     value: ""
-  - name: actorStateStore
-    value: "true"
+  - name: keyPrefix
+    value: product

@@ -4,7 +4,7 @@ using Nwd.Orders.Domain.Entities;
 using Nwd.Orders.Domain.Interfaces;
 using Nws.BuildingBlocks.Events;
 
-namespace Nwd.Orders.Application.EventHandlers
+namespace Nwd.Orders.Application.IntegrationEventHandlers
 {
     public class ProductCreatedEventHandler : INotificationHandler<ProductCreatedEvent>
     {

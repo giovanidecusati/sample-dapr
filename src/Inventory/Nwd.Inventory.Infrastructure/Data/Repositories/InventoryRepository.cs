@@ -3,7 +3,7 @@ using Nwd.Inventory.Domain.Repositories;
 
 namespace Nwd.Inventory.Infrastructure.Data.Repositories
 {
-    public class InventoryRepository : DaprStateMgmtRepository<Domain.Entities.Inventory>, IInventoryRepository
+    public class InventoryRepository : DaprRepositoryBase<Domain.Entities.Inventory>, IInventoryRepository
     {
         public override string StoreName => "inventory";
 

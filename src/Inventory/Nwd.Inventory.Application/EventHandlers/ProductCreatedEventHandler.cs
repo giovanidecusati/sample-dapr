@@ -1,5 +1,6 @@
 ﻿using Dapr.Client;
 using MediatR;
+using Nws.BuildingBlocks;
 using Nws.BuildingBlocks.Events;
 
 namespace Nwd.Inventory.Application.EventHandlers
@@ -16,7 +17,7 @@ namespace Nwd.Inventory.Application.EventHandlers
         public async Task Handle(ProductCreatedEvent productCreatedEvent, CancellationToken cancellationToken)
         {
             // Publish an event/message using Dapr PubSub
-            await _daprClient.PublishEventAsync("queue-component", "new-product-topic", productCreatedEvent);
+            await _daprClient.PublishEventAsync(DaprConstants.DAPR_PUBSUB_NAME, nameof(ProductCreatedEvent), productCreatedEvent);
         }
     }
 }

@@ -23,13 +23,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Basket", "2. Basket", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Basket.Api", "Basket\Nwd.Basket.Api\Nwd.Basket.Api.csproj", "{F13D0256-2369-4C99-A9D4-9ABEFC8A78CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nwd.Inventory.Application", "Inventory\Nwd.Inventory.Application\Nwd.Inventory.Application.csproj", "{55300E2D-6303-4139-856F-E5952B37E4A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Inventory.Application", "Inventory\Nwd.Inventory.Application\Nwd.Inventory.Application.csproj", "{55300E2D-6303-4139-856F-E5952B37E4A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nwd.Orders.Application", "Orders\Nwd.Orders.Application\Nwd.Orders.Application.csproj", "{E44316CF-0E0E-473F-976B-5C6DDB6CC704}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Orders.Application", "Orders\Nwd.Orders.Application\Nwd.Orders.Application.csproj", "{E44316CF-0E0E-473F-976B-5C6DDB6CC704}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. BuildingBlocks", "1. BuildingBlocks", "{6E5EBB6E-58D1-4310-9088-233E37300F8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nws.BuildingBlocks", "BuildingBlocks\Nws.BuildingBlocks\Nws.BuildingBlocks.csproj", "{8B1F97F3-8E46-45DA-BA01-566211C526E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nws.BuildingBlocks", "BuildingBlocks\Nws.BuildingBlocks\Nws.BuildingBlocks.csproj", "{8B1F97F3-8E46-45DA-BA01-566211C526E6}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{5910827F-7F06-44A6-B5B0-2F5B8163401D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{43BC7F89-B933-49EF-8738-B4B3C7D6433C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{7786BA43-6D25-4007-857B-C4C85104BDB7}"
+	ProjectSection(SolutionItems) = preProject
+		..\dapr\components\nwd-basket-basket.statestore.yml = ..\dapr\components\nwd-basket-basket.statestore.yml
+		..\dapr\components\nwd-inventory-category.statestore.yml = ..\dapr\components\nwd-inventory-category.statestore.yml
+		..\dapr\components\nwd-inventory-inventory.statestore.yml = ..\dapr\components\nwd-inventory-inventory.statestore.yml
+		..\dapr\components\nwd-inventory-product.statestore.yml = ..\dapr\components\nwd-inventory-product.statestore.yml
+		..\dapr\components\nwd-inventory-transaction.statestore.yml = ..\dapr\components\nwd-inventory-transaction.statestore.yml
+		..\dapr\components\nwd-queue.pubsub.yml = ..\dapr\components\nwd-queue.pubsub.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{E2A88A73-2E53-4499-8FB9-2400EDE7BF92}"
+	ProjectSection(SolutionItems) = preProject
+		..\dapr\config\nwd-config.yml = ..\dapr\config\nwd-config.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +96,10 @@ Global
 		{8B1F97F3-8E46-45DA-BA01-566211C526E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B1F97F3-8E46-45DA-BA01-566211C526E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B1F97F3-8E46-45DA-BA01-566211C526E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5910827F-7F06-44A6-B5B0-2F5B8163401D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5910827F-7F06-44A6-B5B0-2F5B8163401D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5910827F-7F06-44A6-B5B0-2F5B8163401D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5910827F-7F06-44A6-B5B0-2F5B8163401D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,6 +115,8 @@ Global
 		{55300E2D-6303-4139-856F-E5952B37E4A3} = {6D9CC4B2-1CB1-4278-ACB3-5514E665CE59}
 		{E44316CF-0E0E-473F-976B-5C6DDB6CC704} = {34D3D46D-0D53-44A6-93BE-8A535AAA75B7}
 		{8B1F97F3-8E46-45DA-BA01-566211C526E6} = {6E5EBB6E-58D1-4310-9088-233E37300F8D}
+		{7786BA43-6D25-4007-857B-C4C85104BDB7} = {43BC7F89-B933-49EF-8738-B4B3C7D6433C}
+		{E2A88A73-2E53-4499-8FB9-2400EDE7BF92} = {43BC7F89-B933-49EF-8738-B4B3C7D6433C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A2901978-962F-4E55-AE9D-98F8EF3CCB5C}

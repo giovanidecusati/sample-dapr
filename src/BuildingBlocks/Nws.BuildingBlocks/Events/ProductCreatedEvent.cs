@@ -4,6 +4,8 @@ namespace Nws.BuildingBlocks.Events
 {
     public class ProductCreatedEvent : INotification
     {
+        public ProductCreatedEvent() { }
+
         public ProductCreatedEvent(string id, string name, string categoryName, decimal unitPrice)
         {
             Id = id;

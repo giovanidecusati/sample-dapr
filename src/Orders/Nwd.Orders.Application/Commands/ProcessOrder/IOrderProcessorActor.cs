@@ -5,6 +5,6 @@ namespace Nwd.Orders.Application.Commands.ProcessOrder
 {
     public interface IOrderProcessorActor : IActor
     {
-        Task ProcessOrderAsync(Order order);
+        Task ProcessOrderAsync(string orderId);
     }
 }

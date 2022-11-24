@@ -1,5 +1,6 @@
 using Nwd.Orders.Api.Configuration;
 using Nwd.Orders.Api.Services;
+using Nwd.Orders.Application.Configuration;
 using Nwd.Orders.Infrastructure.Configuration;
 using Nwd.Orders.Infrastructure.Data.Configuration;
 using Nwd.Orders.Infrastructure.Extensions;
@@ -34,6 +35,8 @@ builder.Services.AddDaprActors();
 
 // Setup Infrastructure
 builder.Services.SetupInfrastructure(builder.Configuration.GetSection("ConnectionStrings:CosmosDB").Get<CosmosDbSettings>());
+
+builder.Services.SetupApplication();
 
 var app = builder.Build();
 

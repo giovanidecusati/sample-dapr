@@ -2,6 +2,7 @@
 using Dapr.Actors.Client;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Nwd.Orders.Application.Actors;
 using Nwd.Orders.Domain.Interfaces;
 
 namespace Nwd.Orders.Application.Commands.ProcessOrder
@@ -23,9 +24,9 @@ namespace Nwd.Orders.Application.Commands.ProcessOrder
         {
             var order = await _orderRepository.GetByIdAsync(request.OrderId);
 
-            var orderProcessorActor = _actorProxyFactory.CreateActorProxy<IOrderProcessorActor>(new ActorId(request.OrderId), "OrderProcessorActor");
+            var orderProcessorActor = _actorProxyFactory.CreateActorProxy<IOrderProcessorActor>(new ActorId(request.OrderId), nameof(OrderProcessorActor));
 
-            await orderProcessorActor.ProcessOrderAsync(order);
+            await orderProcessorActor.ProcessOrderAsync(request.OrderId);
 
             return new ProcessOrderCommandResult(order.Id, order.Status.ToString(), order.Message);
         }

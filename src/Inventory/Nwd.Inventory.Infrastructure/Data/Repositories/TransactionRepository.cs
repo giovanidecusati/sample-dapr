@@ -4,7 +4,7 @@ using Nwd.Inventory.Domain.Repositories;
 
 namespace Nwd.Inventory.Infrastructure.Data.Repositories
 {
-    public class TransactionRepository : DaprStateMgmtRepository<Transaction>, ITransactionRepository
+    public class TransactionRepository : DaprRepositoryBase<Transaction>, ITransactionRepository
     {
         public override string StoreName => "transaction";
 

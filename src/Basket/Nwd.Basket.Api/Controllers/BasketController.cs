@@ -7,7 +7,7 @@ namespace Nwd.Basket.Api.Controllers
     public class BasketController : ApiControllerBase
     {
         private readonly ILogger<BasketController> _logger;
-        private const string STATESTORE = "statestore";
+        private const string STATESTORE = "basket";
         private const string STATESTORE_KEY = "id";
 
         public BasketController(ILogger<BasketController> logger)

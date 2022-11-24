@@ -1,5 +1,6 @@
 using Nwd.Inventory.Api.Configuration;
 using Nwd.Inventory.Api.Services;
+using Nwd.Inventory.Application.Configuration;
 using Nwd.Inventory.Infrastructure.Configuration;
 using Serilog;
 
@@ -20,9 +21,6 @@ builder.Services.SetupNSwag();
 // Setup Controllers
 builder.Services.SetupControllers();
 
-// Setup FluentValidators
-builder.Services.SetupFluentValidators();
-
 // HttpContext
 builder.Services.AddHttpContextAccessor();
 
@@ -33,7 +31,7 @@ builder.Services.AddHealthChecks()
 // Setup Infrastructure
 builder.Services.SetupInfrastructure();
 
-// Setup Domain
+// Setup Application
 builder.Services.SetupApplication();
 
 var app = builder.Build();
@@ -43,10 +41,6 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    // app.EnsureCosmosDbIsCreated();
-
-    // await app.SeedIfEmptyAsync();
-
     // Add OpenAPI/Swagger middlewares
     // Serves the registered OpenAPI/Swagger documents by default on `/swagger/{documentName}/swagger.json`
     app.UseOpenApi();
@@ -73,7 +67,8 @@ app.UseSerilogRequestLogging();
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 // UseHttpsRedirection
-app.UseHttpsRedirection();
+// Dapr Actors doesn't support UseHttpsRedirection  
+//app.UseHttpsRedirection();
 
 // app.UseAuthorization();
 

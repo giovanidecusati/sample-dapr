@@ -4,14 +4,14 @@ using Nwd.Inventory.Domain.Repositories;
 
 namespace Nwd.Inventory.Infrastructure.Data.Repositories
 {
-    public abstract class DaprStateMgmtRepository<T> where T : BaseEntity
+    public abstract class DaprRepositoryBase<T> where T : BaseEntity
     {
         private IUnitOfWork? _unitOfWork;
         private readonly DaprClient _client;
         public abstract string StoreName { get; }
         public abstract string StoreKeyName(T entity);
 
-        public DaprStateMgmtRepository(DaprClient client)
+        public DaprRepositoryBase(DaprClient client)
         {
             _client = client;
         }

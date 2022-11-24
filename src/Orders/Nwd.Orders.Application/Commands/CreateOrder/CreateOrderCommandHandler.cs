@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Nwd.Orders.Application.CreateOrder;
 using Nwd.Orders.Domain.Entities;
 using Nwd.Orders.Domain.Interfaces;
+using Nws.BuildingBlocks;
 using Nws.BuildingBlocks.Events;
 
 namespace Nwd.Orders.Domain.Commands.CreateOrder
@@ -68,7 +69,7 @@ namespace Nwd.Orders.Domain.Commands.CreateOrder
             await _orderRepository.AddAsync(order);
 
             // Publish an event/message using Dapr PubSub
-            await _daprClient.PublishEventAsync("queue-component", "order-submitted-topic", new OrderSubmittedEvent(order.Id));
+            await _daprClient.PublishEventAsync(DaprConstants.DAPR_PUBSUB_NAME, nameof(OrderSubmittedEvent), new OrderSubmittedEvent(order.Id));
 
             return new CreateOrderCommandResult(order.Id);
         }

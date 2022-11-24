@@ -47,6 +47,11 @@ namespace Nwd.Orders.Infrastructure.Data.Repositories
             await _container.CreateItemAsync<T>(item, ResolvePartitionKey(item.Id));
         }
 
+        public virtual async Task UpdateAsync(T item)
+        {
+            await _container.UpsertItemAsync<T>(item, ResolvePartitionKey(item.Id));
+        }
+
         public async Task DeleteAsync(string id)
         {
             await _container.DeleteItemAsync<T>(id.ToString(), ResolvePartitionKey(id));

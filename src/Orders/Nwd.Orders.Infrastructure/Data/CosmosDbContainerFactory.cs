@@ -36,7 +36,7 @@ namespace Nwd.Orders.Infrastructure.Data
             {
                 throw new ArgumentException($"Unable to find container: {containerName}");
             }
-
+                
             return new CosmosDbContainer(_cosmosClient, _databaseName, containerName);
         }
 

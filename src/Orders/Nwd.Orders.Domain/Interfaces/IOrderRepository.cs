@@ -5,6 +5,7 @@ namespace Nwd.Orders.Domain.Interfaces
     public interface IOrderRepository
     {
         Task AddAsync(Order entity);
+        Task UpdateAsync(Order entity);
         Task<Order> GetByIdAsync(string orderId);
     }
 }

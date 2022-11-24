@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  nwd.basket.api:
+    image: ${DOCKER_REGISTRY-}nwdbasketapi
+    build:
+      context: .
+      dockerfile: Basket/Nwd.Basket.Api/Dockerfile
+
+  nwd.inventory.api:
+    image: ${DOCKER_REGISTRY-}nwdinventoryapi
+    build:
+      context: .
+      dockerfile: Inventory/Nwd.Inventory.Api/Dockerfile
+
+
+  nwd.orders.api:
+    image: ${DOCKER_REGISTRY-}nwdordersapi
+    build:
+      context: .
+      dockerfile: Orders/Nwd.Orders.Api/Dockerfile
+
