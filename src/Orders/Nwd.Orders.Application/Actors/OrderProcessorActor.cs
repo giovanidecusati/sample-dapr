@@ -1,9 +1,11 @@
 ﻿using Dapr.Actors.Runtime;
 using Dapr.Client;
 using Microsoft.Extensions.Logging;
-using Nwd.Orders.Application.Commands.ProcessOrder;
+using Nwd.Orders.Application.Services.Inventory;
 using Nwd.Orders.Domain.Entities;
 using Nwd.Orders.Domain.Interfaces;
+using Nws.BuildingBlocks;
+using Nws.BuildingBlocks.Events;
 
 namespace Nwd.Orders.Application.Actors
 {
@@ -11,29 +13,62 @@ namespace Nwd.Orders.Application.Actors
     {
         private readonly ILogger<OrderProcessorActor> _logger;
         private readonly DaprClient _daprClient;
+        private readonly IInventoryService _inventoryService;
         private readonly IOrderRepository _orderRepository;
 
-        public OrderProcessorActor(ActorHost host, ILogger<OrderProcessorActor> logger, DaprClient daprClient, IOrderRepository orderRepository) : base(host)
+        public OrderProcessorActor(ActorHost host, ILogger<OrderProcessorActor> logger, DaprClient daprClient, IOrderRepository orderRepository, IInventoryService inventoryService) : base(host)
         {
             _logger = logger;
             _daprClient = daprClient;
             _orderRepository = orderRepository;
+            _inventoryService = inventoryService;
         }
 
-        public async Task ProcessOrderAsync(string orderId)
+        public async Task UpdateInventoryAsync(string orderId)
         {
-            _logger.LogInformation("Processing Order {orderId}", orderId);
+            _logger.LogInformation("OrderProcessorActor (UpdateInventoryAsync) has been started for Order {orderId}", orderId);
 
-            // Step 1 - Inventory - Reserve Items 
-            // Step 2 - Payment - Charge Order
-            // Step 3 - Payment - Charge Order
             var order = await _orderRepository.GetByIdAsync(orderId);
 
             order.Status = OrderStatus.Processing;
+            order.Messages.Add($"Changing status to Processing at {DateTime.Now}");
+
+            foreach (var item in order.Items)
+            {
+                order.Messages.Add($"Reserving item {item.Product.Id} at {DateTime.Now}");
+                try
+                {
+                    var result = _inventoryService.UpdateAsync(new UpdateInventoryModel() { ProductId = item.Product.Id, Units = item.Quantity }, string.Empty);
+                }
+                catch (Exception ex)
+                {
+                    order.Messages.Add($"Unable to reserve item {item.Product.Id} at {DateTime.Now}");
+                    _logger.LogError(ex, $"Unable to reserve item {item.Product.Id} due to an error.");
+                }
+            }
 
             await _orderRepository.UpdateAsync(order);
 
-            _logger.LogInformation("Processing Order {orderId} has been completed.", orderId);
+            await _daprClient.PublishEventAsync(DaprConstants.DAPR_PUBSUB_NAME, nameof(OrderItemReservedEvent), new OrderItemReservedEvent(order.Id));
+
+            _logger.LogInformation("OrderProcessorActor (UpdateInventoryAsync) has been completed for Order {orderId}", orderId);
+        }
+
+        public async Task ProcessPaymentAsync(string orderId)
+        {
+            _logger.LogInformation("OrderProcessorActor (ProcessPaymentAsync) has been started for Order {orderId}", orderId);
+
+            var order = await _orderRepository.GetByIdAsync(orderId);
+
+            await _orderRepository.UpdateAsync(order);
+
+            order.Status = OrderStatus.Completed;
+            order.Messages.Add($"Changing status to Completed at {DateTime.Now}");
+            await _orderRepository.UpdateAsync(order);
+
+            await _daprClient.PublishEventAsync(DaprConstants.DAPR_PUBSUB_NAME, nameof(OrderPaidEvent), new OrderPaidEvent(order.Id));
+
+            _logger.LogInformation("OrderProcessorActor (ProcessPaymentAsync) has been completed for Order {orderId}", orderId);
         }
     }
 }

@@ -11,6 +11,6 @@
         public OrderStatus Status { get; set; }
 
         public Address ShipTo { get; set; }
-        public string Message { get; set; }
+        public List<string> Messages { get; set; } = new List<string>();
     }
 }

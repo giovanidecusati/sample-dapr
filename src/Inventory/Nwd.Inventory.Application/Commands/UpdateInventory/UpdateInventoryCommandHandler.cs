@@ -17,6 +17,8 @@ namespace Nwd.Inventory.Application.Commands.UpdateInventory
             _inventoryRepository = inventoryRepository;
             _mediator = mediator;
             _unitOfWork = unitOfWork;
+            // Terrible approach. I would use Actor to do it, but as I'm testing, I can.
+            // This implementation should not be used to solve this concurrency scenario or race condition.
             _inventoryRepository.SetUnitOfWork(_unitOfWork);
         }
 
