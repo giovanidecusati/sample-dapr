@@ -6,7 +6,7 @@ namespace Nwd.Inventory.Infrastructure.Data.Repositories
 {
     public class CategoryRepository : DaprRepositoryBase<Category>, ICategoryRepository
     {
-        public override string StoreName => "category";
+        public override string StoreName => nameof(Category);
 
         public override string StoreKeyName(Category entity) => $"{entity.Id}";
 

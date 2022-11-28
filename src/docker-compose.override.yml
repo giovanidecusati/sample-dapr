@@ -1,34 +1,85 @@
 version: '3.4'
 
 services:
-  nwd.basket.api:
+  nwd-basket-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  nwd.inventory.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    ports:
-      - "80"
-      - "443"
+      - "44301:443"
+      - "50001:50001"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
-  nwd.orders.api:
+  nwd-basket-api-dapr:
+    command: ["./daprd",
+      "-app-id", "nwd-basket-api",
+      "-app-port", "80",
+      "-placement-host-address", "dapr-placement:50000",
+      "-components-path", "/components",
+      "-config", "/configuration/nwd-config.yml"
+      ]
+    volumes:
+      - "../dapr/components/:/components"
+      - "../dapr/configuration/:/configuration"
+
+  nwd-inventory-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
-      - "80"
-      - "443"
+      - "44302:443"
+      - "50002:50001"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  nwd-inventory-api-dapr:
+    command: ["./daprd",
+      "-app-id", "nwd-inventory-api",
+      "-app-port", "80",
+      "-placement-host-address", "dapr-placement:50000",
+      "-components-path", "/components",
+      "-config", "/configuration/nwd-config.yml"
+      ]
+    volumes:
+      - "../dapr/components/:/components"
+      - "../dapr/configuration/:/configuration"
+
+  nwd-orders-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "44303:443"
+      - "50003:50001"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  nwd-orders-api-dapr:
+    command: ["./daprd",
+      "-app-id", "nwd-orders-api",
+      "-app-port", "80",
+      "-placement-host-address", "dapr-placement:50000",
+      "-components-path", "/components",
+      "-config", "/configuration/nwd-config.yml"
+      ]
+    volumes:
+      - "../dapr/components/:/components"
+      - "../dapr/configuration/:/configuration"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "5379:6379"
+
+  zipkin:
+    ports:
+      - "5411:9411"
+
+  dapr-placement:
+    command: ["./placement", "-port", "50000", "-log-level", "debug"]
+    ports:
+      - "50000:50000"

@@ -1,14 +1,14 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Nwd.Orders.Infrastructure.Data.Interfaces;
+﻿using Dapr.Client;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics;
 
 namespace Nwd.Orders.Api.Services
 {
     public class HealthCheck : IHealthCheck
     {
-        private readonly ICosmosDbContainerFactory _cosmosDbContainerFactory;
         private readonly ILogger<HealthCheck> _logger;
-        private static readonly string Component_CosmosDbName = "CosmosDB";
+        private readonly DaprClient _daprClient;
+        private static readonly string Component_Dapr = "Dapr";
         private static readonly string Component_HealthyStatus = "Healthy";
         private static readonly string Component_DegradedStatus = "Degraded";
         private static readonly string Component_UnhealthyStatus = "Unhealthy";
@@ -17,18 +17,16 @@ namespace Nwd.Orders.Api.Services
         private static readonly string Message_Unhealthy = "Our application is unhealthy and is offline or an unhandled exception was thrown while executing the check.";
         private Dictionary<string, object> _components;
 
-        public HealthCheck(ICosmosDbContainerFactory cosmosDbContainerFactory, ILogger<HealthCheck> logger)
+        public HealthCheck(ILogger<HealthCheck> logger, DaprClient daprClient)
         {
-            _cosmosDbContainerFactory = cosmosDbContainerFactory;
             _logger = logger;
-            _components = new Dictionary<string, object>(new[] {
-                new KeyValuePair<string, object>(Component_CosmosDbName, Component_UnhealthyStatus)
-            });
+            _daprClient = daprClient;
+            _components = new Dictionary<string, object>(new[] { new KeyValuePair<string, object>(Component_Dapr, Component_UnhealthyStatus) });
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            await CosmosDBHealthcheck(cancellationToken);
+            await DaprHealthCheck(cancellationToken);
 
             if (_components.Values.Contains(Component_UnhealthyStatus))
                 return await Task.FromResult(HealthCheckResult.Healthy(Message_Unhealthy, _components));
@@ -38,26 +36,31 @@ namespace Nwd.Orders.Api.Services
                 return await Task.FromResult(HealthCheckResult.Healthy(Message_Healthy, _components));
         }
 
-        private async Task CosmosDBHealthcheck(CancellationToken cancellationToken)
+        private async Task DaprHealthCheck(CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Checking {Component_CosmosDbName} component health.");
+            _logger.LogInformation($"Checking {Component_Dapr} component health.");
             var helathStatus = Component_UnhealthyStatus;
 
             try
             {
                 var stopWatch = new Stopwatch();
                 stopWatch.Start();
-                await _cosmosDbContainerFactory.CheckHealthAsync(cancellationToken);
+                var result = await _daprClient.CheckHealthAsync();
                 stopWatch.Stop();
 
-                helathStatus = stopWatch.ElapsedMilliseconds < 300 ? Component_HealthyStatus : Message_Degraded;
+                if (result)
+                    helathStatus = stopWatch.ElapsedMilliseconds < 300 ? Component_HealthyStatus : Message_Degraded;
+                else
+                    helathStatus = Component_UnhealthyStatus;
+
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{Component_CosmosDbName} is {helathStatus}.");
+                _logger.LogError(ex, $"{Component_Dapr} is {helathStatus}.");
             }
 
-            _components[Component_CosmosDbName] = helathStatus;
+            _components[Component_Dapr] = helathStatus;
+            _logger.LogInformation($"{Component_Dapr} is {helathStatus}.");
         }
     }
 }

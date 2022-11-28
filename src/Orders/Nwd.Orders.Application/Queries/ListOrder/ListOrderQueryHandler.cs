@@ -13,7 +13,7 @@ namespace Nwd.Orders.Application.Queries.ListOrder
 
         public async Task<IList<ListOrderQueryResult>> Handle(ListOrderQuery request, CancellationToken cancellationToken)
         {
-            return await _orderReadOnlyRepository.ListOrder(request);
+            return await _orderReadOnlyRepository.ListOrderAsync(request);
         }
     }
 }

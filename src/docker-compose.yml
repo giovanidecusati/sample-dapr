@@ -1,22 +1,53 @@
 version: '3.4'
 
 services:
-  nwd.basket.api:
-    image: ${DOCKER_REGISTRY-}nwdbasketapi
+  nwd-basket-api:
+    image: ${DOCKER_REGISTRY-}nwd.basket.api:${TAG:-latest}
     build:
       context: .
       dockerfile: Basket/Nwd.Basket.Api/Dockerfile
+    depends_on:
+      - redis
 
-  nwd.inventory.api:
-    image: ${DOCKER_REGISTRY-}nwdinventoryapi
+  nwd-basket-api-dapr:
+    image: "daprio/daprd:1.8.4"
+    network_mode: "service:nwd-basket-api"
+    depends_on:
+      - nwd-basket-api
+
+  nwd-inventory-api:
+    image: ${DOCKER_REGISTRY-}nwd.inventory.api:${TAG:-latest}
     build:
       context: .
       dockerfile: Inventory/Nwd.Inventory.Api/Dockerfile
+    depends_on:
+      - redis
 
+  nwd-inventory-api-dapr:
+    image: "daprio/daprd:1.8.4"
+    network_mode: "service:nwd-inventory-api"
+    depends_on:
+      - nwd-inventory-api
 
-  nwd.orders.api:
-    image: ${DOCKER_REGISTRY-}nwdordersapi
+  nwd-orders-api:
+    image: ${DOCKER_REGISTRY-}nwd.orders.api:${TAG:-latest}
     build:
       context: .
       dockerfile: Orders/Nwd.Orders.Api/Dockerfile
+    depends_on:
+      - redis
 
+  nwd-orders-api-dapr:
+    image: "daprio/daprd:1.8.4"
+    network_mode: "service:nwd-orders-api"
+    depends_on:
+      - nwd-orders-api
+
+  dapr-placement:
+    image: "daprio/dapr:1.8.4"
+  
+  zipkin:
+    image: openzipkin/zipkin-slim
+
+  redis:
+    image: redis:alpine

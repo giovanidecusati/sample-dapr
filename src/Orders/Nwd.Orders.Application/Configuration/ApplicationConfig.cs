@@ -27,7 +27,7 @@ namespace Nwd.Orders.Application.Configuration
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
             // ReadOnly Repositories
-            services.AddScoped<IOrderReadOnlyRepository, OrderReadOnlyRepository>();
+            services.AddScoped<IGetSingleOrderReadOnlyRepository, OrderReadOnlyRepository>();
             services.AddScoped<IListOrderReadOnlyRepository, OrderReadOnlyRepository>();
 
             // Dapr Services

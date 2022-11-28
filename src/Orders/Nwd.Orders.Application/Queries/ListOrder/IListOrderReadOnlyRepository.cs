@@ -2,6 +2,6 @@
 {
     public interface IListOrderReadOnlyRepository
     {
-        Task<IList<ListOrderQueryResult>> ListOrder(ListOrderQuery request);
+        Task<IList<ListOrderQueryResult>> ListOrderAsync(ListOrderQuery request, CancellationToken cancellationToken = default);
     }
 }

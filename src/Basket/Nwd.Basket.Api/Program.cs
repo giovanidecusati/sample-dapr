@@ -62,7 +62,7 @@ app.UseSerilogRequestLogging();
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 // UseHttpsRedirection
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 // app.UseAuthorization();
 

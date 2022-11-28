@@ -6,7 +6,7 @@
                 "host": "localhost",
                 "accessKey": "",
                 "filter": "*",
-                "port": "6379"
+                "port": "5379"
             }
         ],
         "scanLimit": 200

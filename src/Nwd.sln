@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Orders.Api", "Orders\Nwd.Orders.Api\Nwd.Orders.Api.csproj", "{5A45083B-D014-4F8E-AE47-BF98601E4A45}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7360DBA-3A2D-41F0-B593-BBEC27151A0A} = {A7360DBA-3A2D-41F0-B593-BBEC27151A0A}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nwd.Orders.Domain", "Orders\Nwd.Orders.Domain\Nwd.Orders.Domain.csproj", "{F0A479A8-AA41-474D-BCA9-FDA39FA2D3AB}"
 EndProject
@@ -42,12 +45,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", 
 		..\dapr\components\nwd-inventory-inventory.statestore.yml = ..\dapr\components\nwd-inventory-inventory.statestore.yml
 		..\dapr\components\nwd-inventory-product.statestore.yml = ..\dapr\components\nwd-inventory-product.statestore.yml
 		..\dapr\components\nwd-inventory-transaction.statestore.yml = ..\dapr\components\nwd-inventory-transaction.statestore.yml
+		..\dapr\components\nwd-orders-orderProcessorActor.statestore.yml = ..\dapr\components\nwd-orders-orderProcessorActor.statestore.yml
+		..\dapr\components\nwd-orders-product.statestore.yml = ..\dapr\components\nwd-orders-product.statestore.yml
 		..\dapr\components\nwd-queue.pubsub.yml = ..\dapr\components\nwd-queue.pubsub.yml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{E2A88A73-2E53-4499-8FB9-2400EDE7BF92}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configuration", "{E2A88A73-2E53-4499-8FB9-2400EDE7BF92}"
 	ProjectSection(SolutionItems) = preProject
-		..\dapr\config\nwd-config.yml = ..\dapr\config\nwd-config.yml
+		..\dapr\configuration\nwd-config.yml = ..\dapr\configuration\nwd-config.yml
 	EndProjectSection
 EndProject
 Global

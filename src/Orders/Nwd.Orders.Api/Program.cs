@@ -2,8 +2,6 @@ using Nwd.Orders.Api.Configuration;
 using Nwd.Orders.Api.Services;
 using Nwd.Orders.Application.Configuration;
 using Nwd.Orders.Infrastructure.Configuration;
-using Nwd.Orders.Infrastructure.Data.Configuration;
-using Nwd.Orders.Infrastructure.Extensions;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -34,7 +32,7 @@ builder.Services.AddHealthChecks()
 builder.Services.AddDaprActors();
 
 // Setup Infrastructure
-builder.Services.SetupInfrastructure(builder.Configuration.GetSection("ConnectionStrings:CosmosDB").Get<CosmosDbSettings>());
+builder.Services.SetupInfrastructure();
 
 builder.Services.SetupApplication();
 
@@ -42,9 +40,10 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.EnsureCosmosDbIsCreated();
+    // TODO: How to seed collections
+    // app.EnsureCosmosDbIsCreated();
 
-    await app.SeedIfEmptyAsync();
+    // await app.SeedIfEmptyAsync();
 
     // Add OpenAPI/Swagger middlewares
     // Serves the registered OpenAPI/Swagger documents by default on `/swagger/{documentName}/swagger.json`

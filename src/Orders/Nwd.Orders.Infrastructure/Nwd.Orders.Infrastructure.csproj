@@ -7,19 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\Seed\Products.json" />
-    <None Remove="Extensions\Seed.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Data\Seed\Products.json" />
-    <EmbeddedResource Include="Data\Seed\Customers.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.31.0" />
+    <PackageReference Include="Dapr.Client" Version="1.9.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

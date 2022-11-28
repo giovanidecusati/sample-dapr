@@ -1,0 +1,22 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "nwd.basket.api",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger/index.html",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "nwd.basket.api": "StartDebugging",
+        "nwd.basket.api.dapr": "StartWithoutDebugging",
+        "nwd.inventory.api": "StartDebugging",
+        "nwd.inventory.api.dapr": "StartWithoutDebugging",
+        "nwd.orders.api": "StartDebugging",
+        "nwd.orders.api.dapr": "StartWithoutDebugging",
+        "dapr-placement": "StartWithoutDebugging",
+        "redis": "StartWithoutDebugging",
+        "zipkin": "StartWithoutDebugging"
+      }
+    }
+  }
+}

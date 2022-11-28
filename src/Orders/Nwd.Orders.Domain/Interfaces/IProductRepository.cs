@@ -4,7 +4,7 @@ namespace Nwd.Orders.Domain.Interfaces
 {
     public interface IProductRepository
     {
-        Task<Product> GetByIdAsync(string productId);
-        Task AddAsync(Product item);
+        Task<Product> GetByIdAsync(string productId, CancellationToken cancellationToken = default);
+        Task AddAsync(Product item, CancellationToken cancellationToken = default);
     }
 }

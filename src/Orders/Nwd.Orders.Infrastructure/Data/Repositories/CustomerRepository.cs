@@ -1,21 +1,15 @@
-﻿using Microsoft.Azure.Cosmos;
+﻿using Dapr.Client;
 using Nwd.Orders.Domain.Entities;
 using Nwd.Orders.Domain.Interfaces;
-using Nwd.Orders.Infrastructure.Data.Interfaces;
 
 namespace Nwd.Orders.Infrastructure.Data.Repositories
 {
-    internal class CustomerRepository : CosmosDbRepository<Customer>, ICustomerRepository
+    internal class CustomerRepository : DaprRepositoryBase<Customer>, ICustomerRepository
     {
-        public override string ContainerName { get; } = CosmosDbContainer.CustomersContainerName;
+        public override string StoreName { get; } = nameof(Customer);
 
-        public override string GenerateId(Customer entity) => $"{Guid.NewGuid()}";
+        public override string StoreKey(Customer entity) => $"{Guid.NewGuid()}";
 
-        public override PartitionKey ResolvePartitionKey(string entityId) => new PartitionKey(entityId.Split(':')[0]);
-
-        public CustomerRepository(ICosmosDbContainerFactory factory) : base(factory)
-        {
-
-        }
+        public CustomerRepository(DaprClient daprClient) : base(daprClient) { }
     }
 }
