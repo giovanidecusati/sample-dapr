@@ -5,6 +5,6 @@ namespace Nwd.Orders.Domain.Entities
     public abstract class BaseEntity
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public virtual string Id { get; set; }
     }
 }

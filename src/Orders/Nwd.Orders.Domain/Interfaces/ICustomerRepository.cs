@@ -6,5 +6,6 @@ namespace Nwd.Orders.Domain.Interfaces
     {
         Task<Customer> GetByIdAsync(string customerId, CancellationToken cancellationToken = default);
         Task AddAsync(Customer item, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Customer item, CancellationToken cancellationToken = default);
     }
 }

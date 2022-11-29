@@ -7,7 +7,7 @@ namespace Nwd.Orders.Infrastructure.Data.Repositories
     {
         private readonly DaprClient _client;
         public abstract string StoreName { get; }
-        public abstract string StoreKey(T entity);
+        public abstract string GenerateId(T entity);
 
         public DaprRepositoryBase(DaprClient client)
         {
@@ -16,12 +16,13 @@ namespace Nwd.Orders.Infrastructure.Data.Repositories
 
         public async Task AddAsync(T item, CancellationToken cancellationToken = default)
         {
-            await _client.SaveStateAsync(StoreName, StoreKey(item), item, cancellationToken: cancellationToken);
+            item.Id = GenerateId(item);
+            await _client.SaveStateAsync(StoreName, item.Id, item, cancellationToken: cancellationToken);
         }
 
         public async Task UpdateAsync(T item, CancellationToken cancellationToken = default)
         {
-            await _client.SaveStateAsync(StoreName, StoreKey(item), item, cancellationToken: cancellationToken);
+            await _client.SaveStateAsync(StoreName, item.Id, item, cancellationToken: cancellationToken);
         }
 
         public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)

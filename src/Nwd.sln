@@ -46,6 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", 
 		..\dapr\components\nwd-inventory-product.statestore.yml = ..\dapr\components\nwd-inventory-product.statestore.yml
 		..\dapr\components\nwd-inventory-transaction.statestore.yml = ..\dapr\components\nwd-inventory-transaction.statestore.yml
 		..\dapr\components\nwd-orders-customer.statestore.yml = ..\dapr\components\nwd-orders-customer.statestore.yml
+		..\dapr\components\nwd-orders-order.statestore.yml = ..\dapr\components\nwd-orders-order.statestore.yml
 		..\dapr\components\nwd-orders-orderProcessorActor.statestore.yml = ..\dapr\components\nwd-orders-orderProcessorActor.statestore.yml
 		..\dapr\components\nwd-orders-product.statestore.yml = ..\dapr\components\nwd-orders-product.statestore.yml
 		..\dapr\components\nwd-queue.pubsub.yml = ..\dapr\components\nwd-queue.pubsub.yml

@@ -8,7 +8,7 @@ namespace Nwd.Orders.Infrastructure.Data.Repositories
     {
         public override string StoreName { get; } = nameof(Customer);
 
-        public override string StoreKey(Customer entity) => $"{Guid.NewGuid()}";
+        public override string GenerateId(Customer entity) => $"{Guid.NewGuid()}";
 
         public CustomerRepository(DaprClient daprClient) : base(daprClient) { }
     }

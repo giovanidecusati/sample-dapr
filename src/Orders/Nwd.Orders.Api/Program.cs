@@ -40,10 +40,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    // TODO: How to seed collections
-    // app.EnsureCosmosDbIsCreated();
-
-    // await app.SeedIfEmptyAsync();
+    await app.SeedIfEmptyAsync();
 
     // Add OpenAPI/Swagger middlewares
     // Serves the registered OpenAPI/Swagger documents by default on `/swagger/{documentName}/swagger.json`
