@@ -24,8 +24,7 @@ steps:
           ResourceGroupName = '$(ResourceGroupName)'
           SolutionName      = '$(SolutionName)'
           EnvironmentName   = '$(EnvironmentName)'
-          BicepFilePath    = '.\templates\main.bicep'
-          TemplateOutFile  = '.\out\main.json'
+          BicepFilePath    = './templates/main.bicep'
       }
       .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
     azurePowerShellVersion: 'LatestVersion'

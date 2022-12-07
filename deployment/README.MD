@@ -5,6 +5,8 @@ $deploymentArgs = @{
     ResourceGroupName = 'rg-giodapr-lab-ause'
     SolutionName      = 'giodapr'
     EnvironmentName   = 'lab'
+    BicepFilePath    = '.\templates\main.prereqs.bicep'
+    TemplateOutFile  = '.\out\main.prereqs.json'
 }
 
 .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose

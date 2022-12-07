@@ -173,22 +173,80 @@ module moduleServiceBus './serviceBus.bicep' = {
   }
 }
 
-// Key-vault secret: adonetSQLServerConnectionString
-// module moduleKeyVaultSecretADONETSqlServerConnectionString './keyVault.secret.bicep' = {
-//   name: 'akvADONETSqlServerConnectionStringDeploy'
-//   dependsOn: [
-//     moduleKeyVault
-//   ]
-//   params: {
-//     keyVaultName: keyVault.name
-//     name: 'adonetSQLServerConnectionString'
-//     secretValue: moduleSqlServerDatabases.outputs.adonetSQLServerConnectionString
-//     contentType: 'plain/text'
-//     tags: {
-//       CredentialId: 'connectionString'
-//       ProviderAddress: moduleSqlServers.outputs.sqlServerId
-//       ValidityPeriodDays: 365
-//     }
-//     expiryDate: '${dateTimeToEpoch(dateTimeAdd(baseTime, 'P1Y'))}'
-//   }
-// }
+// Key-vault secret: cosmosdb_masterKey
+module moduleAkvSecret_cosmosdb_masterKey './keyVault.secret.bicep' = {
+  name: 'akvSecret_cosmosdb_masterKey-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    name: 'cosmosdb_masterKey'
+    secretValue: moduleCosmosDb.outputs.primaryMasterKey
+    contentType: 'plain/text'
+    tags: {
+      CredentialId: 'primaryMasterKey'
+      ProviderAddress: moduleCosmosDb.outputs.id
+      ValidityPeriodDays: 365
+    }
+    expiryDate: '${dateTimeToEpoch(dateTimeAdd(baseTime, 'P1Y'))}'
+  }
+}
+
+// Key-vault secret: acr_loginServer
+module moduleAkvSecret_acr_loginServer './keyVault.secret.bicep' = {
+  name: 'akvSecret_acr_loginServer-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    name: 'acr_loginServer'
+    secretValue: moduleContainerRegistry.outputs.logingServer
+    contentType: 'plain/text'
+    tags: {
+      CredentialId: 'loginServer'
+      ProviderAddress: moduleContainerRegistry.outputs.id
+      ValidityPeriodDays: -1
+    }
+  }
+}
+
+// Key-vault secret: acr_password
+module moduleAkvSecret_acr_password './keyVault.secret.bicep' = {
+  name: 'akvSecret_acr_password-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    name: 'acr_password'
+    secretValue: moduleContainerRegistry.outputs.password
+    contentType: 'plain/text'
+    tags: {
+      CredentialId: 'password'
+      ProviderAddress: moduleContainerRegistry.outputs.id
+      ValidityPeriodDays: 365
+    }
+    expiryDate: '${dateTimeToEpoch(dateTimeAdd(baseTime, 'P1Y'))}'
+  }
+}
+
+// Key-vault secret: acr_username
+module moduleAkvSecret_acr_username './keyVault.secret.bicep' = {
+  name: 'akvSecret_acr_username-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    name: 'acr_username'
+    secretValue: moduleContainerRegistry.outputs.username
+    contentType: 'plain/text'
+    tags: {
+      CredentialId: 'username'
+      ProviderAddress: moduleContainerRegistry.outputs.id
+      ValidityPeriodDays: -1
+    }
+  }
+}
