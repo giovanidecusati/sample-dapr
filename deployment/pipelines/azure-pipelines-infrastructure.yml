@@ -24,7 +24,7 @@ steps:
           ResourceGroupName = '$(ResourceGroupName)'
           SolutionName      = '$(SolutionName)'
           EnvironmentName   = '$(EnvironmentName)'
-          $BicepFilePath    = '.\templates\main.bicep',
+          $BicepFilePath    = '.\templates\main.bicep'
           $TemplateOutFile  = '.\out\main.json'
       }
       .\Deploy-Prereqs.ps1 @deploymentArgs -Verbose
