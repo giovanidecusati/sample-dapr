@@ -6,7 +6,7 @@ namespace Nwd.Inventory.Infrastructure.Data.Repositories
 {
     public class TransactionRepository : DaprRepositoryBase<Transaction>, ITransactionRepository
     {
-        public override string StoreName => nameof(Transaction);
+        public override string StoreName => "nwd-inventory.transaction";
 
         public override string StoreKeyName(Transaction entity) => $"{entity.Id}";
 

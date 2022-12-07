@@ -1,0 +1,33 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: 
+      DAPR-LAB
+
+steps:
+
+- task: AzurePowerShell@5
+  inputs:
+    azureSubscription: 'Visual Studio Enterprise com MSDN(c1bda0fc-c0e3-4b89-be00-0524b96b7b0f)'
+    ScriptType: 'InlineScript'
+    Inline: |
+      $deploymentArgs = @{
+          SubscriptionId    = '$(SubscriptionId)'
+          ResourceGroupName = '$(ResourceGroupName)'
+          SolutionName      = '$(SolutionName)'
+          EnvironmentName   = '$(EnvironmentName)'
+          $BicepFilePath    = '.\templates\main.prereqs.bicep',
+          $TemplateOutFile  = '.\out\main.prereqs.json'
+      }
+      .\Deploy-Prereqs.ps1 @deploymentArgs -Verbose
+    azurePowerShellVersion: 'LatestVersion'
+    pwsh: true
+    workingDirectory: 'deployment'

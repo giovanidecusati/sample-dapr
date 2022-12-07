@@ -40,16 +40,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{43BC7F89-B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{7786BA43-6D25-4007-857B-C4C85104BDB7}"
 	ProjectSection(SolutionItems) = preProject
-		..\dapr\components\nwd-basket-basket.statestore.yml = ..\dapr\components\nwd-basket-basket.statestore.yml
-		..\dapr\components\nwd-inventory-category.statestore.yml = ..\dapr\components\nwd-inventory-category.statestore.yml
-		..\dapr\components\nwd-inventory-inventory.statestore.yml = ..\dapr\components\nwd-inventory-inventory.statestore.yml
-		..\dapr\components\nwd-inventory-product.statestore.yml = ..\dapr\components\nwd-inventory-product.statestore.yml
-		..\dapr\components\nwd-inventory-transaction.statestore.yml = ..\dapr\components\nwd-inventory-transaction.statestore.yml
-		..\dapr\components\nwd-orders-customer.statestore.yml = ..\dapr\components\nwd-orders-customer.statestore.yml
-		..\dapr\components\nwd-orders-order.statestore.yml = ..\dapr\components\nwd-orders-order.statestore.yml
-		..\dapr\components\nwd-orders-orderProcessorActor.statestore.yml = ..\dapr\components\nwd-orders-orderProcessorActor.statestore.yml
-		..\dapr\components\nwd-orders-product.statestore.yml = ..\dapr\components\nwd-orders-product.statestore.yml
-		..\dapr\components\nwd-queue.pubsub.yml = ..\dapr\components\nwd-queue.pubsub.yml
+		..\dapr\components\nwd-basket.basket.statestore.yml = ..\dapr\components\nwd-basket.basket.statestore.yml
+		..\dapr\components\nwd-inventory.category.statestore.yml = ..\dapr\components\nwd-inventory.category.statestore.yml
+		..\dapr\components\nwd-inventory.inventory.statestore.yml = ..\dapr\components\nwd-inventory.inventory.statestore.yml
+		..\dapr\components\nwd-inventory.product.statestore.yml = ..\dapr\components\nwd-inventory.product.statestore.yml
+		..\dapr\components\nwd-inventory.transaction.statestore.yml = ..\dapr\components\nwd-inventory.transaction.statestore.yml
+		..\dapr\components\nwd-orders.customer.statestore.yml = ..\dapr\components\nwd-orders.customer.statestore.yml
+		..\dapr\components\nwd-orders.order.statestore.yml = ..\dapr\components\nwd-orders.order.statestore.yml
+		..\dapr\components\nwd-orders.orderProcessorActor.statestore.yml = ..\dapr\components\nwd-orders.orderProcessorActor.statestore.yml
+		..\dapr\components\nwd-orders.product.statestore.yml = ..\dapr\components\nwd-orders.product.statestore.yml
+		..\dapr\components\nwd.nwd-queue.pubsub.yml = ..\dapr\components\nwd.nwd-queue.pubsub.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configuration", "{E2A88A73-2E53-4499-8FB9-2400EDE7BF92}"

@@ -2,6 +2,6 @@
 {
     public class DaprConstants
     {
-        public const string DAPR_PUBSUB_NAME = "nwd-queue";
+        public const string DAPR_PUBSUB_NAME = "nwd.nwd-queue";
     }
 }
