@@ -23,7 +23,7 @@ resource resourceKeyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
       defaultAction: 'Deny'
       ipRules: []
     }
-    publicNetworkAccess: 'disabled'
+    publicNetworkAccess: 'enabled'
     sku: {
       family: 'A'
       name: 'standard'
