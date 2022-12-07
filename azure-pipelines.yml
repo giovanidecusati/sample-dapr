@@ -21,10 +21,10 @@ steps:
     ScriptType: 'InlineScript'
     Inline: |
       $deploymentArgs = @{
-          SubscriptionId    = $(SubscriptionId)
-          ResourceGroupName = $(ResourceGroupName)
-          SolutionName      = $(SolutionName)
-          EnvironmentName   = $(EnvironmentName)
+          SubscriptionId    = '$(SubscriptionId)'
+          ResourceGroupName = '$(ResourceGroupName)'
+          SolutionName      = '$(SolutionName)'
+          EnvironmentName   = '$(EnvironmentName)'
       }
       .\Deploy-Prereqs.ps1 @deploymentArgs -Verbose
     azurePowerShellVersion: 'LatestVersion'
