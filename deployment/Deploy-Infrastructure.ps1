@@ -13,7 +13,7 @@ Param (
     [string] $BuildId = ((Get-Date).ToUniversalTime()).ToString('MMddHHmm'),
     [switch] $ValidateOnly,
     $BicepFilePath = '.\templates\main.bicep',
-    $TemplateOutFile = '.\out\mainjson'
+    $TemplateOutFile = '.\out\main.json'
 )
 
 Import-Module .\Function.psm1 -Force
