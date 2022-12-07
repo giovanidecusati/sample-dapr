@@ -5,7 +5,7 @@ param keyVault object
 param logAnalyticsWorkspaceId string
 
 // KeyVault
-resource resourceKeyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
+resource resourceKeyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: keyVault.name
   location: location
   tags: standardTags
@@ -58,4 +58,4 @@ resource resourceKeyVaultDiagnostics 'Microsoft.Insights/diagnosticSettings@2021
   }
 }
 
-output keyVaultId string = resourceKeyVault.id
+output id string = resourceKeyVault.id

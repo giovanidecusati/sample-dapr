@@ -16,3 +16,7 @@ resource resourceServiceBus 'Microsoft.ServiceBus/namespaces@2022-01-01-preview'
     zoneRedundant: false
   }
 }
+
+var serviceBusEndpoint = '${resourceServiceBus.id}/AuthorizationRules/RootManageSharedAccessKey'
+output primaryConnectionString string = listKeys(serviceBusEndpoint, resourceServiceBus.apiVersion).primaryConnectionString
+output id string = resourceServiceBus.id

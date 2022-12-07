@@ -173,15 +173,16 @@ module moduleServiceBus './serviceBus.bicep' = {
   }
 }
 
-// Key-vault secret: cosmosdb_masterKey
+// Key-vault secret: cosmosdb-masterKey
 module moduleAkvSecret_cosmosdb_masterKey './keyVault.secret.bicep' = {
-  name: 'akvSecret_cosmosdb_masterKey-${buildId}'
+  name: 'akvSecret_cosmosdb-masterKey-${buildId}'
   dependsOn: [
     moduleKeyVault
+    moduleCosmosDb
   ]
   params: {
     keyVaultName: keyVault.name
-    name: 'cosmosdb_masterKey'
+    name: 'cosmosdb-masterKey'
     secretValue: moduleCosmosDb.outputs.primaryMasterKey
     contentType: 'plain/text'
     tags: {
@@ -193,15 +194,16 @@ module moduleAkvSecret_cosmosdb_masterKey './keyVault.secret.bicep' = {
   }
 }
 
-// Key-vault secret: acr_loginServer
+// Key-vault secret: acr-loginServer
 module moduleAkvSecret_acr_loginServer './keyVault.secret.bicep' = {
-  name: 'akvSecret_acr_loginServer-${buildId}'
+  name: 'akvSecret_acr-loginServer-${buildId}'
   dependsOn: [
     moduleKeyVault
+    moduleContainerRegistry
   ]
   params: {
     keyVaultName: keyVault.name
-    name: 'acr_loginServer'
+    name: 'acr-loginServer'
     secretValue: moduleContainerRegistry.outputs.logingServer
     contentType: 'plain/text'
     tags: {
@@ -212,15 +214,16 @@ module moduleAkvSecret_acr_loginServer './keyVault.secret.bicep' = {
   }
 }
 
-// Key-vault secret: acr_password
+// Key-vault secret: acr-password
 module moduleAkvSecret_acr_password './keyVault.secret.bicep' = {
-  name: 'akvSecret_acr_password-${buildId}'
+  name: 'akvSecret_acr-password-${buildId}'
   dependsOn: [
     moduleKeyVault
+    moduleContainerRegistry
   ]
   params: {
     keyVaultName: keyVault.name
-    name: 'acr_password'
+    name: 'acr-password'
     secretValue: moduleContainerRegistry.outputs.password
     contentType: 'plain/text'
     tags: {
@@ -232,15 +235,16 @@ module moduleAkvSecret_acr_password './keyVault.secret.bicep' = {
   }
 }
 
-// Key-vault secret: acr_username
+// Key-vault secret: acr-username
 module moduleAkvSecret_acr_username './keyVault.secret.bicep' = {
-  name: 'akvSecret_acr_username-${buildId}'
+  name: 'akvSecret_acr-username-${buildId}'
   dependsOn: [
     moduleKeyVault
+    moduleContainerRegistry
   ]
   params: {
     keyVaultName: keyVault.name
-    name: 'acr_username'
+    name: 'acr-username'
     secretValue: moduleContainerRegistry.outputs.username
     contentType: 'plain/text'
     tags: {
@@ -249,4 +253,28 @@ module moduleAkvSecret_acr_username './keyVault.secret.bicep' = {
       ValidityPeriodDays: -1
     }
   }
+}
+
+// Key-vault secret: servicebus-connectionString
+module moduleAkvSecret_servicebus_connectionString './keyVault.secret.bicep' = {
+  name: 'akvSecret_servicebus-connectionString-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+    moduleContainerRegistry
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    name: 'servicebus-connectionString'
+    secretValue: moduleServiceBus.outputs.primaryConnectionString
+    contentType: 'plain/text'
+    tags: {
+      CredentialId: 'connectionString'
+      ProviderAddress: moduleServiceBus.outputs.id
+      ValidityPeriodDays: -1
+    }
+  }
+}
+
+output keyVault object = {
+  id: moduleKeyVault.outputs.id
 }

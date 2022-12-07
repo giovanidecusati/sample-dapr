@@ -16,11 +16,11 @@ var standardAttributes = {
 
 }
 
-resource resourceKeyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
+resource resourceKeyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
 }
 
-resource resourceKeyVaultSecretSecret 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+resource resourceKeyVaultSecretSecret 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: name
   tags: tags
   parent: resourceKeyVault
