@@ -29,4 +29,4 @@ steps:
       .\Deploy-Prereqs.ps1 @deploymentArgs -Verbose
     azurePowerShellVersion: 'LatestVersion'
     pwsh: true
-    workingDirectory: '.\deployment'
+    workingDirectory: 'deployment'
