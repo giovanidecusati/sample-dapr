@@ -27,7 +27,7 @@ steps:
           BicepFilePath    = '.\templates\main.bicep'
           TemplateOutFile  = '.\out\main.json'
       }
-      .\Deploy-Prereqs.ps1 @deploymentArgs -Verbose
+      .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
     azurePowerShellVersion: 'LatestVersion'
     pwsh: true
     workingDirectory: 'deployment'
