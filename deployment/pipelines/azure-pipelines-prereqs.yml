@@ -15,6 +15,7 @@ variables:
 steps:
 
 - task: AzurePowerShell@5
+  displayName: 'Deploy pre-requirements'
   inputs:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'

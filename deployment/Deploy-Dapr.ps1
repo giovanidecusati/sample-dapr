@@ -2,9 +2,9 @@
 
 [CmdletBinding(SupportsShouldProcess = $true)]
 Param (
-    [String] $SubscriptionId = 'c1bda0fc-c0e3-4b89-be00-0524b96b7b0f',
-    [String] $ResourceGroupName = 'rg-dapr',
-    [String] $ContainerAppEnvironment = 'cape-dapr-giovani',
+    [Parameter(Mandatory)] [String] $SubscriptionId,
+    [Parameter(Mandatory)] [String] $ResourceGroupName,
+    [Parameter(Mandatory)] [String] $ContainerAppEnvironment,
     [string] $ComponentsDirectory = '.\components'
 )
 

@@ -4,8 +4,6 @@
 
 [CmdletBinding(SupportsShouldProcess = $true)]
 Param (
-    [String] $AppGatewayCertificateFileName,
-    [SecureString] $AppGatewayCertificatePassword,
     [Parameter(Mandatory)] [String] $SubscriptionId,
     [Parameter(Mandatory)] [String] $ResourceGroupName,
     [Parameter(Mandatory)] [String] $SolutionName,
