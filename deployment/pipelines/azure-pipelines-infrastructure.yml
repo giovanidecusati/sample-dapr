@@ -48,7 +48,7 @@ steps:
           SubscriptionId            = '$(SubscriptionId)'
           ResourceGroupName         = '$(ResourceGroupName)'
           ContainerAppEnvironment   = '$(stepDeployInfrastructure.containerAppEnvironment)'
-          ComponentsDirectory       = 'deployment/components'
+          ComponentsDirectory       = 'components'
       }
       .\Deploy-Dapr.ps1 @deploymentArgs -Verbose
     azurePowerShellVersion: 'LatestVersion'
