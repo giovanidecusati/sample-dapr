@@ -110,8 +110,8 @@ module moduleContainerAppEnvironment './containerAppEnvironment.bicep' = {
     location: containerAppEnvironment.location
     standardTags: standardTags
     containerAppEnvironment: containerAppEnvironment
-    logAnalyticsCustomerId: resourceKeyVault.getSecret('logAnalyticsCustomerId')
-    logAnalyticsPrimarySharedKey: resourceKeyVault.getSecret('logAnalyticsPrimarySharedKey')
+    logAnalyticsCustomerId: resourceKeyVault.getSecret('logAnalyticsWorkspaceCustomerId')
+    logAnalyticsPrimarySharedKey: resourceKeyVault.getSecret('logAnalyticsWorkspacePrimarySharedKey')
   }
 }
 

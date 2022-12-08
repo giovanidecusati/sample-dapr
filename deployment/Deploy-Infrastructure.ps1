@@ -12,7 +12,7 @@ Param (
     [Parameter(Mandatory)] [String] $EnvironmentName,    
     [string] $BuildId = ((Get-Date).ToUniversalTime()).ToString('MMddHHmm'),
     [switch] $ValidateOnly,
-    $BicepFilePath = '.\templates\main.bicep',
+    $BicepFilePath = '.\templates\main.prereqs.bicep',
     $TemplateOutFile = '.\out\main.json'
 )
 
