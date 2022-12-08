@@ -13,6 +13,10 @@ variables:
     value: 'Release'
   - name: basketApiImageName
     value: 'nwd-basket-api'
+  - name: inventoryApiImageName
+    value: 'nwd-inventory-api'
+  - name: ordersApiImageName
+    value: 'nwd-orders-api'
   - name: tag
     value: '$(Build.BuildId)'
   - group: DAPR-LAB
@@ -67,7 +71,28 @@ steps:
   inputs:
     repository: '$(acrLoginServer)/$(basketApiImageName)'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
+    Dockerfile: 'Basket/Nwd.Basket.Api/Dockerfile'
+    buildContext: 'src'
+    tags: |
+      $(tag)
+      latest
+- task: Docker@2
+  displayName: 'Build and push $(inventoryApiImageName)'
+  inputs:
+    repository: '$(acrLoginServer)/$(inventoryApiImageName)'
+    command: 'buildAndPush'
+    Dockerfile: 'Inventory/Nwd.Inventory.Api/Dockerfile'
+    buildContext: 'src'
+    tags: |
+      $(tag)
+      latest
+
+- task: Docker@2
+  displayName: 'Build and push $(ordersApiImageName)'
+  inputs:
+    repository: '$(acrLoginServer)/$(ordersApiImageName)'
+    command: 'buildAndPush'
+    Dockerfile: 'Orders/Nwd.Orders.Api/Dockerfile'
     buildContext: 'src'
     tags: |
       $(tag)
