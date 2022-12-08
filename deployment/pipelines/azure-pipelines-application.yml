@@ -65,9 +65,10 @@ steps:
 - task: Docker@2
   displayName: 'Build and push $(basketApiImageName)'
   inputs:
-    repository: $(basketApiImageName)
-    command: buildAndPush
-    dockerfile: src/Basket/Nwd.Basket.Api/Dockerfile
+    repository: '$(basketApiImageName)'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    buildContext: 'src'
     tags: |
       $(tag)
       latest
