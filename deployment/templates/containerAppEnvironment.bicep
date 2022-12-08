@@ -1,7 +1,9 @@
 param location string
 param standardTags object
 param containerAppEnvironment object
+@secure()
 param logAnalyticsCustomerId string
+@secure()
 param logAnalyticsPrimarySharedKey string
 
 resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022-06-01-preview' = {

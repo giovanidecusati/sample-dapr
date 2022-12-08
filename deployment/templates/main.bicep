@@ -40,11 +40,6 @@ var containerRegistry = {
   name: 'cr${solutionName}${environmentName}${constants.dataCenterCode}'
 }
 
-var containerAppEnvironment = {
-  name: 'cae-${solutionName}-${environmentName}-ause'
-  location: 'australiaeast'
-}
-
 var cosmosDb = {
   name: 'cosmos-${solutionName}-${environmentName}-${constants.dataCenterCode}'
   totalThroughputLimit: 4000
@@ -127,18 +122,6 @@ module moduleContainerRegistry './containerRegistry.bicep' = {
   }
 }
 
-module moduleContainerAppEnvironment './containerAppEnvironment.bicep' = {
-  name: 'containerAppEnvironment-${buildId}'
-  dependsOn: []
-  params: {
-    location: containerAppEnvironment.location
-    standardTags: standardTags
-    containerAppEnvironment: containerAppEnvironment
-    logAnalyticsCustomerId: moduleLogAnalyticsWorkspace.outputs.customerId
-    logAnalyticsPrimarySharedKey: moduleLogAnalyticsWorkspace.outputs.primarySharedKey
-  }
-}
-
 module moduleCosmosDb './cosmosdb.bicep' = {
   name: 'cosmosdb-${buildId}'
   dependsOn: []
@@ -173,16 +156,16 @@ module moduleServiceBus './serviceBus.bicep' = {
   }
 }
 
-// Key-vault secret: cosmosdb-masterKey
-module moduleAkvSecret_cosmosdb_masterKey './keyVault.secret.bicep' = {
-  name: 'akvSecret_cosmosdb-masterKey-${buildId}'
+// Key-vault secret: cosmosdbMasterKey
+module moduleAkvSecret_cosmosdbMasterKey './keyVault.secret.bicep' = {
+  name: 'akvSecret_cosmosdbMasterKey-${buildId}'
   dependsOn: [
     moduleKeyVault
     moduleCosmosDb
   ]
   params: {
     keyVaultName: keyVault.name
-    name: 'cosmosdb-masterKey'
+    name: 'cosmosdbMasterKey'
     secretValue: moduleCosmosDb.outputs.primaryMasterKey
     contentType: 'plain/text'
     tags: {
@@ -194,16 +177,37 @@ module moduleAkvSecret_cosmosdb_masterKey './keyVault.secret.bicep' = {
   }
 }
 
-// Key-vault secret: acr-loginServer
-module moduleAkvSecret_acr_loginServer './keyVault.secret.bicep' = {
-  name: 'akvSecret_acr-loginServer-${buildId}'
+// Key-vault secret: cosmosdbDocumentEndpoint
+module moduleAkvSecret_cosmosdbDocumentEndpoint './keyVault.secret.bicep' = {
+  name: 'akvSecret_cosmosdbDocumentEndpoint-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+    moduleCosmosDb
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    name: 'cosmosdbDocumentEndpoint'
+    secretValue: moduleCosmosDb.outputs.documentEndpoint
+    contentType: 'plain/text'
+    tags: {
+      CredentialId: 'documentEndpoint'
+      ProviderAddress: moduleCosmosDb.outputs.id
+      ValidityPeriodDays: 365
+    }
+    expiryDate: '${dateTimeToEpoch(dateTimeAdd(baseTime, 'P1Y'))}'
+  }
+}
+
+// Key-vault secret: acrLoginServer
+module moduleAkvSecret_acrLoginServer './keyVault.secret.bicep' = {
+  name: 'akvSecret_acrLoginServer-${buildId}'
   dependsOn: [
     moduleKeyVault
     moduleContainerRegistry
   ]
   params: {
     keyVaultName: keyVault.name
-    name: 'acr-loginServer'
+    name: 'acrLoginServer'
     secretValue: moduleContainerRegistry.outputs.logingServer
     contentType: 'plain/text'
     tags: {
@@ -214,16 +218,16 @@ module moduleAkvSecret_acr_loginServer './keyVault.secret.bicep' = {
   }
 }
 
-// Key-vault secret: acr-password
-module moduleAkvSecret_acr_password './keyVault.secret.bicep' = {
-  name: 'akvSecret_acr-password-${buildId}'
+// Key-vault secret: acrPassword
+module moduleAkvSecret_acrPassword './keyVault.secret.bicep' = {
+  name: 'akvSecret_acrPassword-${buildId}'
   dependsOn: [
     moduleKeyVault
     moduleContainerRegistry
   ]
   params: {
     keyVaultName: keyVault.name
-    name: 'acr-password'
+    name: 'acrPassword'
     secretValue: moduleContainerRegistry.outputs.password
     contentType: 'plain/text'
     tags: {
@@ -235,16 +239,16 @@ module moduleAkvSecret_acr_password './keyVault.secret.bicep' = {
   }
 }
 
-// Key-vault secret: acr-username
-module moduleAkvSecret_acr_username './keyVault.secret.bicep' = {
-  name: 'akvSecret_acr-username-${buildId}'
+// Key-vault secret: acrUserName
+module moduleAkvSecret_acrUserName './keyVault.secret.bicep' = {
+  name: 'akvSecret_acrUserName-${buildId}'
   dependsOn: [
     moduleKeyVault
     moduleContainerRegistry
   ]
   params: {
     keyVaultName: keyVault.name
-    name: 'acr-username'
+    name: 'acrUserName'
     secretValue: moduleContainerRegistry.outputs.username
     contentType: 'plain/text'
     tags: {
@@ -255,16 +259,16 @@ module moduleAkvSecret_acr_username './keyVault.secret.bicep' = {
   }
 }
 
-// Key-vault secret: servicebus-connectionString
+// Key-vault secret: servicebusConnectionString
 module moduleAkvSecret_servicebus_connectionString './keyVault.secret.bicep' = {
-  name: 'akvSecret_servicebus-connectionString-${buildId}'
+  name: 'akvSecret_servicebusConnectionString-${buildId}'
   dependsOn: [
     moduleKeyVault
     moduleContainerRegistry
   ]
   params: {
     keyVaultName: keyVault.name
-    name: 'servicebus-connectionString'
+    name: 'servicebusConnectionString'
     secretValue: moduleServiceBus.outputs.primaryConnectionString
     contentType: 'plain/text'
     tags: {
@@ -275,6 +279,67 @@ module moduleAkvSecret_servicebus_connectionString './keyVault.secret.bicep' = {
   }
 }
 
+// Key-vault secret: logAnalyticsWorkspaceCustomerId
+module moduleAkvSecret_logAnalyticsWorkspaceCustomerId './keyVault.secret.bicep' = {
+  name: 'akvSecret_logAnalyticsWorkspaceCustomerId-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+    moduleContainerRegistry
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    name: 'logAnalyticsWorkspaceCustomerId'
+    secretValue: moduleLogAnalyticsWorkspace.outputs.customerId
+    contentType: 'plain/text'
+    tags: {
+      CredentialId: 'customerId'
+      ProviderAddress: moduleLogAnalyticsWorkspace.outputs.customerId
+      ValidityPeriodDays: -1
+    }
+  }
+}
+
+// Key-vault secret: logAnalyticsWorkspacePrimarySharedKey
+module moduleAkvSecret_logAnalyticsWorkspacePrimarySharedKey './keyVault.secret.bicep' = {
+  name: 'akvSecret_logAnalyticsWorkspacePrimarySharedKey-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+    moduleContainerRegistry
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    name: 'logAnalyticsWorkspacePrimarySharedKey'
+    secretValue: moduleLogAnalyticsWorkspace.outputs.primarySharedKey
+    contentType: 'plain/text'
+    tags: {
+      CredentialId: 'primarySharedKey'
+      ProviderAddress: moduleLogAnalyticsWorkspace.outputs.primarySharedKey
+      ValidityPeriodDays: -1
+    }
+  }
+}
+
+output appInsights object = {
+  id: moduleAppInsights.outputs.id
+  name: appInsights.name
+}
+
 output keyVault object = {
   id: moduleKeyVault.outputs.id
+  name: keyVault.name
+}
+
+output containerRegistry object = {
+  id: moduleContainerRegistry.outputs.id
+  name: containerRegistry.name
+}
+
+output cosmosDb object = {
+  id: moduleCosmosDb.outputs.id
+  name: cosmosDb.name
+}
+
+output serviceBus object = {
+  id: moduleServiceBus.outputs.id
+  name: serviceBus.name
 }

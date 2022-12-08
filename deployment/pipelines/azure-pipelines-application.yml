@@ -9,24 +9,68 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
+  - name: buildConfiguration
+    value: 'Release'
+  - name: basketApiImageName
+    value: 'nwd-basket-api'
+  - name: tag
+    value: '$(Build.BuildId)'
   - group: 
       DAPR-LAB
+      DAPR-LAB-AKV
 
 steps:
 
-- task: AzurePowerShell@5
+- task: UseDotNet@2
   inputs:
-    azureSubscription: 'Visual Studio Enterprise com MSDN(c1bda0fc-c0e3-4b89-be00-0524b96b7b0f)'
-    ScriptType: 'InlineScript'
-    Inline: |
-      $deploymentArgs = @{
-          SubscriptionId    = '$(SubscriptionId)'
-          ResourceGroupName = '$(ResourceGroupName)'
-          SolutionName      = '$(SolutionName)'
-          EnvironmentName   = '$(EnvironmentName)'
-          BicepFilePath    = './templates/main.bicep'
-      }
-      .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
-    azurePowerShellVersion: 'LatestVersion'
-    pwsh: true
-    workingDirectory: 'deployment'
+    version: '6.x'
+    
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
+  displayName: 'dotnet build $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)' # Update this to match your need
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: '**/*Tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+
+# this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'drop'
+
+- script: |
+    docker login -u $(acrUserName) -p $(acrPassword) $(acrLoginServer)
+  displayName: 'Login to ACR'
+
+- task: Docker@2
+  displayName: Build an image
+  inputs:
+    repository: $(basketApiImageName)
+    command: buildAndPush
+    dockerfile: src/Basket/Nwd.Basket.Api/Dockerfile
+    tags: |
+      $(tag)
+      latest
