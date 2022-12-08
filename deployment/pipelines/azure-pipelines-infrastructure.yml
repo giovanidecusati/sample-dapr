@@ -24,7 +24,7 @@ steps:
           ResourceGroupName = '$(ResourceGroupName)'
           SolutionName      = '$(SolutionName)'
           EnvironmentName   = '$(EnvironmentName)'
-          BicepFilePath     = './templates/main.bicep'
+          BicepFilePath     = './templates/main.infrastructure.bicep'
           TemplateOutFile   = './out/main.json'
       }
       .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose

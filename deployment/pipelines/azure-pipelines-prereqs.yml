@@ -16,7 +16,7 @@ steps:
 
 - task: AzurePowerShell@5
   inputs:
-    azureSubscription: 'Visual Studio Enterprise com MSDN(c1bda0fc-c0e3-4b89-be00-0524b96b7b0f)'
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
       $deploymentArgs = @{
@@ -24,7 +24,8 @@ steps:
           ResourceGroupName = '$(ResourceGroupName)'
           SolutionName      = '$(SolutionName)'
           EnvironmentName   = '$(EnvironmentName)'
-          BicepFilePath    = './templates/main.containers.bicep'
+          BicepFilePath     = './templates/main.prereqs.bicep'
+          TemplateOutFile   = './out/main.json'
       }
       .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
     azurePowerShellVersion: 'LatestVersion'

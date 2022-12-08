@@ -40,36 +40,8 @@ var containerRegistry = {
   name: 'cr${solutionName}${environmentName}${constants.dataCenterCode}'
 }
 
-var cosmosDb = {
-  name: 'cosmos-${solutionName}-${environmentName}-${constants.dataCenterCode}'
-  totalThroughputLimit: 4000
-  locations: [
-    {
-      locationName: 'australiasoutheast'
-    }
-  ]
-  databases: [
-    {
-      name: 'BasketDB'
-      containers: [ 'Basket' ]
-    }
-    {
-      name: 'InventoryDB'
-      containers: [ 'Category', 'Inventory', 'Product', 'Transaction' ]
-    }
-    {
-      name: 'OrdersDB'
-      containers: [ 'Customer', 'Order', 'orderProcessorActor', 'Product' ]
-    }
-  ]
-}
-
 var keyVault = {
   name: 'kv-${solutionName}-${environmentName}-${constants.dataCenterCode}'
-}
-
-var serviceBus = {
-  name: 'sb-${solutionName}-${environmentName}-${constants.dataCenterCode}'
 }
 
 // ##################################################################
@@ -87,9 +59,7 @@ module moduleLogAnalyticsWorkspace './logAnalyticsWorkspace.bicep' = {
 
 module moduleAppInsights './appInsights.bicep' = {
   name: 'appInsights-${buildId}'
-  dependsOn: [
-    moduleLogAnalyticsWorkspace
-  ]
+  dependsOn: [ ]
   params: {
     location: location
     standardTags: standardTags
@@ -129,82 +99,6 @@ module moduleContainerRegistry './containerRegistry.bicep' = {
     location: location
     standardTags: standardTags
     containerRegistry: containerRegistry
-  }
-}
-
-module moduleCosmosDb './cosmosdb.bicep' = {
-  name: 'cosmosdb-${buildId}'
-  dependsOn: []
-  params: {
-    location: location
-    standardTags: standardTags
-    cosmosDb: cosmosDb
-  }
-}
-
-module moduleCosmosDbContainer './cosmosdbContainer.bicep' = [for database in cosmosDb.databases: {
-  name: 'cosmosdb${database.name}Container-${buildId}'
-  dependsOn: [
-    moduleCosmosDb
-  ]
-  params: {
-    location: location
-    standardTags: standardTags
-    cosmosDbName: cosmosDb.name
-    databaseName: database.name
-    containerNames: database.containers
-  }
-}]
-
-module moduleServiceBus './serviceBus.bicep' = {
-  name: 'serviceBus-${buildId}'
-  dependsOn: []
-  params: {
-    location: location
-    standardTags: standardTags
-    serviceBus: serviceBus
-  }
-}
-
-// Key-vault secret: cosmosdbMasterKey
-module moduleAkvSecret_cosmosdbMasterKey './keyVault.secret.bicep' = {
-  name: 'akvSecret_cosmosdbMasterKey-${buildId}'
-  dependsOn: [
-    moduleKeyVault
-    moduleCosmosDb
-  ]
-  params: {
-    keyVaultName: keyVault.name
-    name: 'cosmosdbMasterKey'
-    secretValue: moduleCosmosDb.outputs.primaryMasterKey
-    contentType: 'plain/text'
-    tags: {
-      CredentialId: 'primaryMasterKey'
-      ProviderAddress: moduleCosmosDb.outputs.id
-      ValidityPeriodDays: 365
-    }
-    expiryDate: '${dateTimeToEpoch(dateTimeAdd(baseTime, 'P1Y'))}'
-  }
-}
-
-// Key-vault secret: cosmosdbDocumentEndpoint
-module moduleAkvSecret_cosmosdbDocumentEndpoint './keyVault.secret.bicep' = {
-  name: 'akvSecret_cosmosdbDocumentEndpoint-${buildId}'
-  dependsOn: [
-    moduleKeyVault
-    moduleCosmosDb
-  ]
-  params: {
-    keyVaultName: keyVault.name
-    name: 'cosmosdbDocumentEndpoint'
-    secretValue: moduleCosmosDb.outputs.documentEndpoint
-    contentType: 'plain/text'
-    tags: {
-      CredentialId: 'documentEndpoint'
-      ProviderAddress: moduleCosmosDb.outputs.id
-      ValidityPeriodDays: 365
-    }
-    expiryDate: '${dateTimeToEpoch(dateTimeAdd(baseTime, 'P1Y'))}'
   }
 }
 
@@ -269,26 +163,6 @@ module moduleAkvSecret_acrUserName './keyVault.secret.bicep' = {
   }
 }
 
-// Key-vault secret: servicebusConnectionString
-module moduleAkvSecret_servicebus_connectionString './keyVault.secret.bicep' = {
-  name: 'akvSecret_servicebusConnectionString-${buildId}'
-  dependsOn: [
-    moduleKeyVault
-    moduleContainerRegistry
-  ]
-  params: {
-    keyVaultName: keyVault.name
-    name: 'servicebusConnectionString'
-    secretValue: moduleServiceBus.outputs.primaryConnectionString
-    contentType: 'plain/text'
-    tags: {
-      CredentialId: 'connectionString'
-      ProviderAddress: moduleServiceBus.outputs.id
-      ValidityPeriodDays: -1
-    }
-  }
-}
-
 // Key-vault secret: logAnalyticsWorkspaceCustomerId
 module moduleAkvSecret_logAnalyticsWorkspaceCustomerId './keyVault.secret.bicep' = {
   name: 'akvSecret_logAnalyticsWorkspaceCustomerId-${buildId}'
@@ -329,9 +203,9 @@ module moduleAkvSecret_logAnalyticsWorkspacePrimarySharedKey './keyVault.secret.
   }
 }
 
-output appInsights object = {
-  id: moduleAppInsights.outputs.id
-  name: appInsights.name
+output logAnalyticsWorkspace object = {
+  id: moduleLogAnalyticsWorkspace.outputs.id
+  name: logAnalyticsWorkspace.name
 }
 
 output keyVault object = {
@@ -342,14 +216,4 @@ output keyVault object = {
 output containerRegistry object = {
   id: moduleContainerRegistry.outputs.id
   name: containerRegistry.name
-}
-
-output cosmosDb object = {
-  id: moduleCosmosDb.outputs.id
-  name: cosmosDb.name
-}
-
-output serviceBus object = {
-  id: moduleServiceBus.outputs.id
-  name: serviceBus.name
 }
