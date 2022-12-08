@@ -29,7 +29,8 @@ steps:
           BicepFilePath     = './templates/main.infrastructure.bicep'
           TemplateOutFile   = './out/main.json'
       }
-      $output = .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
+      $output = 'something'
+      # $output = .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
       Write-Host "##vso[task.setvariable variable=deploymentOutput;isOutput=true]$output"
       $output
     azurePowerShellVersion: 'LatestVersion'
@@ -44,14 +45,14 @@ steps:
     Inline: |
       $output = $(stepDeployInfrastructure.deploymentOutput)
       $output
-      $deploymentArgs = @{
-          SubscriptionId            = '$(SubscriptionId)'
-          ResourceGroupName         = '$(ResourceGroupName)'
-          SolutionName              = '$(SolutionName)'
-          ContainerAppEnvironment   = $output.Outputs.containerAppEnvironment.name
-          ComponentsDirectory       = 'deployment/components'
-      }
-      .\Deploy-Dapr.ps1 @deploymentArgs -Verbose
+      # $deploymentArgs = @{
+      #     SubscriptionId            = '$(SubscriptionId)'
+      #     ResourceGroupName         = '$(ResourceGroupName)'
+      #     SolutionName              = '$(SolutionName)'
+      #     ContainerAppEnvironment   = $output.Outputs.containerAppEnvironment.name
+      #     ComponentsDirectory       = 'deployment/components'
+      # }
+      # .\Deploy-Dapr.ps1 @deploymentArgs -Verbose
     azurePowerShellVersion: 'LatestVersion'
     pwsh: true
     workingDirectory: 'deployment'
