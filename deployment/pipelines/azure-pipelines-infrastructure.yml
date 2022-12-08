@@ -47,7 +47,6 @@ steps:
       $deploymentArgs = @{
           SubscriptionId            = '$(SubscriptionId)'
           ResourceGroupName         = '$(ResourceGroupName)'
-          SolutionName              = '$(SolutionName)'
           ContainerAppEnvironment   = '$(stepDeployInfrastructure.containerAppEnvironment)'
           ComponentsDirectory       = 'deployment/components'
       }
