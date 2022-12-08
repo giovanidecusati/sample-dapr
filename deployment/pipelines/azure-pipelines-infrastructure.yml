@@ -38,12 +38,12 @@ steps:
     pwsh: true
     workingDirectory: 'deployment'
 
-- task: AzurePowerShell@5
-  displayName: 'Deploy dapr components'
+- task: AzureCLI@2
   inputs:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
-    ScriptType: 'InlineScript'
-    Inline: |
+    scriptType: 'pscore'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
       az extension add --name containerapp --upgrade
       az provider register --namespace Microsoft.App
       $deploymentArgs = @{
@@ -53,6 +53,4 @@ steps:
           ComponentsDirectory       = 'components'
       }
       .\Deploy-Dapr.ps1 @deploymentArgs -Verbose
-    azurePowerShellVersion: 'LatestVersion'
-    pwsh: true
     workingDirectory: 'deployment'
