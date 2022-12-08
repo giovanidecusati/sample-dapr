@@ -5,9 +5,7 @@ Param (
     [String] $SubscriptionId = 'c1bda0fc-c0e3-4b89-be00-0524b96b7b0f',
     [String] $ResourceGroupName = 'rg-dapr',
     [String] $ContainerAppEnvironment = 'cape-dapr-giovani',
-    [String] $Location = 'australiaeast',
-    [string] $BuildId = ((Get-Date).ToUniversalTime()).ToString('MMddHHmm'),
-    [string] $ComponentsDirecory = '.\components'
+    [string] $ComponentsDirectory = '.\components'
 )
 
 try {
@@ -25,7 +23,7 @@ if ($VerbosePreference -eq "SilentlyContinue" -and $Env:SYSTEM_DEBUG) {
 
 $PSBoundParameters | Format-Table | Out-String | Write-Verbose
 
-$components = Get-ChildItem -Path $ComponentsDirecory
+$components = Get-ChildItem -Path $ComponentsDirectory
 ForEach ($componentPath in $components) {
     $componentNaming = $componentPath.Name.Split('.')
     $componentNamespace = $componentNaming[0]
@@ -38,10 +36,9 @@ ForEach ($componentPath in $components) {
     Write-Host "Type: ${componentType}."
     Write-Host "`n"
 
-    $output = `
-        az containerapp env dapr-component set `
-            --name $ContainerAppEnvironment `
-            --resource-group $ResourceGroupName `
-            --dapr-component-name $componentName `
-            --yaml $componentPath
+    az containerapp env dapr-component set `
+        --name $ContainerAppEnvironment `
+        --resource-group $ResourceGroupName `
+        --dapr-component-name $componentName `
+        --yaml $componentPath
 }

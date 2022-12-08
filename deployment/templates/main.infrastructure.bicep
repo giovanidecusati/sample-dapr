@@ -61,6 +61,24 @@ var containerAppEnvironment = {
   location: 'australiaeast'
 }
 
+var containerAppBasketApi = {
+  name: 'ca-${solutionName}-${environmentName}-${constants.dataCenterCode}-basketapi'
+  appId: 'nwd-basket-api'
+  image: 'crgiodaprlabause.azurecr.io/nwd-basket-api:latest'
+}
+
+var containerAppInventoryApi = {
+  name: 'ca-${solutionName}-${environmentName}-${constants.dataCenterCode}-inventoryapi'
+  appId: 'nwd-inventory-api'
+  image: 'crgiodaprlabause.azurecr.io/nwd-inventory-api:latest'
+}
+
+var containerAppOrdersApi = {
+  name: 'ca-${solutionName}-${environmentName}-${constants.dataCenterCode}-ordersapi'
+  appId: 'nwd-orders-api'
+  image: 'crgiodaprlabause.azurecr.io/nwd-orders-api:latest'
+}
+
 // ##################################################################
 //  Modules
 // ##################################################################
@@ -155,6 +173,48 @@ module moduleAkvSecret_cosmosdbDocumentEndpoint './keyVault.secret.bicep' = {
   }
 }
 
+module moduleContainerAppBasketApi './containerApp.bicep' = {
+  name: 'containerAppBasketApi-${buildId}'
+  dependsOn: []
+  params: {
+    location: containerAppEnvironment.location
+    standardTags: standardTags
+    containerApp: containerAppBasketApi
+    acrPassword: resourceKeyVault.getSecret('acrPassword')
+    acrServer: resourceKeyVault.getSecret('acrLoginServer')
+    acrUserName: resourceKeyVault.getSecret('acrUserName')
+    managedEnvironmentId: moduleContainerAppEnvironment.outputs.id
+  }
+}
+
+module moduleContainerAppInventoryApi './containerApp.bicep' = {
+  name: 'containerAppInventoryApi-${buildId}'
+  dependsOn: []
+  params: {
+    location: containerAppEnvironment.location
+    standardTags: standardTags
+    containerApp: containerAppInventoryApi
+    acrPassword: resourceKeyVault.getSecret('acrPassword')
+    acrServer: resourceKeyVault.getSecret('acrLoginServer')
+    acrUserName: resourceKeyVault.getSecret('acrUserName')
+    managedEnvironmentId: moduleContainerAppEnvironment.outputs.id
+  }
+}
+
+module moduleContainerAppOrdersApi './containerApp.bicep' = {
+  name: 'containerAppOrdersApi-${buildId}'
+  dependsOn: []
+  params: {
+    location: containerAppEnvironment.location
+    standardTags: standardTags
+    containerApp: containerAppOrdersApi
+    acrPassword: resourceKeyVault.getSecret('acrPassword')
+    acrServer: resourceKeyVault.getSecret('acrLoginServer')
+    acrUserName: resourceKeyVault.getSecret('acrUserName')
+    managedEnvironmentId: moduleContainerAppEnvironment.outputs.id
+  }
+}
+
 output cosmosDb object = {
   id: moduleCosmosDb.outputs.id
   name: cosmosDb.name
@@ -168,4 +228,22 @@ output serviceBus object = {
 output containerAppEnvironment object = {
   id: moduleContainerAppEnvironment.outputs.id
   name: containerAppEnvironment.name
+}
+
+output containerAppBasketApi object = {
+  id: moduleContainerAppBasketApi.outputs.id
+  name: containerAppBasketApi.name
+  fqdn: moduleContainerAppBasketApi.outputs.fqdn
+}
+
+output containerAppInventoryApi object = {
+  id: moduleContainerAppInventoryApi.outputs.id
+  name: containerAppInventoryApi.name
+  fqdn: moduleContainerAppInventoryApi.outputs.fqdn
+}
+
+output containerAppOrdersApi object = {
+  id: moduleContainerAppOrdersApi.outputs.id
+  name: containerAppOrdersApi.name
+  fqdn: moduleContainerAppOrdersApi.outputs.fqdn
 }
