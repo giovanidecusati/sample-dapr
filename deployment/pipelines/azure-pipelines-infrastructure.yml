@@ -30,7 +30,8 @@ steps:
           TemplateOutFile   = './out/main.json'
       }
       $deploymentOutput = .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
-      $containerAppEnvironment = ($deploymentOutput.Outputs['containerAppEnvironment'] | ConvertTo-Json | ConvertFrom-Json).Value.name
+      # TODO: find a better way to retrieve a value from JObject
+      $containerAppEnvironment = ($deploymentOutput.Outputs.containerAppEnvironment[0] | ConvertTo-Json | ConvertFrom-Json).Value.name
       Write-Host "##vso[task.setvariable variable=containerAppEnvironment;isOutput=true]$containerAppEnvironment"
       $containerAppEnvironment
     azurePowerShellVersion: 'LatestVersion'
