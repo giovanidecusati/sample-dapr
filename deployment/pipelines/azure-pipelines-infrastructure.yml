@@ -44,6 +44,8 @@ steps:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
+      az extension add --name containerapp --upgrade
+      az provider register --namespace Microsoft.App
       $deploymentArgs = @{
           SubscriptionId            = '$(SubscriptionId)'
           ResourceGroupName         = '$(ResourceGroupName)'
