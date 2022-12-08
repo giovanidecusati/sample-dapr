@@ -29,9 +29,9 @@ steps:
           BicepFilePath     = './templates/main.infrastructure.bicep'
           TemplateOutFile   = './out/main.json'
       }
-      $output = 'something'
-      # $output = .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
-      Write-Host "##vso[task.setvariable variable=deploymentOutput;isOutput=true]$output"
+      $output = .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
+      $output.Outputs.containerAppEnvironment.name
+      Write-Host "##vso[task.setvariable variable=containerAppEnvironment;isOutput=true]$output.Outputs.containerAppEnvironment.name"
       $output
     azurePowerShellVersion: 'LatestVersion'
     pwsh: true
@@ -43,16 +43,14 @@ steps:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
-      $output = $(stepDeployInfrastructure.deploymentOutput)
-      $output
-      # $deploymentArgs = @{
-      #     SubscriptionId            = '$(SubscriptionId)'
-      #     ResourceGroupName         = '$(ResourceGroupName)'
-      #     SolutionName              = '$(SolutionName)'
-      #     ContainerAppEnvironment   = $output.Outputs.containerAppEnvironment.name
-      #     ComponentsDirectory       = 'deployment/components'
-      # }
-      # .\Deploy-Dapr.ps1 @deploymentArgs -Verbose
+      $deploymentArgs = @{
+          SubscriptionId            = '$(SubscriptionId)'
+          ResourceGroupName         = '$(ResourceGroupName)'
+          SolutionName              = '$(SolutionName)'
+          ContainerAppEnvironment   = '$(stepDeployInfrastructure.containerAppEnvironment)'
+          ComponentsDirectory       = 'deployment/components'
+      }
+      .\Deploy-Dapr.ps1 @deploymentArgs -Verbose
     azurePowerShellVersion: 'LatestVersion'
     pwsh: true
     workingDirectory: 'deployment'
