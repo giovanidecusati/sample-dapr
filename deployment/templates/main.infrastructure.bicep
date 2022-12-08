@@ -122,7 +122,7 @@ module moduleAkvSecret_cosmosdbMasterKey './keyVault.secret.bicep' = {
     moduleCosmosDb
   ]
   params: {
-    keyVaultName: keyVault.name
+    keyVaultName: keyVaultName
     name: 'cosmosdbMasterKey'
     secretValue: moduleCosmosDb.outputs.primaryMasterKey
     contentType: 'plain/text'
@@ -142,7 +142,7 @@ module moduleAkvSecret_cosmosdbDocumentEndpoint './keyVault.secret.bicep' = {
     moduleCosmosDb
   ]
   params: {
-    keyVaultName: keyVault.name
+    keyVaultName: keyVaultName
     name: 'cosmosdbDocumentEndpoint'
     secretValue: moduleCosmosDb.outputs.documentEndpoint
     contentType: 'plain/text'
@@ -153,11 +153,6 @@ module moduleAkvSecret_cosmosdbDocumentEndpoint './keyVault.secret.bicep' = {
     }
     expiryDate: '${dateTimeToEpoch(dateTimeAdd(baseTime, 'P1Y'))}'
   }
-}
-
-output appInsights object = {
-  id: moduleAppInsights.outputs.id
-  name: appInsights.name
 }
 
 output cosmosDb object = {
