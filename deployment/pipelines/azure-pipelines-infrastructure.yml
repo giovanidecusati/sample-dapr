@@ -29,10 +29,10 @@ steps:
           BicepFilePath     = './templates/main.infrastructure.bicep'
           TemplateOutFile   = './out/main.json'
       }
-      $output = .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
-      $output.Outputs.containerAppEnvironment.name
-      Write-Host "##vso[task.setvariable variable=containerAppEnvironment;isOutput=true]$output.Outputs.containerAppEnvironment.name"
-      $output
+      $deploymentOutput = .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
+      $containerAppEnvironment = ($deploymentOutput.Outputs['containerAppEnvironment'] | ConvertTo-Json | ConvertFrom-Json).Value.name
+      Write-Host "##vso[task.setvariable variable=containerAppEnvironment;isOutput=true]$containerAppEnvironment"
+      $containerAppEnvironment
     azurePowerShellVersion: 'LatestVersion'
     pwsh: true
     workingDirectory: 'deployment'
