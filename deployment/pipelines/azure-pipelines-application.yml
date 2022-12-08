@@ -71,7 +71,7 @@ steps:
   inputs:
     repository: '$(acrLoginServer)/$(basketApiImageName)'
     command: 'buildAndPush'
-    Dockerfile: 'Basket/Nwd.Basket.Api/Dockerfile'
+    Dockerfile: 'src/Basket/Nwd.Basket.Api/Dockerfile'
     buildContext: 'src'
     tags: |
       $(tag)
@@ -81,7 +81,7 @@ steps:
   inputs:
     repository: '$(acrLoginServer)/$(inventoryApiImageName)'
     command: 'buildAndPush'
-    Dockerfile: 'Inventory/Nwd.Inventory.Api/Dockerfile'
+    Dockerfile: 'src/Inventory/Nwd.Inventory.Api/Dockerfile'
     buildContext: 'src'
     tags: |
       $(tag)
@@ -92,7 +92,7 @@ steps:
   inputs:
     repository: '$(acrLoginServer)/$(ordersApiImageName)'
     command: 'buildAndPush'
-    Dockerfile: 'Orders/Nwd.Orders.Api/Dockerfile'
+    Dockerfile: 'src/Orders/Nwd.Orders.Api/Dockerfile'
     buildContext: 'src'
     tags: |
       $(tag)
