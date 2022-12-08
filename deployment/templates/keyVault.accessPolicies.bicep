@@ -1,7 +1,4 @@
 param keyVaultName string
-param webAppServiceObjectId string
-param apiAppServiceObjectId string
-param syncAppServiceObjectId string
 
 resource resourceKeyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
   name: keyVaultName
@@ -13,36 +10,14 @@ resource resourceKeyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicie
   properties: {
     accessPolicies: [
       {
-        objectId: webAppServiceObjectId
+        // azuredevops-giovanidecusati-spn
+        objectId: '8235c2d5-546b-44bd-863f-28d2ca81041a'
         permissions: {
           certificates: []
           keys: []
           secrets: [
             'get'
-          ]
-          storage: []
-        }
-        tenantId: subscription().tenantId
-      }
-      {
-        objectId: apiAppServiceObjectId
-        permissions: {
-          certificates: []
-          keys: []
-          secrets: [
-            'get'
-          ]
-          storage: []
-        }
-        tenantId: subscription().tenantId
-      }
-      {
-        objectId: syncAppServiceObjectId
-        permissions: {
-          certificates: []
-          keys: []
-          secrets: [
-            'get'
+            'list'
           ]
           storage: []
         }

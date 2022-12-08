@@ -112,6 +112,16 @@ module moduleKeyVault './keyVault.bicep' = {
   }
 }
 
+module moduleKeyVaultAccessPolicy './keyVault.accessPolicies.bicep' = {
+  name: 'keyVaultAccessPolicy-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+  ]
+  params: {
+    keyVaultName: keyVault.name
+  }
+}
+
 module moduleContainerRegistry './containerRegistry.bicep' = {
   name: 'containerRegistry-${buildId}'
   dependsOn: []

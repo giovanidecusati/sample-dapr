@@ -22,6 +22,7 @@ resource resourceKeyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
       bypass: 'AzureServices'
       defaultAction: 'Deny'
       ipRules: []
+      virtualNetworkRules: []
     }
     publicNetworkAccess: 'enabled'
     sku: {
