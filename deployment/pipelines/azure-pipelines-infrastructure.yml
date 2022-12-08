@@ -39,6 +39,7 @@ steps:
     workingDirectory: 'deployment'
 
 - task: AzureCLI@2
+  displayName: 'Deploy dapr components'
   inputs:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     scriptType: 'pscore'
