@@ -15,9 +15,8 @@ variables:
     value: 'nwd-basket-api'
   - name: tag
     value: '$(Build.BuildId)'
-  - group: 
-      DAPR-LAB
-      DAPR-LAB-AKV
+  - group: DAPR-LAB
+  - group: DAPR-LAB-AKV
 
 steps:
 
