@@ -102,6 +102,26 @@ module moduleContainerRegistry './containerRegistry.bicep' = {
   }
 }
 
+// Key-vault secret: appInsightsConnectionString
+module moduleAkvSecret_appInsightsConnectionString './keyVault.secret.bicep' = {
+  name: 'akvSecret_appInsightsConnectionString-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+    moduleContainerRegistry
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    name: 'appInsightsConnectionString'
+    secretValue: moduleAppInsights.outputs.ConnectionString
+    contentType: 'plain/text'
+    tags: {
+      CredentialId: 'connectionString'
+      ProviderAddress: moduleAppInsights.outputs.id
+      ValidityPeriodDays: -1
+    }
+  }
+}
+
 // Key-vault secret: acrLoginServer
 module moduleAkvSecret_acrLoginServer './keyVault.secret.bicep' = {
   name: 'akvSecret_acrLoginServer-${buildId}'

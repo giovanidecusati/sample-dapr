@@ -15,3 +15,4 @@ resource resourceAppInsights 'Microsoft.Insights/components@2020-02-02' = {
 }
 
 output id string = resourceAppInsights.id
+output ConnectionString string = resourceAppInsights.properties.ConnectionString

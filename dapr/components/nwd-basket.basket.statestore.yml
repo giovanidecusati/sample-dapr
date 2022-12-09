@@ -4,28 +4,28 @@ metadata:
   name: nwd-basket.basket
   namespace: nwd
 spec:
-  type: state.redis
-  version: v1
-  metadata:
-  - name: redisHost
-    value: redis:6379
-  - name: redisPassword
-    value: ""
-  - name: keyPrefix
-    value: basket
-  # type: state.azure.cosmosdb
+  # type: state.redis
   # version: v1
-  # initTimeout: 5m
   # metadata:
-  # - name: url
-  #   value: https://localhost:8081
-  # - name: masterKey
-  #   value: C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==
-  # - name: database
-  #   value: BasketDB
-  # - name: collection
-  #   value: Basket
-  # - name: partitionKey
-  #   value: id
+  # - name: redisHost
+  #   value: redis:6379
+  # - name: redisPassword
+  #   value: ""
+  # - name: keyPrefix
+  #   value: basket
+  type: state.azure.cosmosdb
+  version: v1
+  initTimeout: 5m
+  metadata:
+  - name: url
+    value: https://cosmos-giodapr-lab-ause.documents.azure.com:443/
+  - name: masterKey
+    value: qqsbtA7SDAdPaR8fBTbsm9f7aQH68hlSG5hiJaEmqAlbHn4EB2VOv8cGtdOU5PbSkEmBJE9Zb9W7ACDbiwznXg==
+  - name: database
+    value: BasketDB
+  - name: collection
+    value: Basket
+  - name: partitionKey
+    value: id
 scopes:
 - nwd-basket-api

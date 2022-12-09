@@ -3,6 +3,8 @@ param standardTags object
 param containerApp object
 param managedEnvironmentId string
 @secure()
+param applicationInsightsConnectionString string
+@secure()
 param acrServer string
 @secure()
 param acrUserName string
@@ -18,9 +20,10 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
   properties: {
     managedEnvironmentId: managedEnvironmentId
     configuration: {
+      activeRevisionsMode:'Single'
       dapr: {
         appId: containerApp.appId
-        appPort: 443
+        appPort: 80
         appProtocol: 'http'
         enableApiLogging: true
         enabled: true
@@ -32,7 +35,13 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
         external: false
         transport: 'auto'
         allowInsecure: false
-        targetPort: 443
+        targetPort: 80
+        traffic: [
+          {
+            latestRevision: true
+            weight: 100
+          }
+        ]
       }
       registries: [
         {
@@ -57,13 +66,36 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
             cpu: 1
             memory: '2Gi'
           }
+          probes: [
+            {
+              type: 'Readiness'
+              httpGet: {
+                port: 80
+                path: '/api/health'
+                scheme: 'HTTP'
+              }
+              periodSeconds: 240
+              timeoutSeconds: 5
+              initialDelaySeconds: 5
+              successThreshold: 1
+              failureThreshold: 3
+            }
+          ]
           env: [
             {
               name: 'ASPNETCORE_ENVIRONMENT'
-              value: 'Development'
+              value: 'Production'
+            }
+            {
+              name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+              value: applicationInsightsConnectionString
             }
           ]
         } ]
+      scale: {
+        minReplicas: 1
+        maxReplicas: 2
+      }
     }
   }
 }

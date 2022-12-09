@@ -184,6 +184,7 @@ module moduleContainerAppBasketApi './containerApp.bicep' = {
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
     acrUserName: resourceKeyVault.getSecret('acrUserName')
     managedEnvironmentId: moduleContainerAppEnvironment.outputs.id
+    applicationInsightsConnectionString:resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
 
