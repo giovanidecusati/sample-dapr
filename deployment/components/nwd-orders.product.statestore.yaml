@@ -2,9 +2,9 @@ componentType: state.azure.cosmosdb
 version: v1
 metadata:
   - name: url
-    value: https://cosmosdb-dapr-giovani.documents.azure.com:443/
+    value: https://cosmos-giodapr-lab-ause.documents.azure.com:443/
   - name: masterKey
-    value: xIZoAau3XZgye6CtyEr5ElctbXSOtjiJq3lY2DyIJDmC8DbSDHxpfb7o8KkdCkV0gFd9TByU1k2pACDbovOoXA==
+    value: qqsbtA7SDAdPaR8fBTbsm9f7aQH68hlSG5hiJaEmqAlbHn4EB2VOv8cGtdOU5PbSkEmBJE9Zb9W7ACDbiwznXg==
   - name: database
     value: OrdersDB
   - name: collection
