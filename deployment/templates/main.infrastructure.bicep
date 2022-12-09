@@ -184,7 +184,7 @@ module moduleContainerAppBasketApi './containerApp.bicep' = {
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
     acrUserName: resourceKeyVault.getSecret('acrUserName')
     managedEnvironmentId: moduleContainerAppEnvironment.outputs.id
-    applicationInsightsConnectionString:resourceKeyVault.getSecret('appInsightsConnectionString')
+    appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
 
@@ -199,6 +199,7 @@ module moduleContainerAppInventoryApi './containerApp.bicep' = {
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
     acrUserName: resourceKeyVault.getSecret('acrUserName')
     managedEnvironmentId: moduleContainerAppEnvironment.outputs.id
+    appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
 
@@ -213,6 +214,7 @@ module moduleContainerAppOrdersApi './containerApp.bicep' = {
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
     acrUserName: resourceKeyVault.getSecret('acrUserName')
     managedEnvironmentId: moduleContainerAppEnvironment.outputs.id
+    appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
 

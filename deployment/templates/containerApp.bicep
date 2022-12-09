@@ -3,7 +3,7 @@ param standardTags object
 param containerApp object
 param managedEnvironmentId string
 @secure()
-param applicationInsightsConnectionString string
+param appInsightsConnectionString string
 @secure()
 param acrServer string
 @secure()
@@ -88,7 +88,7 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
             }
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-              value: applicationInsightsConnectionString
+              value: appInsightsConnectionString
             }
           ]
         } ]
