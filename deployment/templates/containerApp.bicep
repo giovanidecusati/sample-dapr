@@ -32,7 +32,7 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
         logLevel: 'debug'
       }
       ingress: {
-        external: false
+        external: true
         transport: 'auto'
         allowInsecure: false
         targetPort: 80
