@@ -3,7 +3,7 @@ componentType: pubsub.azure.servicebus
 version: v1
 metadata:
   - name: connectionString
-    value: "Endpoint=sb://sb-giovani.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=wICmqvjeN+QfEzj53bj8f3mIN4GgqfBsYFkZ/tFDqdg="
+    value: "Endpoint=sb://sb-giodapr-lab-ause.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=MUqGGnyn0QT9SKI7RFO33ZMiHyn02HawOALqbxZw0Zw="
 scopes:
   - nwd-inventory-api
   - nwd-orders-api
