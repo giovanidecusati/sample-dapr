@@ -90,6 +90,10 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
               value: appInsightsConnectionString
             }
+            {
+              name: 'ASPNETCORE_URLS'
+              value: 'http://+:80'
+            }
           ]
         } ]
       scale: {
