@@ -47,3 +47,4 @@ resource resourceDatabases 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2
 
 output id string = resourceCosmosDb.id
 output primaryMasterKey string = resourceCosmosDb.listKeys().primaryMasterKey
+output documentEndpoint string = resourceCosmosDb.properties.documentEndpoint

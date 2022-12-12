@@ -15,8 +15,10 @@ variables:
 steps:
 
 - task: AzurePowerShell@5
+  displayName: 'Deploy container app infrastructure'
+  name: 'stepDeployInfrastructure'
   inputs:
-    azureSubscription: 'Visual Studio Enterprise com MSDN(c1bda0fc-c0e3-4b89-be00-0524b96b7b0f)'
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
       $deploymentArgs = @{
@@ -24,10 +26,10 @@ steps:
           ResourceGroupName = '$(ResourceGroupName)'
           SolutionName      = '$(SolutionName)'
           EnvironmentName   = '$(EnvironmentName)'
-          $BicepFilePath    = '.\templates\main.prereqs.bicep',
-          $TemplateOutFile  = '.\out\main.prereqs.json'
+          BicepFilePath     = './templates/main.daprcomponents.bicep'
+          TemplateOutFile   = './out/main.json'
       }
-      .\Deploy-Prereqs.ps1 @deploymentArgs -Verbose
+      .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
     azurePowerShellVersion: 'LatestVersion'
     pwsh: true
     workingDirectory: 'deployment'

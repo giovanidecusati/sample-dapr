@@ -21,32 +21,12 @@ resource resourceDatabaseContainers 'Microsoft.DocumentDB/databaseAccounts/sqlDa
   properties: {
     options: {}
     resource: {
-      conflictResolutionPolicy: {
-        conflictResolutionPath: '/_ts'
-        mode: 'LastWriterWins'
-      }
       id: container
-      indexingPolicy: {
-        automatic: true
-        compositeIndexes: []
-        excludedPaths: []
-        includedPaths: [
-          {
-            indexes: []
-            path: '/*'
-          }
-        ]
-        indexingMode: 'consistent'
-        spatialIndexes: []
-      }
       partitionKey: {
         kind: 'Hash'
         paths: [
           '/partitionKey'
         ]
-      }
-      uniqueKeyPolicy: {
-        uniqueKeys: []
       }
     }
   }

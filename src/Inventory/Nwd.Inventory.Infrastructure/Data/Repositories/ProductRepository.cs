@@ -6,7 +6,7 @@ namespace Nwd.Inventory.Infrastructure.Data.Repositories
 {
     public class ProductRepository : DaprRepositoryBase<Product>, IProductRepository
     {
-        public override string StoreName => "nwd-inventory.product";
+        public override string StoreName => "nwd-inventory-product";
 
         public override string StoreKeyName(Product entity) => $"{entity.Id}";
 

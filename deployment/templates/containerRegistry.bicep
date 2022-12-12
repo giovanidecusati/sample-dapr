@@ -19,3 +19,6 @@ resource resourceContainerRegistry 'Microsoft.ContainerRegistry/registries@2022-
 }
 
 output id string = resourceContainerRegistry.id
+output logingServer string = resourceContainerRegistry.properties.loginServer
+output password string = resourceContainerRegistry.listCredentials().passwords[0].value
+output username string = resourceContainerRegistry.listCredentials().username

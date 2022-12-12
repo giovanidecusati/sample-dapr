@@ -1,0 +1,101 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - name: buildConfiguration
+    value: 'Release'
+  - name: basketApiImageName
+    value: 'nwd-basket-api'
+  - name: inventoryApiImageName
+    value: 'nwd-inventory-api'
+  - name: ordersApiImageName
+    value: 'nwd-orders-api'
+  - name: tag
+    value: '$(Build.BuildId)'
+  - group: DAPR-LAB
+  - group: DAPR-LAB-AKV
+
+steps:
+
+- task: UseDotNet@2
+  displayName: 'Install .NET 6.x'
+  inputs:
+    version: '6.x'
+    
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore $(buildConfiguration)'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build $(buildConfiguration)'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test $(buildConfiguration)'
+  inputs:
+    command: test
+    projects: '**/*Tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish $(buildConfiguration)'
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish artifact'
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'drop'
+
+- script: |
+    docker login -u $(acrUserName) -p $(acrPassword) $(acrLoginServer)
+  displayName: 'Login to ACR'
+
+- task: Docker@2
+  displayName: 'Build and push $(basketApiImageName)'
+  inputs:
+    repository: '$(acrLoginServer)/$(basketApiImageName)'
+    command: 'buildAndPush'
+    Dockerfile: 'src/Basket/Nwd.Basket.Api/Dockerfile'
+    buildContext: 'src'
+    tags: |
+      $(tag)
+      latest
+- task: Docker@2
+  displayName: 'Build and push $(inventoryApiImageName)'
+  inputs:
+    repository: '$(acrLoginServer)/$(inventoryApiImageName)'
+    command: 'buildAndPush'
+    Dockerfile: 'src/Inventory/Nwd.Inventory.Api/Dockerfile'
+    buildContext: 'src'
+    tags: |
+      $(tag)
+      latest
+
+- task: Docker@2
+  displayName: 'Build and push $(ordersApiImageName)'
+  inputs:
+    repository: '$(acrLoginServer)/$(ordersApiImageName)'
+    command: 'buildAndPush'
+    Dockerfile: 'src/Orders/Nwd.Orders.Api/Dockerfile'
+    buildContext: 'src'
+    tags: |
+      $(tag)
+      latest

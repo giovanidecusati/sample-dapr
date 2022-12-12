@@ -4,16 +4,14 @@
 
 [CmdletBinding(SupportsShouldProcess = $true)]
 Param (
-    [String] $AppGatewayCertificateFileName,
-    [SecureString] $AppGatewayCertificatePassword,
     [Parameter(Mandatory)] [String] $SubscriptionId,
     [Parameter(Mandatory)] [String] $ResourceGroupName,
     [Parameter(Mandatory)] [String] $SolutionName,
     [Parameter(Mandatory)] [String] $EnvironmentName,    
     [string] $BuildId = ((Get-Date).ToUniversalTime()).ToString('MMddHHmm'),
     [switch] $ValidateOnly,
-    $BicepFilePath = '.\templates\main.bicep',
-    $TemplateOutFile = '.\out\mainjson'
+    $BicepFilePath = '.\templates\main.prereqs.bicep',
+    $TemplateOutFile = '.\out\main.json'
 )
 
 Import-Module .\Function.psm1 -Force
