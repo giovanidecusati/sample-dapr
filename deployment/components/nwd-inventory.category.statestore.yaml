@@ -1,5 +1,6 @@
 componentType: state.azure.cosmosdb
 version: v1
+secretStoreComponent: "appsecretstore"
 metadata:
   - name: url
     secretRef: cosmosdbDocumentEndpoint
