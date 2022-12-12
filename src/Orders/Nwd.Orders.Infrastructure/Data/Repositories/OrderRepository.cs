@@ -6,7 +6,7 @@ namespace Nwd.Orders.Infrastructure.Data.Repositories
 {
     internal class OrderRepository : DaprRepositoryBase<Order>, IOrderRepository
     {
-        public override string StoreName { get; } = "nwd-orders.order";
+        public override string StoreName { get; } = "nwd-orders-order";
 
         public override string GenerateId(Order entity) => $"{Guid.NewGuid()}";
 
