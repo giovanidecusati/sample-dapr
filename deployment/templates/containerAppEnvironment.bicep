@@ -6,6 +6,10 @@ param keyvaultName string
 param logAnalyticsCustomerId string
 @secure()
 param logAnalyticsPrimarySharedKey string
+@secure()
+param azureClientId string
+@secure()
+param azureClientSecret string
 
 resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022-06-01-preview' = {
   name: containerAppEnvironment.name
@@ -36,15 +40,15 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         }
         {
           name: 'azureTenantId'
-          value: tenant().tenantId
+          value: subscription().tenantId
         }
         {
           name: 'azureClientId'
-          value: 'd172df0b-9009-4e2b-a82e-866c63730b8e'
+          value: azureClientId
         }
         {
           name: 'azureClientSecret'
-          value: 'fcz8Q~q~W4GtjYl3yzXsLao0YdxgjadsB5.gHaOh'
+          value: azureClientSecret
         }
       ]
       scopes: [

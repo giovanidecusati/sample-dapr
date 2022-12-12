@@ -5,12 +5,12 @@ resource resourceKeyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existin
 }
 
 resource resourceKeyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-11-01-preview' = {
-  name: 'replace'
+  name: 'add'
   parent: resourceKeyVault
   properties: {
     accessPolicies: [
       {
-        // azuredevops-giovanidecusati-spn
+        // azuredevops service principal to integrate AKV with Environment Variables Group
         objectId: '8235c2d5-546b-44bd-863f-28d2ca81041a'
         permissions: {
           certificates: []

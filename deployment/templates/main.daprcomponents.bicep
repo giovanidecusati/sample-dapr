@@ -69,6 +69,8 @@ module moduleContainerAppEnvironment './containerAppEnvironment.bicep' = {
     logAnalyticsCustomerId: resourceKeyVault.getSecret('logAnalyticsWorkspaceCustomerId')
     logAnalyticsPrimarySharedKey: resourceKeyVault.getSecret('logAnalyticsWorkspacePrimarySharedKey')
     keyvaultName: keyVaultName
+    azureClientId: resourceKeyVault.getSecret('spnDaprClientId')
+    azureClientSecret: resourceKeyVault.getSecret('spnDaprClientSecret')
   }
 }
 
