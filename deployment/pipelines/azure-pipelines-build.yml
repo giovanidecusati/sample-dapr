@@ -25,10 +25,12 @@ variables:
 steps:
 
 - task: UseDotNet@2
+  displayName: 'Install .NET 6.x'
   inputs:
     version: '6.x'
     
 - task: DotNetCoreCLI@2
+  displayName: 'dotnet restore $(buildConfiguration)'
   inputs:
     command: 'restore'
     projects: '**/*.csproj'

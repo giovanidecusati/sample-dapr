@@ -15,7 +15,7 @@ variables:
 steps:
 
 - task: AzurePowerShell@5
-  displayName: 'Deploy infrastructure'
+  displayName: 'Deploy container app infrastructure'
   name: 'stepDeployInfrastructure'
   inputs:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
