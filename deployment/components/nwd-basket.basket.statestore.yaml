@@ -2,9 +2,13 @@ componentType: state.azure.cosmosdb
 version: v1
 metadata:
   - name: url
-    value: https://cosmos-giodapr-lab-ause.documents.azure.com:443/
+    secretKeyRef:
+      name: cosmosdbDocumentEndpoint
+      key: cosmosdbDocumentEndpoint
   - name: masterKey
-    value: qqsbtA7SDAdPaR8fBTbsm9f7aQH68hlSG5hiJaEmqAlbHn4EB2VOv8cGtdOU5PbSkEmBJE9Zb9W7ACDbiwznXg==
+    secretKeyRef:
+      name: cosmosdbMasterKey
+      key: cosmosdbMasterKey
   - name: database
     value: BasketDB
   - name: collection
