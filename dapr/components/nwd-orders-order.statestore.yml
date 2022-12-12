@@ -1,7 +1,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: nwd-orders.orderProcessorActor
+  name: nwd-orders-order
   namespace: nwd
 spec:
   type: state.redis
@@ -12,8 +12,6 @@ spec:
   - name: redisPassword
     value: ""
   - name: keyPrefix
-    value: orderProcessorActor
-  - name: actorStateStore
-    value: "true"
+    value: order
 scopes:
 - nwd-orders-api

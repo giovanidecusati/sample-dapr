@@ -59,6 +59,20 @@ resource resourceKeyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
 }
 
+module moduleKeyVaultAccessPolicy './keyVault.accessPolicies.bicep' = {
+  name: 'keyVaultAccessPolicy-${buildId}'
+  dependsOn: [
+    resourceKeyVault
+  ]
+  params: {
+    keyVaultName: keyVaultName
+    objectId: resourceKeyVault.getSecret('spnDaprObjectId')
+    secrets: [
+      'get'
+    ]
+  }
+}
+
 module moduleContainerAppEnvironment './containerAppEnvironment.bicep' = {
   name: 'containerAppEnvironment-${buildId}'
   dependsOn: []

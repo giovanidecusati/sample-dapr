@@ -1,7 +1,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: nwd-inventory.product
+  name: nwd-inventory-inventory
   namespace: nwd
 spec:
   type: state.redis
@@ -10,8 +10,8 @@ spec:
   - name: redisHost
     value: redis:6379
   - name: redisPassword
-    value: ""
+    value: ""  
   - name: keyPrefix
-    value: product
+    value: inventory
 scopes:
 - nwd-inventory-api

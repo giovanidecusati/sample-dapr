@@ -87,7 +87,7 @@ module moduleLogAnalyticsWorkspace './logAnalyticsWorkspace.bicep' = {
 
 module moduleAppInsights './appInsights.bicep' = {
   name: 'appInsights-${buildId}'
-  dependsOn: [ ]
+  dependsOn: []
   params: {
     location: location
     standardTags: standardTags
@@ -117,6 +117,11 @@ module moduleKeyVaultAccessPolicy './keyVault.accessPolicies.bicep' = {
   ]
   params: {
     keyVaultName: keyVault.name
+    objectId: '8235c2d5-546b-44bd-863f-28d2ca81041a' // azuredevops service principal to integrate AKV with Environment Variables Group
+    secrets: [
+      'get'
+      'list'
+    ]
   }
 }
 

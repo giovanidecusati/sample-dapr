@@ -5,7 +5,8 @@
 Param (
     [Parameter(Mandatory)] [String] $SubscriptionId,
     [Parameter(Mandatory)] [String] $ResourceGroupName,
-    [String] $TemplateFile = '.\templates\resourceGroupCleanup.bicep',
+    [String] $BicepFilePath = '.\templates\resourceGroupCleanup.bicep',
+    $TemplateOutFile = '.\out\main.json',
     [switch] $Force
 )
 
@@ -28,6 +29,14 @@ if ($context.Subscription.Id -ne $SubscriptionId) {
     Set-AzContext -SubscriptionId $SubscriptionId
 }
 
+
+    $outDir = Split-Path $TemplateOutFile
+    New-Item -Path $outDir -ItemType Directory -ErrorAction Ignore | Out-Null
+    Get-ChildItem -Path $outDir -Include *.* -File -Recurse | ForEach-Object { $_.Delete() }
+
+Write-Output 'Building bicep.'
+az bicep build --file $BicepFilePath --outfile $TemplateOutFile --verbose
+
 Write-Output 'Cleaning up resources.'
 $decision = 0
 
@@ -40,9 +49,9 @@ if (-not $Force) {
 
 if ($decision -eq 0) {
     New-AzResourceGroupDeployment `
-        -Name (Split-Path $TemplateFile -LeafBase) `
+        -Name (Split-Path $TemplateOutFile -LeafBase) `
         -ResourceGroupName $ResourceGroupName `
-        -TemplateFile $TemplateFile `
+        -TemplateFile $TemplateOutFile `
         -Force `
         -Mode Complete `
         -ErrorVariable errorMessages

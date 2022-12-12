@@ -1,7 +1,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: nwd-basket.basket
+  name: nwd-basket-basket
   namespace: nwd
 spec:
   # type: state.redis

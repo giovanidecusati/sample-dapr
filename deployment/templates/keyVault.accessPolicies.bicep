@@ -1,4 +1,7 @@
 param keyVaultName string
+@secure()
+param objectId string
+param secrets array
 
 resource resourceKeyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' existing = {
   name: keyVaultName
@@ -10,15 +13,11 @@ resource resourceKeyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicie
   properties: {
     accessPolicies: [
       {
-        // azuredevops service principal to integrate AKV with Environment Variables Group
-        objectId: '8235c2d5-546b-44bd-863f-28d2ca81041a'
+        objectId: objectId
         permissions: {
           certificates: []
           keys: []
-          secrets: [
-            'get'
-            'list'
-          ]
+          secrets: secrets
           storage: []
         }
         tenantId: subscription().tenantId
