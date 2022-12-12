@@ -332,6 +332,27 @@ module moduleAkvSecret_cosmosdbDocumentEndpoint './keyVault.secret.bicep' = {
   }
 }
 
+// Key-vault secret: servicebusConnectionString
+module moduleAkvSecret_servicebusConnectionString './keyVault.secret.bicep' = {
+  name: 'akvSecret_servicebusConnectionString-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+    moduleCosmosDb
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    name: 'servicebusConnectionString'
+    secretValue: moduleServiceBus.outputs.primaryConnectionString
+    contentType: 'plain/text'
+    tags: {
+      CredentialId: 'primaryConnectionString'
+      ProviderAddress: moduleServiceBus.outputs.id
+      ValidityPeriodDays: 365
+    }
+    expiryDate: '${dateTimeToEpoch(dateTimeAdd(baseTime, 'P1Y'))}'
+  }
+}
+
 output logAnalyticsWorkspace object = {
   id: moduleLogAnalyticsWorkspace.outputs.id
   name: logAnalyticsWorkspace.name

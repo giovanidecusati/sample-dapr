@@ -18,12 +18,7 @@ resource resourceKeyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
     enableRbacAuthorization: false
     enableSoftDelete: true
     accessPolicies: []
-    networkAcls: {
-      bypass: 'AzureServices'
-      defaultAction: 'Deny'
-      ipRules: []
-      virtualNetworkRules: []
-    }
+    networkAcls: {}
     publicNetworkAccess: 'enabled'
     sku: {
       family: 'A'
