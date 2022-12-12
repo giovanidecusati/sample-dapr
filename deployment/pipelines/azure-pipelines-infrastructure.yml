@@ -15,8 +15,7 @@ variables:
 steps:
 
 - task: AzurePowerShell@5
-  displayName: 'Deploy infrastructure'
-  name: 'stepDeployInfrastructure'
+  displayName: 'Deploy pre-requirements'
   inputs:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
@@ -29,29 +28,7 @@ steps:
           BicepFilePath     = './templates/main.infrastructure.bicep'
           TemplateOutFile   = './out/main.json'
       }
-      $deploymentOutput = .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
-      # TODO: find a better way to retrieve a value from JObject
-      $containerAppEnvironment = ($deploymentOutput.Outputs.containerAppEnvironment[0] | ConvertTo-Json | ConvertFrom-Json).Value.name
-      Write-Host "##vso[task.setvariable variable=containerAppEnvironment;isOutput=true]$containerAppEnvironment"
-      $containerAppEnvironment
+      .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
     azurePowerShellVersion: 'LatestVersion'
     pwsh: true
-    workingDirectory: 'deployment'
-
-- task: AzureCLI@2
-  displayName: 'Deploy dapr components'
-  inputs:
-    azureSubscription: 'azuredevops-giovanidecusati-spn'
-    scriptType: 'pscore'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      az extension add --name containerapp --upgrade
-      az provider register --namespace Microsoft.App
-      $deploymentArgs = @{
-          SubscriptionId            = '$(SubscriptionId)'
-          ResourceGroupName         = '$(ResourceGroupName)'
-          ContainerAppEnvironment   = '$(stepDeployInfrastructure.containerAppEnvironment)'
-          ComponentsDirectory       = 'components'
-      }
-      .\Deploy-Dapr.ps1 @deploymentArgs -Verbose
     workingDirectory: 'deployment'

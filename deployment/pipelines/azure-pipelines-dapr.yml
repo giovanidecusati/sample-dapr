@@ -1,0 +1,57 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: 
+      DAPR-LAB
+
+steps:
+
+- task: AzurePowerShell@5
+  displayName: 'Deploy infrastructure'
+  name: 'stepDeployInfrastructure'
+  inputs:
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
+    ScriptType: 'InlineScript'
+    Inline: |
+      $deploymentArgs = @{
+          SubscriptionId    = '$(SubscriptionId)'
+          ResourceGroupName = '$(ResourceGroupName)'
+          SolutionName      = '$(SolutionName)'
+          EnvironmentName   = '$(EnvironmentName)'
+          BicepFilePath     = './templates/main.dapr.bicep'
+          TemplateOutFile   = './out/main.json'
+      }
+      $deploymentOutput = .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
+      # TODO: find a better way to retrieve a value from JObject
+      $containerAppEnvironment = ($deploymentOutput.Outputs.containerAppEnvironment[0] | ConvertTo-Json | ConvertFrom-Json).Value.name
+      Write-Host "##vso[task.setvariable variable=containerAppEnvironment;isOutput=true]$containerAppEnvironment"
+      $containerAppEnvironment
+    azurePowerShellVersion: 'LatestVersion'
+    pwsh: true
+    workingDirectory: 'deployment'
+
+- task: AzureCLI@2
+  displayName: 'Deploy dapr components'
+  inputs:
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
+    scriptType: 'pscore'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az extension add --name containerapp --upgrade
+      az provider register --namespace Microsoft.App
+      $deploymentArgs = @{
+          SubscriptionId            = '$(SubscriptionId)'
+          ResourceGroupName         = '$(ResourceGroupName)'
+          ContainerAppEnvironment   = '$(stepDeployInfrastructure.containerAppEnvironment)'
+          ComponentsDirectory       = 'components'
+      }
+      .\Deploy-Dapr.ps1 @deploymentArgs -Verbose
+    workingDirectory: 'deployment'

@@ -4,11 +4,9 @@ metadata:
   - name: url
     secretKeyRef:
       name: cosmosdbDocumentEndpoint
-      key: cosmosdbDocumentEndpoint
   - name: masterKey
     secretKeyRef:
       name: cosmosdbMasterKey
-      key: cosmosdbMasterKey
   - name: database
     value: BasketDB
   - name: collection
