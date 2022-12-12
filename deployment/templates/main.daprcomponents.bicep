@@ -66,7 +66,7 @@ module moduleKeyVaultAccessPolicy './keyVault.accessPolicies.bicep' = {
   ]
   params: {
     keyVaultName: keyVaultName
-    objectId: resourceKeyVault.getSecret('spnDaprClientId')
+    objectId: resourceKeyVault.getSecret('spnDaprObjectId')
     secrets: [
       'get'
     ]
