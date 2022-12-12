@@ -2,11 +2,9 @@ componentType: state.azure.cosmosdb
 version: v1
 metadata:
   - name: url
-    secretKeyRef:
-      name: cosmosdbDocumentEndpoint
+    secretRef: cosmosdbDocumentEndpoint
   - name: masterKey
-    secretKeyRef:
-      name: cosmosdbMasterKey
+    secretRef: cosmosdbMasterKey
   - name: database
     value: OrdersDB
   - name: collection
