@@ -75,6 +75,7 @@ steps:
   inputs:
     repository: '$(acrLoginServer)/$(basketApiImageName)'
     command: 'buildAndPush'
+    arguments: '--build-arg [APPVERSION]=$(version)'
     Dockerfile: 'src/Basket/Nwd.Basket.Api/Dockerfile'
     buildContext: 'src'
     tags: |
@@ -85,6 +86,7 @@ steps:
   inputs:
     repository: '$(acrLoginServer)/$(inventoryApiImageName)'
     command: 'buildAndPush'
+    arguments: '--build-arg [APPVERSION]=$(version)'
     Dockerfile: 'src/Inventory/Nwd.Inventory.Api/Dockerfile'
     buildContext: 'src'
     tags: |
@@ -96,6 +98,7 @@ steps:
   inputs:
     repository: '$(acrLoginServer)/$(ordersApiImageName)'
     command: 'buildAndPush'
+    arguments: '--build-arg [APPVERSION]=$(version)'
     Dockerfile: 'src/Orders/Nwd.Orders.Api/Dockerfile'
     buildContext: 'src'
     tags: |
