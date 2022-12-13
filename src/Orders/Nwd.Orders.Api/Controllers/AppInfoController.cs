@@ -3,8 +3,9 @@ using System.Reflection;
 
 namespace Nwd.Orders.Api.Controllers
 {
+    [Route("api/[controller]")]
     public class AppInfoController : ControllerBase
-    {
+    {        
         [HttpGet]
         public dynamic Get()
         {

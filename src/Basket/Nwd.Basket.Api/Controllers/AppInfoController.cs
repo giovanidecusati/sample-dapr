@@ -3,6 +3,7 @@ using System.Reflection;
 
 namespace Nwd.Basket.Api.Controllers
 {
+    [Route("api/[controller]")]
     public class AppInfoController : ControllerBase
     {
         [HttpGet]

@@ -3,6 +3,7 @@ using System.Reflection;
 
 namespace Nwd.Inventory.Api.Controllers
 {
+    [Route("api/[controller]")]
     public class AppInfoController : ControllerBase
     {
         [HttpGet]
