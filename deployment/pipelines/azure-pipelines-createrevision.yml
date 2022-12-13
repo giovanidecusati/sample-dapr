@@ -24,6 +24,17 @@ variables:
 steps:
 
 - task: AzureCLI@2
+  displayName: 'Install extensions'
+  inputs:
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
+    scriptType: 'pscore'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az extension add --name containerapp --upgrade
+      az provider register --namespace Microsoft.App
+      az provider register --namespace Microsoft.App
+
+- task: AzureCLI@2
   displayName: 'Creating new revision for basket-api'
   inputs:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
