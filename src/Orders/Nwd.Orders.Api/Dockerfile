@@ -6,7 +6,6 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-ARG APPVERSION=0.0.0.1
 WORKDIR /src
 COPY ["Orders/Nwd.Orders.Api/Nwd.Orders.Api.csproj", "Orders/Nwd.Orders.Api/"]
 COPY ["Orders/Nwd.Orders.Application/Nwd.Orders.Application.csproj", "Orders/Nwd.Orders.Application/"]
@@ -16,7 +15,7 @@ COPY ["Orders/Nwd.Orders.Infrastructure/Nwd.Orders.Infrastructure.csproj", "Orde
 RUN dotnet restore "Orders/Nwd.Orders.Api/Nwd.Orders.Api.csproj"
 COPY . .
 WORKDIR "/src/Orders/Nwd.Orders.Api"
-RUN dotnet build "Nwd.Orders.Api.csproj" -c Release -o /app/build -p:Version=$APPVERSION
+RUN dotnet build "Nwd.Orders.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "Nwd.Orders.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false

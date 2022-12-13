@@ -12,7 +12,7 @@ namespace Nwd.Orders.Api.Controllers
         {
             return new
             {
-                Version = Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "1.0.0",
+                Version = Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? String.Empty,
                 Name = Assembly.GetEntryAssembly()?.GetName().Name?.ToString() ?? String.Empty
             };
         }
