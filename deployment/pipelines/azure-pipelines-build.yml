@@ -9,6 +9,8 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
+  - name: version
+    value: '1.0.0.$(Build.BuildId)'
   - name: buildConfiguration
     value: 'Release'
   - name: basketApiImageName
@@ -41,7 +43,7 @@ steps:
   inputs:
     command: 'build'
     projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration) -p:Version=$(version)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test $(buildConfiguration)'
