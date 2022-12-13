@@ -15,42 +15,38 @@ parameters:
 
 variables:
   - name: basketApiImageName
-    value: 'nwd-basket-api'
+    value: 'crgiodaprlabause.azurecr.io/nwd-basket-api'
   - name: inventoryApiImageName
-    value: 'nwd-inventory-api'
+    value: 'crgiodaprlabause.azurecr.io/nwd-inventory-api'
   - name: ordersApiImageName
-    value: 'nwd-orders-api'
+    value: 'crgiodaprlabause.azurecr.io/nwd-orders-api'
   - group: DAPR-LAB
-  - group: DAPR-LAB-AKV
  
 steps:
 
-  - task: AzureContainerAppsRC@0
-    displayName: 'Creating new revision for orders-api'
-    inputs:
-      azureSubscription: 'azuredevops-giovanidecusati-spn'
-      acrName: '$(acrName)'
-      imageToDeploy: '$(acrLoginServer)/$(ordersApiImageName):$(tag)'
-      containerAppName: '$(containerAppNameForOrdersApi)'
-      resourceGroup: '$(ResourceGroupName)'
-      targetPort: '80'
+- task: AzureCLI@2
+  displayName: 'Creating new revision for basket-api'
+  inputs:
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
+    scriptType: 'pscore'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az containerapp up --name 'ca-giodapr-lab-ause-basketapi' --resource-group '$(ResourceGroupName)' --image '$(basketApiImageName):$(tag)' --target-port 80
 
-  - task: AzureContainerAppsRC@0
-    displayName: 'Creating new revision for inventory-api'
-    inputs:
-      azureSubscription: 'azuredevops-giovanidecusati-spn'
-      acrName: '$(acrName)'
-      containerAppName: '$(containerAppNameForInventoryApi)'
-      resourceGroup: '$(ResourceGroupName)'
-      imageToDeploy: '$(acrLoginServer)/$(inventoryApiImageName):$(tag)'
-      targetPort: '80'
+- task: AzureCLI@2
+  displayName: 'Creating new revision for inventory-api'
+  inputs:
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
+    scriptType: 'pscore'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az containerapp up --name 'ca-giodapr-lab-ause-inventoryapi' --resource-group '$(ResourceGroupName)' --image '$(inventoryApiImageName):$(tag)' --target-port 80
 
-  - task: AzureContainerAppsRC@0
-    displayName: 'Creating new revision for basket-api'
-    inputs:
-      azureSubscription: 'azuredevops-giovanidecusati-spn'
-      acrName: '$(acrName)'
-      containerAppName: '$(containerAppNameForBasketApi)'
-      resourceGroup: '$(ResourceGroupName)'
-      imageToDeploy: '$(acrLoginServer)/$(basketApiImageName):$(tag)'
-      targetPort: '80'
+- task: AzureCLI@2
+  displayName: 'Creating new revision for orders-api'
+  inputs:
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
+    scriptType: 'pscore'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az containerapp up --name 'ca-giodapr-lab-ause-ordersapi' --resource-group '$(ResourceGroupName)' --image '$(ordersApiImageName):$(tag)' --target-port 80

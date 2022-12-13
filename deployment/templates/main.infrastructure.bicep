@@ -10,6 +10,8 @@ param location string = resourceGroup().location
 param buildId string
 param baseTime string = utcNow('u')
 
+// azuredevops service principal to integrate AKV with Environment Variables Group
+var spnAzureDevOps = '8235c2d5-546b-44bd-863f-28d2ca81041a'
 var standardTags = {
   environment: environmentName
   solutionName: solutionName
@@ -117,7 +119,7 @@ module moduleKeyVaultAccessPolicy './keyVault.accessPolicies.bicep' = {
   ]
   params: {
     keyVaultName: keyVault.name
-    objectId: '8235c2d5-546b-44bd-863f-28d2ca81041a' // azuredevops service principal to integrate AKV with Environment Variables Group
+    objectId: spnAzureDevOps
     secrets: [
       'get'
       'list'
