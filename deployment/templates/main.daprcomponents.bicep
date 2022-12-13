@@ -133,6 +133,54 @@ module moduleContainerAppOrdersApi './containerApp.bicep' = {
   }
 }
 
+// Key-vault secret: containerAppNameForOrdersApi
+module moduleAkvSecret_containerAppNameForOrdersApi './keyVault.secret.bicep' = {
+  name: 'akvSecret_containerAppNameForOrdersApi-${buildId}'
+  dependsOn: [
+    resourceKeyVault
+    moduleContainerAppOrdersApi
+  ]
+  params: {
+    keyVaultName: keyVaultName
+    name: 'containerAppNameForOrdersApi'
+    secretValue: containerAppOrdersApi.name
+    contentType: 'plain/text'
+    tags: {}
+  }
+}
+
+// Key-vault secret: containerAppNameForInventoryApi
+module moduleAkvSecret_containerAppNameForInventoryApi './keyVault.secret.bicep' = {
+  name: 'akvSecret_containerAppNameForInventoryApi-${buildId}'
+  dependsOn: [
+    resourceKeyVault
+    moduleContainerAppInventoryApi
+  ]
+  params: {
+    keyVaultName: keyVaultName
+    name: 'containerAppNameForInventoryApi'
+    secretValue: containerAppInventoryApi.name
+    contentType: 'plain/text'
+    tags: {}
+  }
+}
+
+// Key-vault secret: containerAppNameForBasketApi
+module moduleAkvSecret_containerAppNameForBasketApi './keyVault.secret.bicep' = {
+  name: 'akvSecret_containerAppNameForInventoryApi-${buildId}'
+  dependsOn: [
+    resourceKeyVault
+    moduleContainerAppBasketApi
+  ]
+  params: {
+    keyVaultName: keyVaultName
+    name: 'containerAppNameForBasketApi'
+    secretValue: containerAppBasketApi.name
+    contentType: 'plain/text'
+    tags: {}
+  }
+}
+
 output containerAppEnvironment object = {
   id: moduleContainerAppEnvironment.outputs.id
   name: containerAppEnvironment.name
