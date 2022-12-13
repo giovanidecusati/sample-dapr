@@ -167,7 +167,7 @@ module moduleAkvSecret_containerAppNameForInventoryApi './keyVault.secret.bicep'
 
 // Key-vault secret: containerAppNameForBasketApi
 module moduleAkvSecret_containerAppNameForBasketApi './keyVault.secret.bicep' = {
-  name: 'akvSecret_containerAppNameForInventoryApi-${buildId}'
+  name: 'akvSecret_containerAppNameForBasketApi-${buildId}'
   dependsOn: [
     resourceKeyVault
     moduleContainerAppBasketApi
