@@ -13,12 +13,6 @@ parameters:
   type: string
 
 variables:
-  - name: basketApiImageName
-    value: 'crgiodaprlabause.azurecr.io/nwd-basket-api'
-  - name: inventoryApiImageName
-    value: 'crgiodaprlabause.azurecr.io/nwd-inventory-api'
-  - name: ordersApiImageName
-    value: 'crgiodaprlabause.azurecr.io/nwd-orders-api'
   - group: DAPR-LAB
  
 steps:
