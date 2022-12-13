@@ -11,10 +11,10 @@ COPY ["Basket/Nwd.Basket.Api/Nwd.Basket.Api.csproj", "Basket/Nwd.Basket.Api/"]
 RUN dotnet restore "Basket/Nwd.Basket.Api/Nwd.Basket.Api.csproj"
 COPY . .
 WORKDIR "/src/Basket/Nwd.Basket.Api"
-RUN dotnet build "Nwd.Basket.Api.csproj" -c Release -o /app/build
+RUN dotnet build "Nwd.Basket.Api.csproj" -c Release -o /app/build -p:Version=$APPVERSION
 
 FROM build AS publish
-RUN dotnet publish "Nwd.Basket.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false -p:Version=$APPVERSION
+RUN dotnet publish "Nwd.Basket.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

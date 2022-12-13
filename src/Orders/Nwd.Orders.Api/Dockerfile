@@ -16,10 +16,10 @@ COPY ["Orders/Nwd.Orders.Infrastructure/Nwd.Orders.Infrastructure.csproj", "Orde
 RUN dotnet restore "Orders/Nwd.Orders.Api/Nwd.Orders.Api.csproj"
 COPY . .
 WORKDIR "/src/Orders/Nwd.Orders.Api"
-RUN dotnet build "Nwd.Orders.Api.csproj" -c Release -o /app/build
+RUN dotnet build "Nwd.Orders.Api.csproj" -c Release -o /app/build -p:Version=$APPVERSION
 
 FROM build AS publish
-RUN dotnet publish "Nwd.Orders.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false -p:Version=$APPVERSION
+RUN dotnet publish "Nwd.Orders.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

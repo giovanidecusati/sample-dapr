@@ -16,10 +16,10 @@ COPY ["Inventory/Nwd.Inventory.Infrastructure/Nwd.Inventory.Infrastructure.cspro
 RUN dotnet restore "Inventory/Nwd.Inventory.Api/Nwd.Inventory.Api.csproj"
 COPY . .
 WORKDIR "/src/Inventory/Nwd.Inventory.Api"
-RUN dotnet build "Nwd.Inventory.Api.csproj" -c Release -o /app/build
+RUN dotnet build "Nwd.Inventory.Api.csproj" -c Release -o /app/build -p:Version=$APPVERSION
 
 FROM build AS publish
-RUN dotnet publish "Nwd.Inventory.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false -p:Version=$APPVERSION
+RUN dotnet publish "Nwd.Inventory.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
