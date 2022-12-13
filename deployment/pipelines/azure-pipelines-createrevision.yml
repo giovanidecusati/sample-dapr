@@ -30,9 +30,10 @@ steps:
     inputs:
       azureSubscription: 'azuredevops-giovanidecusati-spn'
       acrName: '$(acrName)'
+      imageToDeploy: '$(acrLoginServer)/$(ordersApiImageName):$(tag)'
       containerAppName: '$(containerAppNameForOrdersApi)'
       resourceGroup: '$(ResourceGroupName)'
-      imageToDeploy: '$(acrLoginServer)/$(ordersApiImageName):$(tag)'
+      targetPort: '80'
 
   - task: AzureContainerAppsRC@0
     displayName: 'Creating new revision for inventory-api'
@@ -42,6 +43,7 @@ steps:
       containerAppName: '$(containerAppNameForInventoryApi)'
       resourceGroup: '$(ResourceGroupName)'
       imageToDeploy: '$(acrLoginServer)/$(inventoryApiImageName):$(tag)'
+      targetPort: '80'
 
   - task: AzureContainerAppsRC@0
     displayName: 'Creating new revision for basket-api'
@@ -51,3 +53,4 @@ steps:
       containerAppName: '$(containerAppNameForBasketApi)'
       resourceGroup: '$(ResourceGroupName)'
       imageToDeploy: '$(acrLoginServer)/$(basketApiImageName):$(tag)'
+      targetPort: '80'
