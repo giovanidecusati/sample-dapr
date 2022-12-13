@@ -41,7 +41,7 @@ steps:
     scriptType: 'pscore'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      az containerapp up --name 'ca-giodapr-lab-ause-basketapi' --resource-group '$(ResourceGroupName)' --image '$(basketApiImageName):$(tag)' --target-port 80
+      az containerapp up --name 'ca-giodapr-lab-ause-basketapi' --resource-group '$(ResourceGroupName)' --image '$(basketApiImageName):$(parameters.tag)' --target-port 80
 
 - task: AzureCLI@2
   displayName: 'Creating new revision for inventory-api'
@@ -50,7 +50,7 @@ steps:
     scriptType: 'pscore'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      az containerapp up --name 'ca-giodapr-lab-ause-inventoryapi' --resource-group '$(ResourceGroupName)' --image '$(inventoryApiImageName):$(tag)' --target-port 80
+      az containerapp up --name 'ca-giodapr-lab-ause-inventoryapi' --resource-group '$(ResourceGroupName)' --image '$(inventoryApiImageName):$(parameters.tag)' --target-port 80
 
 - task: AzureCLI@2
   displayName: 'Creating new revision for orders-api'
@@ -59,4 +59,4 @@ steps:
     scriptType: 'pscore'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      az containerapp up --name 'ca-giodapr-lab-ause-ordersapi' --resource-group '$(ResourceGroupName)' --image '$(ordersApiImageName):$(tag)' --target-port 80
+      az containerapp up --name 'ca-giodapr-lab-ause-ordersapi' --resource-group '$(ResourceGroupName)' --image '$(ordersApiImageName):$(parameters.tag)' --target-port 80
