@@ -1,0 +1,53 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+- name: tag
+  type: string
+  default: 'latest'
+
+variables:
+  - name: basketApiImageName
+    value: 'nwd-basket-api'
+  - name: inventoryApiImageName
+    value: 'nwd-inventory-api'
+  - name: ordersApiImageName
+    value: 'nwd-orders-api'
+  - group: DAPR-LAB
+  - group: DAPR-LAB-AKV
+ 
+steps:
+
+  - task: AzureContainerAppsRC@0
+    displayName: 'Creating new revision for orders-api'
+    inputs:
+      azureSubscription: 'azuredevops-giovanidecusati-spn'
+      acrName: '$(acrName)'
+      containerAppName: '$(containerAppNameForOrdersApi)'
+      resourceGroup: '$(ResourceGroupName)'
+      imageToDeploy: '$(acrLoginServer)/$(ordersApiImageName):$(tag)'
+
+  - task: AzureContainerAppsRC@0
+    displayName: 'Creating new revision for inventory-api'
+    inputs:
+      azureSubscription: 'azuredevops-giovanidecusati-spn'
+      acrName: '$(acrName)'
+      containerAppName: '$(containerAppNameForInventoryApi)'
+      resourceGroup: '$(ResourceGroupName)'
+      imageToDeploy: '$(acrLoginServer)/$(inventoryApiImageName):$(tag)'
+
+  - task: AzureContainerAppsRC@0
+    displayName: 'Creating new revision for basket-api'
+    inputs:
+      azureSubscription: 'azuredevops-giovanidecusati-spn'
+      acrName: '$(acrName)'
+      containerAppName: '$(containerAppNameForBasketApi)'
+      resourceGroup: '$(ResourceGroupName)'
+      imageToDeploy: '$(acrLoginServer)/$(basketApiImageName):$(tag)'

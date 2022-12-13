@@ -101,30 +101,3 @@ steps:
     tags: |
       $(tag)
       latest
-
-  - task: AzureContainerAppsRC@0
-    displayName: 'Update container app (orders-api)'
-    inputs:
-      azureSubscription: 'azuredevops-giovanidecusati-spn'
-      acrName: '$(acrName)'
-      containerAppName: '$(containerAppNameForOrdersApi)'
-      resourceGroup: '$(ResourceGroupName)'
-      imageToDeploy: '$(acrLoginServer)/$(ordersApiImageName)'
-
-  - task: AzureContainerAppsRC@0
-    displayName: 'Update container app (inventory-api)'
-    inputs:
-      azureSubscription: 'azuredevops-giovanidecusati-spn'
-      acrName: '$(acrName)'
-      containerAppName: '$(containerAppNameForInventoryApi)'
-      resourceGroup: '$(ResourceGroupName)'
-      imageToDeploy: '$(acrLoginServer)/$(inventoryApiImageName)'
-
-  - task: AzureContainerAppsRC@0
-    displayName: 'Update container app (basket-api)'
-    inputs:
-      azureSubscription: 'azuredevops-giovanidecusati-spn'
-      acrName: '$(acrName)'
-      containerAppName: '$(containerAppNameForBasketApi)'
-      resourceGroup: '$(ResourceGroupName)'
-      imageToDeploy: '$(acrLoginServer)/$(basketApiImageName)'
