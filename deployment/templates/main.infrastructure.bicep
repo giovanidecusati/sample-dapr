@@ -191,26 +191,6 @@ module moduleAkvSecret_appInsightsConnectionString './keyVault.secret.bicep' = {
   }
 }
 
-// Key-vault secret: acrName
-module moduleAkvSecret_acrName './keyVault.secret.bicep' = {
-  name: 'akvSecret_acrName-${buildId}'
-  dependsOn: [
-    moduleKeyVault
-    moduleContainerRegistry
-  ]
-  params: {
-    keyVaultName: keyVault.name
-    name: 'acrName'
-    secretValue: containerRegistry.name
-    contentType: 'plain/text'
-    tags: {
-      CredentialId: 'name'
-      ProviderAddress: moduleContainerRegistry.outputs.id
-      ValidityPeriodDays: -1
-    }
-  }
-}
-
 // Key-vault secret: acrLoginServer
 module moduleAkvSecret_acrLoginServer './keyVault.secret.bicep' = {
   name: 'akvSecret_acrLoginServer-${buildId}'
