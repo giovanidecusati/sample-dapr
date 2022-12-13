@@ -6,6 +6,7 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+ARG APPVERSION=0.0.0.1
 WORKDIR /src
 COPY ["Orders/Nwd.Orders.Api/Nwd.Orders.Api.csproj", "Orders/Nwd.Orders.Api/"]
 COPY ["Orders/Nwd.Orders.Application/Nwd.Orders.Application.csproj", "Orders/Nwd.Orders.Application/"]
@@ -18,7 +19,7 @@ WORKDIR "/src/Orders/Nwd.Orders.Api"
 RUN dotnet build "Nwd.Orders.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Nwd.Orders.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Nwd.Orders.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false -p:Version=$APPVERSION
 
 FROM base AS final
 WORKDIR /app
