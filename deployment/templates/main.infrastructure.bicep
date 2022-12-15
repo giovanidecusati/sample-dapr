@@ -6,7 +6,6 @@
 ])
 param environmentName string
 param solutionName string
-param devOpsObjectId string
 param buildId string
 param location string = resourceGroup().location
 param baseTime string = utcNow('u')
@@ -109,21 +108,6 @@ module moduleKeyVault './keyVault.bicep' = {
     constants: appConstants
     keyVault: keyVault
     logAnalyticsWorkspaceId: moduleLogAnalyticsWorkspace.outputs.id
-  }
-}
-
-module moduleKeyVaultAccessPolicy './keyVault.accessPolicies.bicep' = {
-  name: 'keyVaultAccessPolicy-${buildId}'
-  dependsOn: [
-    moduleKeyVault
-  ]
-  params: {
-    keyVaultName: keyVault.name
-    objectId: devOpsObjectId
-    secrets: [
-      'get'
-      'list'
-    ]
   }
 }
 

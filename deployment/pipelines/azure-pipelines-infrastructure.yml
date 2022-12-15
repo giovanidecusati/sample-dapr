@@ -20,10 +20,7 @@ steps:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
-      Import-Module .\Function.psm1
-      $devOpsObjectId = Get-CurrentUserObjectID
       $templateArgs = @{
-        DevOpsObjectId    = $devOpsObjectId
         SolutionName      = '$(SolutionName)'
         EnvironmentName   = '$(EnvironmentName)'
       }
