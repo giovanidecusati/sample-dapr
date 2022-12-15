@@ -25,9 +25,9 @@ steps:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
-      $keyVaultName = (Get-AzKeyVault -ResourceGroupName '$(SubscriptionId)').VaultName
-      $containerRegistryLoginServer  = (Get-AzContainerRegistry -ResourceGroupName '$(SubscriptionId)').LoginServer
-      $containerAppManagedEnvironmentId = (Get-AzContainerAppManagedEnv -ResourceGroupName '$(SubscriptionId)').Name
+      $keyVaultName = (Get-AzKeyVault -ResourceGroupName '$(ResourceGroupName)').VaultName
+      $containerRegistryLoginServer  = (Get-AzContainerRegistry -ResourceGroupName '$(ResourceGroupName)').LoginServer
+      $containerAppManagedEnvironmentId = (Get-AzContainerAppManagedEnv -ResourceGroupName '$(ResourceGroupName)').Name
       $templateArgs = @{
         SolutionName                      = '$(SolutionName)'
         EnvironmentName                   = '$(EnvironmentName)'
