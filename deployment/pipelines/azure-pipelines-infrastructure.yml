@@ -23,6 +23,7 @@ steps:
       $templateArgs = @{
         SolutionName      = '$(SolutionName)'
         EnvironmentName   = '$(EnvironmentName)'
+        BuildId           = '$(Build.BuildId)'
       }
       $deploymentArgs = @{
           TemplateArgs      = $templateArgs

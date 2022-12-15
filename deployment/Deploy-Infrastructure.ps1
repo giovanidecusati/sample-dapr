@@ -50,13 +50,6 @@ Write-Output 'Building bicep.'
 az bicep build --file $BicepFilePath --outfile $TemplateOutFile --verbose
 
 Write-Output 'Validating ARM Template.'
-if ($null -eq $TemplateArgs.BuildId) {
-    $TemplateArgs.Add('BuildId', $BuildId)
-}
-else {
-    $TemplateArgs.BuildId = $BuildId
-}
-
 $errorMessages = Format-ValidationOutput (Test-AzResourceGroupDeployment `
         -ResourceGroupName $ResourceGroupName `
         -SkipTemplateParameterPrompt `

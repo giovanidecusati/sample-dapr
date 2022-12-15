@@ -35,6 +35,7 @@ steps:
         imageVersion                      = $tag
         containerRegistryLoginServer      = $containerRegistryLoginServer
         containerAppManagedEnvironmentId  = $containerAppManagedEnvironmentId
+        BuildId                           = '$(Build.BuildId)'          
       }
       $deploymentArgs = @{
           TemplateArgs      = $templateArgs
