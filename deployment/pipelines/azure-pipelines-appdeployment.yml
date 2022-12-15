@@ -1,0 +1,63 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+- name: imageVersion
+  type: string
+
+variables:
+  - group: 
+      DAPR-LAB
+
+steps:
+
+- task: AzurePowerShell@5
+  displayName: 'Install Az modules'
+  inputs:
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
+    ScriptType: 'InlineScript'
+    Inline: |
+      Install-Module -Name Az.App -Force
+      Register-AzResourceProvider -ProviderNamespace Microsoft.App
+      Register-AzResourceProvider -ProviderNamespace Microsoft.OperationalInsights
+    azurePowerShellVersion: 'LatestVersion'
+    pwsh: true
+    
+- task: AzurePowerShell@5
+  displayName: 'Deploy container app infrastructure'
+  inputs:
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
+    ScriptType: 'InlineScript'
+    Inline: |
+      Import-Module Az.App
+      $keyVaultName = (Get-AzKeyVault -ResourceGroupName '$(ResourceGroupName)').VaultName
+      $containerRegistryLoginServer  = (Get-AzContainerRegistry -ResourceGroupName '$(ResourceGroupName)').LoginServer
+      $containerAppManagedEnvName = (Get-AzContainerAppManagedEnv -ResourceGroupName '$(ResourceGroupName)').Name
+      $templateArgs = @{
+        SolutionName                = '$(SolutionName)'
+        EnvironmentName             = '$(EnvironmentName)'
+        KeyVaultName                = $keyVaultName
+        imageVersion                = '${{parameters.imageVersion}}'
+        containerRegistryLoginServer= $containerRegistryLoginServer
+        containerAppManagedEnvName  = $containerAppManagedEnvName
+        BuildId                     = '$(Build.BuildId)'          
+      }
+      $deploymentArgs = @{
+          TemplateArgs      = $templateArgs
+          SubscriptionId    = '$(SubscriptionId)'
+          ResourceGroupName = '$(ResourceGroupName)'
+          BuildId           = '$(Build.BuildId)'          
+          BicepFilePath     = './templates/main.application.bicep'
+          TemplateOutFile   = './out/main.json'
+      }
+      .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
+    azurePowerShellVersion: 'LatestVersion'
+    pwsh: true
+    workingDirectory: 'deployment'

@@ -2,14 +2,9 @@ param location string
 param standardTags object
 param containerAppEnvironment object
 param keyvaultName string
-@secure()
 param logAnalyticsCustomerId string
-@secure()
 param logAnalyticsPrimarySharedKey string
-@secure()
-param azureClientId string
-@secure()
-param azureClientSecret string
+param applicationInsightsConnectionString string
 
 resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022-06-01-preview' = {
   name: containerAppEnvironment.name
@@ -17,8 +12,9 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
   tags: standardTags
   sku: {
     name: 'Consumption'
-  }
+  }  
   properties: {
+    daprAIConnectionString: applicationInsightsConnectionString
     appLogsConfiguration: {
       destination: 'log-analytics'
       logAnalyticsConfiguration: {
@@ -41,14 +37,6 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         {
           name: 'azureTenantId'
           value: subscription().tenantId
-        }
-        {
-          name: 'azureClientId'
-          value: azureClientId
-        }
-        {
-          name: 'azureClientSecret'
-          value: azureClientSecret
         }
       ]
       scopes: [

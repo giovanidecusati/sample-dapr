@@ -21,7 +21,7 @@ variables:
     value: '$(Build.BuildId)'
   - group: DAPR-LAB
   - group: DAPR-LAB-AKV
-
+ 
 steps:
 
 - task: UseDotNet@2
@@ -72,7 +72,7 @@ steps:
   displayName: 'Build and push $(basketApiImageName)'
   inputs:
     repository: '$(acrLoginServer)/$(basketApiImageName)'
-    command: 'buildAndPush'
+    command: 'buildAndPush'    
     Dockerfile: 'src/Basket/Nwd.Basket.Api/Dockerfile'
     buildContext: 'src'
     tags: |

@@ -4,52 +4,49 @@
   'dev'
   'lab'
 ])
-param environmentName string = 'dev'
-param solutionName string = 'dapr'
-param location string = resourceGroup().location
+param environmentName string
+param solutionName string
 param buildId string
+param location string = resourceGroup().location
 param baseTime string = utcNow('u')
 
 var standardTags = {
   environment: environmentName
   solutionName: solutionName
-  department: 'IT'
-  businessOwner: 'giovani'
-  technicalOwner: 'giovani'
 }
 
-var constants = {
+var appConstants = {
   nonprod: [
     'dev'
     'lab'
   ]
   diagnosticSettingName: 'defaultDiagnosticSettings'
-  dataCenterCode: 'ause'
+  dataCenterCode: 'aue'
 }
 
 var logAnalyticsWorkspace = {
-  name: 'log-${solutionName}-${environmentName}-${constants.dataCenterCode}'
-  logRetentionDays: contains(constants.nonprod, environmentName) ? 30 : 90
+  name: 'log-${solutionName}-${environmentName}-${appConstants.dataCenterCode}'
+  logRetentionDays: contains(appConstants.nonprod, environmentName) ? 30 : 90
 }
 
 var appInsights = {
-  name: 'appi-${solutionName}-${environmentName}-${constants.dataCenterCode}'
+  name: 'appi-${solutionName}-${environmentName}-${appConstants.dataCenterCode}'
 }
 
 var containerRegistry = {
-  name: 'cr${solutionName}${environmentName}${constants.dataCenterCode}'
+  name: 'cr${solutionName}${environmentName}${appConstants.dataCenterCode}'
 }
 
 var keyVault = {
-  name: 'kv-${solutionName}-${environmentName}-${constants.dataCenterCode}'
+  name: 'kv-${solutionName}-${environmentName}-${appConstants.dataCenterCode}'
 }
 
 var cosmosDb = {
-  name: 'cosmos-${solutionName}-${environmentName}-${constants.dataCenterCode}'
+  name: 'cosmos-${solutionName}-${environmentName}-${appConstants.dataCenterCode}'
   totalThroughputLimit: 4000
   locations: [
     {
-      locationName: 'australiasoutheast'
+      locationName: location
     }
   ]
   databases: [
@@ -69,7 +66,11 @@ var cosmosDb = {
 }
 
 var serviceBus = {
-  name: 'sb-${solutionName}-${environmentName}-${constants.dataCenterCode}'
+  name: 'sb-${solutionName}-${environmentName}-${appConstants.dataCenterCode}'
+}
+
+var containerAppEnvironment = {
+  name: 'cae-${solutionName}-${environmentName}-aue'
 }
 
 // ##################################################################
@@ -104,24 +105,9 @@ module moduleKeyVault './keyVault.bicep' = {
   params: {
     location: location
     standardTags: standardTags
-    constants: constants
+    constants: appConstants
     keyVault: keyVault
     logAnalyticsWorkspaceId: moduleLogAnalyticsWorkspace.outputs.id
-  }
-}
-
-module moduleKeyVaultAccessPolicy './keyVault.accessPolicies.bicep' = {
-  name: 'keyVaultAccessPolicy-${buildId}'
-  dependsOn: [
-    moduleKeyVault
-  ]
-  params: {
-    keyVaultName: keyVault.name
-    objectId: '8235c2d5-546b-44bd-863f-28d2ca81041a' // azuredevops service principal to integrate AKV with Environment Variables Group
-    secrets: [
-      'get'
-      'list'
-    ]
   }
 }
 
@@ -166,6 +152,20 @@ module moduleServiceBus './serviceBus.bicep' = {
     location: location
     standardTags: standardTags
     serviceBus: serviceBus
+  }
+}
+
+module moduleContainerAppEnvironment './containerAppEnvironment.bicep' = {
+  name: 'containerAppEnvironment-${buildId}'
+  dependsOn: []
+  params: {
+    location: location
+    standardTags: standardTags
+    containerAppEnvironment: containerAppEnvironment
+    logAnalyticsCustomerId: moduleLogAnalyticsWorkspace.outputs.customerId
+    logAnalyticsPrimarySharedKey: moduleLogAnalyticsWorkspace.outputs.primarySharedKey
+    keyvaultName: keyVault.name
+    applicationInsightsConnectionString: moduleAppInsights.outputs.ConnectionString
   }
 }
 
@@ -353,27 +353,16 @@ module moduleAkvSecret_servicebusConnectionString './keyVault.secret.bicep' = {
   }
 }
 
-output logAnalyticsWorkspace object = {
-  id: moduleLogAnalyticsWorkspace.outputs.id
-  name: logAnalyticsWorkspace.name
-}
-
-output keyVault object = {
-  id: moduleKeyVault.outputs.id
-  name: keyVault.name
-}
-
-output containerRegistry object = {
-  id: moduleContainerRegistry.outputs.id
-  name: containerRegistry.name
-}
-
-output cosmosDb object = {
-  id: moduleCosmosDb.outputs.id
-  name: cosmosDb.name
-}
-
-output serviceBus object = {
-  id: moduleServiceBus.outputs.id
-  name: serviceBus.name
-}
+output logAnalyticsWorkspaceId string = moduleLogAnalyticsWorkspace.outputs.id
+output logAnalyticsWorkspaceName string = logAnalyticsWorkspace.name
+output keyVaultId string = moduleKeyVault.outputs.id
+output keyVaultName string = keyVault.name
+output containerRegistryId string = moduleContainerRegistry.outputs.id
+output containerRegistryName string = containerRegistry.name
+output containerRegistryLoginServer string = moduleContainerRegistry.outputs.logingServer
+output cosmosDbId string = moduleCosmosDb.outputs.id
+output cosmosDbName string = cosmosDb.name
+output serviceBusId string = moduleServiceBus.outputs.id
+output serviceBusName string = serviceBus.name
+output containerAppEnvironmentId string = moduleContainerAppEnvironment.outputs.id
+output containerAppEnvironmentName string = containerAppEnvironment.name

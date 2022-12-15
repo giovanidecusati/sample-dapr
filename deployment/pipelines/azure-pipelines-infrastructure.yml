@@ -20,11 +20,16 @@ steps:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
+      $templateArgs = @{
+        SolutionName      = '$(SolutionName)'
+        EnvironmentName   = '$(EnvironmentName)'
+        BuildId           = '$(Build.BuildId)'
+      }
       $deploymentArgs = @{
+          TemplateArgs      = $templateArgs
           SubscriptionId    = '$(SubscriptionId)'
-          ResourceGroupName = '$(ResourceGroupName)'
-          SolutionName      = '$(SolutionName)'
-          EnvironmentName   = '$(EnvironmentName)'
+          ResourceGroupName = '$(ResourceGroupName)'                              
+          BuildId           = '$(Build.BuildId)'
           BicepFilePath     = './templates/main.infrastructure.bicep'
           TemplateOutFile   = './out/main.json'
       }

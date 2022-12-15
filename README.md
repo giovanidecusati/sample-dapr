@@ -54,29 +54,21 @@ Follow the steps below to setup you development enviroment.
   ```
 
 ### Let's have fun
-Open your console.
-1. Ensure you have started Azure CosmosDB Emulator.
-2. Add the following secrets to *Nwd.Orders.Api*:
-```
-{
-  "ConnectionStrings": {
-    "CosmosDB": {
-      "EndpointUrl": "https://localhost:8081/",
-      "PrimaryKey": "<your local cosmos DB Primary key>"
-    }
-  }
-}
-```
+Open Visual Studion Solition and run *docker-compose*. Solution will start and attach all application with debugging supporr.
 
-3. Run the init CLI command.
-```
-dapr init
-```
-
-2. Start Dapr dashboard in a new console.
-```
-dapr dashboard
-```
+## Deployment
+* Run *Infrastructure pipeline*.
+* Create an SPN to allow containers app get secrets from AKV.
+* Add the following values into AKV.  
+  * spnDaprClientId
+  * spnDaprClientSecret
+  * spnDaprObjectId: use below command to obtain spn Id
+  ```
+  (Get-AzADServicePrincipal -DisplayName 'spn-giodapr-lab-ause').Id
+  ```
+* Run *build pipeline*.
+* Run *dapr componets pipeline*.
+* Every new build you can run *create revision pipeline* to update containers to latest version.
 
 
 ## References
