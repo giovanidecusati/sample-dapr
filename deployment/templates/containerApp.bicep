@@ -17,10 +17,13 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
   name: containerApp.name
   location: location
   tags: standardTags
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     managedEnvironmentId: managedEnvironmentId
     configuration: {
-      activeRevisionsMode:'Single'
+      activeRevisionsMode: 'Single'
       dapr: {
         appId: containerApp.appId
         appPort: 80
@@ -102,3 +105,4 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
 
 output fqdn string = resourceContainerApp.properties.configuration.ingress.fqdn
 output id string = resourceContainerApp.id
+output principalId string = resourceContainerApp.identity.principalId

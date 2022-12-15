@@ -20,11 +20,18 @@ steps:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
+      Import-Module .\Function.psm1
+      $devOpsObjectId = Get-CurrentUserObjectID
+      $templateArgs = @{
+        DevOpsObjectId    = $devOpsObjectId
+        SolutionName      = '$(SolutionName)'
+        EnvironmentName   = '$(EnvironmentName)'
+      }
       $deploymentArgs = @{
+          TemplateArgs      = $templateArgs
           SubscriptionId    = '$(SubscriptionId)'
-          ResourceGroupName = '$(ResourceGroupName)'
-          SolutionName      = '$(SolutionName)'
-          EnvironmentName   = '$(EnvironmentName)'
+          ResourceGroupName = '$(ResourceGroupName)'                              
+          BuildId           = '$(Build.BuildId)'
           BicepFilePath     = './templates/main.infrastructure.bicep'
           TemplateOutFile   = './out/main.json'
       }

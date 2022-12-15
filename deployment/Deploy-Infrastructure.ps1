@@ -6,8 +6,7 @@
 Param (
     [Parameter(Mandatory)] [String] $SubscriptionId,
     [Parameter(Mandatory)] [String] $ResourceGroupName,
-    [Parameter(Mandatory)] [String] $SolutionName,
-    [Parameter(Mandatory)] [String] $EnvironmentName,    
+    [System.Object] $TemplateArgs,
     [string] $BuildId = ((Get-Date).ToUniversalTime()).ToString('MMddHHmm'),
     [switch] $ValidateOnly,
     $BicepFilePath = '.\templates\main.prereqs.bicep',
@@ -51,16 +50,17 @@ Write-Output 'Building bicep.'
 az bicep build --file $BicepFilePath --outfile $TemplateOutFile --verbose
 
 Write-Output 'Validating ARM Template.'
-$deploymentArguments = @{    
-    environmentName = $EnvironmentName
-    solutionName    = $SolutionName
-    buildId         = $BuildId
+if ($null -eq $TemplateArgs.BuildId) {
+    $TemplateArgs.Add('BuildId', $BuildId)
+}
+else {
+    $TemplateArgs.BuildId = $BuildId
 }
 
 $errorMessages = Format-ValidationOutput (Test-AzResourceGroupDeployment `
         -ResourceGroupName $ResourceGroupName `
         -SkipTemplateParameterPrompt `
-        -TemplateParameterObject $deploymentArguments `
+        -TemplateParameterObject $TemplateArgs `
         -TemplateFile $TemplateOutFile)
     
 if ($errorMessages) {
@@ -79,7 +79,7 @@ if (-not $ValidateOnly) {
         -TemplateFile $TemplateOutFile `
         -Force `
         -ErrorVariable errorMessages `
-        -TemplateParameterObject $deploymentArguments `
+        -TemplateParameterObject $TemplateArgs `
         -OutVariable deploymentResult
     
     if ($errorMessages) {
