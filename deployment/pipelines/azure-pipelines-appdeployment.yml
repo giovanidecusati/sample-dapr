@@ -44,7 +44,7 @@ steps:
         SolutionName                      = '$(SolutionName)'
         EnvironmentName                   = '$(EnvironmentName)'
         KeyVaultName                      = $keyVaultName
-        imageVersion                      = '{{parameters.imageVersion}}'
+        imageVersion                      = '${{parameters.imageVersion}}'
         containerRegistryLoginServer      = $containerRegistryLoginServer
         containerAppManagedEnvironmentId  = $containerAppManagedEnvironmentId
         BuildId                           = '$(Build.BuildId)'          
