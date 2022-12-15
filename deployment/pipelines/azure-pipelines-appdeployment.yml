@@ -9,7 +9,7 @@ pool:
   vmImage: ubuntu-latest
 
 parameters:
-- name: tag
+- name: imageVersion
   type: string
 
 variables:
@@ -44,7 +44,7 @@ steps:
         SolutionName                      = '$(SolutionName)'
         EnvironmentName                   = '$(EnvironmentName)'
         KeyVaultName                      = $keyVaultName
-        imageVersion                      = $tag
+        imageVersion                      = '{{parameters.imageVersion}}'
         containerRegistryLoginServer      = $containerRegistryLoginServer
         containerAppManagedEnvironmentId  = $containerAppManagedEnvironmentId
         BuildId                           = '$(Build.BuildId)'          
