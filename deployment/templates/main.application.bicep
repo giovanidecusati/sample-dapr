@@ -80,7 +80,7 @@ module moduleContainerAppInventoryApi './containerApp.bicep' = {
     acrPassword: resourceKeyVault.getSecret('acrPassword')
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
     acrUserName: resourceKeyVault.getSecret('acrUserName')
-    managedEnvironmentId: location
+    managedEnvironmentId: managedEnvironmentId
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
@@ -95,13 +95,13 @@ module moduleContainerAppOrdersApi './containerApp.bicep' = {
     acrPassword: resourceKeyVault.getSecret('acrPassword')
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
     acrUserName: resourceKeyVault.getSecret('acrUserName')
-    managedEnvironmentId: location
+    managedEnvironmentId: managedEnvironmentId
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
 
-module moduleKeyVaultAccessPolicy './keyVault.accessPolicies.bicep' = {
-  name: 'keyVaultAccessPolicy-${buildId}'
+module moduleKeyVaultAccessPolicyBasketApi './keyVault.accessPolicies.bicep' = {
+  name: 'keyVaultAccessPolicyBasketApi-${buildId}'
   dependsOn: [
     resourceKeyVault
   ]
@@ -114,20 +114,42 @@ module moduleKeyVaultAccessPolicy './keyVault.accessPolicies.bicep' = {
   }
 }
 
-output containerAppBasketApi object = {
-  id: moduleContainerAppBasketApi.outputs.id
-  name: containerAppBasketApi.name
-  fqdn: moduleContainerAppBasketApi.outputs.fqdn
+module moduleKeyVaultAccessPolicyInventoryApi './keyVault.accessPolicies.bicep' = {
+  name: 'keyVaultAccessPolicyInventoryApi-${buildId}'
+  dependsOn: [
+    resourceKeyVault
+  ]
+  params: {
+    keyVaultName: keyVaultName
+    objectId: moduleContainerAppInventoryApi.outputs.principalId
+    secrets: [
+      'get'
+    ]
+  }
 }
 
-output containerAppInventoryApi object = {
-  id: moduleContainerAppInventoryApi.outputs.id
-  name: containerAppInventoryApi.name
-  fqdn: moduleContainerAppInventoryApi.outputs.fqdn
+module moduleKeyVaultAccessPolicyOrdersApi './keyVault.accessPolicies.bicep' = {
+  name: 'keyVaultAccessPolicyOrdersApi-${buildId}'
+  dependsOn: [
+    resourceKeyVault
+  ]
+  params: {
+    keyVaultName: keyVaultName
+    objectId: moduleContainerAppOrdersApi.outputs.principalId
+    secrets: [
+      'get'
+    ]
+  }
 }
 
-output containerAppOrdersApi object = {
-  id: moduleContainerAppOrdersApi.outputs.id
-  name: containerAppOrdersApi.name
-  fqdn: moduleContainerAppOrdersApi.outputs.fqdn
-}
+output containerAppBasketApiId string = moduleContainerAppBasketApi.outputs.id
+output containerAppBasketApiName string = containerAppBasketApi.name
+output containerAppBasketApiFqdn string = moduleContainerAppBasketApi.outputs.fqdn
+
+output containerAppInventoryApiId string = moduleContainerAppInventoryApi.outputs.id
+output containerAppInventoryApiName string = containerAppInventoryApi.name
+output containerAppInventoryApiFqdn string = moduleContainerAppInventoryApi.outputs.fqdn
+
+output containerAppOrdersApiId string = moduleContainerAppOrdersApi.outputs.id
+output containerAppOrdersApiName string = containerAppOrdersApi.name
+output containerAppOrdersApiFqdn string = moduleContainerAppOrdersApi.outputs.fqdn

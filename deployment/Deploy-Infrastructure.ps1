@@ -67,7 +67,7 @@ else {
 
 if (-not $ValidateOnly) {
     New-AzResourceGroupDeployment `
-        -Name ((Split-Path $TemplateOutFile -LeafBase) + '-' + $BuildId) `
+        -Name ((Split-Path $BicepFilePath -LeafBase) + '-' + $BuildId) `
         -ResourceGroupName $ResourceGroupName `
         -SkipTemplateParameterPrompt `
         -TemplateFile $TemplateOutFile `
