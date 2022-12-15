@@ -24,7 +24,7 @@ steps:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
-      Install-Module -Name Az.App
+      Install-Module -Name Az.App -Force
       Register-AzResourceProvider -ProviderNamespace Microsoft.App
       Register-AzResourceProvider -ProviderNamespace Microsoft.OperationalInsights
     azurePowerShellVersion: 'LatestVersion'
