@@ -19,12 +19,24 @@ variables:
 steps:
 
 - task: AzurePowerShell@5
-  displayName: 'Deploy container app infrastructure'
-  name: 'stepDeployInfrastructure'
+  displayName: 'Install Az modules'
   inputs:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
+      Install-Module -Name Az.App
+      Register-AzResourceProvider -ProviderNamespace Microsoft.App
+      Register-AzResourceProvider -ProviderNamespace Microsoft.OperationalInsights
+    azurePowerShellVersion: 'LatestVersion'
+    pwsh: true
+    
+- task: AzurePowerShell@5
+  displayName: 'Deploy container app infrastructure'
+  inputs:
+    azureSubscription: 'azuredevops-giovanidecusati-spn'
+    ScriptType: 'InlineScript'
+    Inline: |
+      Import-Module Az.App
       $keyVaultName = (Get-AzKeyVault -ResourceGroupName '$(ResourceGroupName)').VaultName
       $containerRegistryLoginServer  = (Get-AzContainerRegistry -ResourceGroupName '$(ResourceGroupName)').LoginServer
       $containerAppManagedEnvironmentId = (Get-AzContainerAppManagedEnv -ResourceGroupName '$(ResourceGroupName)').Name
