@@ -41,7 +41,7 @@ steps:
           SubscriptionId    = '$(SubscriptionId)'
           ResourceGroupName = '$(ResourceGroupName)'
           BuildId           = '$(Build.BuildId)'          
-          BicepFilePath     = './templates/main.daprcomponents.bicep'
+          BicepFilePath     = './templates/main.application.bicep'
           TemplateOutFile   = './out/main.json'
       }
       .\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
