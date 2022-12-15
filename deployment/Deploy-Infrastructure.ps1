@@ -6,7 +6,7 @@
 Param (
     [Parameter(Mandatory)] [String] $SubscriptionId,
     [Parameter(Mandatory)] [String] $ResourceGroupName,
-    [System.Object] $TemplateArgs,
+    [Parameter(Mandatory)] [System.Object] $TemplateArgs,
     [string] $BuildId = ((Get-Date).ToUniversalTime()).ToString('MMddHHmm'),
     [switch] $ValidateOnly,
     $BicepFilePath = '.\templates\main.prereqs.bicep',
@@ -29,6 +29,7 @@ if ($VerbosePreference -eq "SilentlyContinue" -and $Env:SYSTEM_DEBUG) {
 }
 
 $PSBoundParameters | Format-Table | Out-String | Write-Verbose
+$TemplateArgs | Format-Table | Out-String | Write-Verbose
 
 $context = Get-AzContext
 if (-not $context) {
