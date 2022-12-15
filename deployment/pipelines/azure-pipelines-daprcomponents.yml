@@ -8,6 +8,10 @@ trigger: none
 pool:
   vmImage: ubuntu-latest
 
+parameters:
+- name: tag
+  type: string
+
 variables:
   - group: 
       DAPR-LAB
@@ -21,11 +25,22 @@ steps:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
+      $keyVaultName = (Get-AzKeyVault -ResourceGroupName '$(SubscriptionId)').VaultName
+      $containerRegistryLoginServer  = (Get-AzContainerRegistry -ResourceGroupName '$(SubscriptionId)').LoginServer
+      $containerAppManagedEnvironmentId = (Get-AzContainerAppManagedEnv -ResourceGroupName '$(SubscriptionId)').Name
+      $templateArgs = @{
+        SolutionName                      = '$(SolutionName)'
+        EnvironmentName                   = '$(EnvironmentName)'
+        KeyVaultName                      = $keyVaultName
+        imageVersion                      = $tag
+        containerRegistryLoginServer      = $containerRegistryLoginServer
+        containerAppManagedEnvironmentId  = $containerAppManagedEnvironmentId
+      }
       $deploymentArgs = @{
+          TemplateArgs      = $templateArgs
           SubscriptionId    = '$(SubscriptionId)'
           ResourceGroupName = '$(ResourceGroupName)'
-          SolutionName      = '$(SolutionName)'
-          EnvironmentName   = '$(EnvironmentName)'
+          BuildId           = '$(Build.BuildId)'          
           BicepFilePath     = './templates/main.daprcomponents.bicep'
           TemplateOutFile   = './out/main.json'
       }

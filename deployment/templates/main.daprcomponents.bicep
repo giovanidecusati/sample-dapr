@@ -8,11 +8,10 @@ param environmentName string
 param solutionName string
 param keyVaultName string
 param imageVersion string
-param containerRegistryName string
+param containerRegistryLoginserver string
 param containerAppManagedEnvironmentId string
-param location string = resourceGroup().location
 param buildId string
-param baseTime string = utcNow('u')
+param location string = resourceGroup().location
 
 var standardTags = {
   environment: environmentName
@@ -31,19 +30,19 @@ var appConstants = {
 var containerAppBasketApi = {
   name: 'ca-${solutionName}-${environmentName}-${appConstants.dataCenterCode}-basketapi'
   appId: 'nwd-basket-api'
-  image: '${containerRegistryName}/nwd-basket-api:${imageVersion}'
+  image: '${containerRegistryLoginserver}/nwd-basket-api:${imageVersion}'
 }
 
 var containerAppInventoryApi = {
   name: 'ca-${solutionName}-${environmentName}-${appConstants.dataCenterCode}-inventoryapi'
   appId: 'nwd-inventory-api'
-  image: '${containerRegistryName}/nwd-inventory-api:${imageVersion}'
+  image: '${containerRegistryLoginserver}/nwd-inventory-api:${imageVersion}'
 }
 
 var containerAppOrdersApi = {
   name: 'ca-${solutionName}-${environmentName}-${appConstants.dataCenterCode}-ordersapi'
   appId: 'nwd-orders-api'
-  image: '${containerRegistryName}/nwd-orders-api:${imageVersion}'
+  image: '${containerRegistryLoginserver}/nwd-orders-api:${imageVersion}'
 }
 
 // ##################################################################
