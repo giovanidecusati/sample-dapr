@@ -9,7 +9,7 @@ param solutionName string
 param keyVaultName string
 param imageVersion string
 param containerRegistryLoginserver string
-param containerAppManagedEnvironmentId string
+param containerAppManagedEnvName string
 param buildId string
 param location string = resourceGroup().location
 
@@ -26,6 +26,8 @@ var appConstants = {
   diagnosticSettingName: 'defaultDiagnosticSettings'
   dataCenterCode: 'aue'
 }
+
+var managedEnvironmentId = resourceId('Microsoft.App/managedEnvironments', containerAppManagedEnvName)
 
 var containerAppBasketApi = {
   name: 'ca-${solutionName}-${environmentName}-${appConstants.dataCenterCode}-basketapi'
@@ -63,7 +65,7 @@ module moduleContainerAppBasketApi './containerApp.bicep' = {
     acrPassword: resourceKeyVault.getSecret('acrPassword')
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
     acrUserName: resourceKeyVault.getSecret('acrUserName')
-    managedEnvironmentId: containerAppManagedEnvironmentId
+    managedEnvironmentId: managedEnvironmentId
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
