@@ -109,4 +109,3 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
 
 output fqdn string = resourceContainerApp.properties.configuration.ingress.fqdn
 output id string = resourceContainerApp.id
-output principalId string = resourceContainerApp.identity.principalId
