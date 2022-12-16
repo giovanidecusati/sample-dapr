@@ -2,6 +2,7 @@ param location string
 param standardTags object
 param containerApp object
 param managedEnvironmentId string
+param managedEnvironmentIdentityId string
 @secure()
 param appInsightsConnectionString string
 @secure()
@@ -18,7 +19,10 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
   location: location
   tags: standardTags
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${managedEnvironmentIdentityId}': {}
+    }
   }
   properties: {
     managedEnvironmentId: managedEnvironmentId

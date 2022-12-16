@@ -9,7 +9,8 @@ param solutionName string
 param keyVaultName string
 param imageVersion string
 param containerRegistryLoginserver string
-param containerAppManagedEnvName string
+param containerAppEnvName string
+param containerAppEnvUsrMngtIdName string
 param buildId string
 param location string = resourceGroup().location
 
@@ -27,7 +28,8 @@ var appConstants = {
   dataCenterCode: 'aue'
 }
 
-var managedEnvironmentId = resourceId('Microsoft.App/managedEnvironments', containerAppManagedEnvName)
+var managedEnvironmentId = resourceId('Microsoft.App/managedEnvironments', containerAppEnvName)
+var containerAppEnvUserManagedIdentityId = resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', containerAppEnvUsrMngtIdName)
 
 var containerAppBasketApi = {
   name: 'ca-${solutionName}-${environmentName}-${appConstants.dataCenterCode}-basketapi'
@@ -66,6 +68,7 @@ module moduleContainerAppBasketApi './containerApp.bicep' = {
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
     acrUserName: resourceKeyVault.getSecret('acrUserName')
     managedEnvironmentId: managedEnvironmentId
+    managedEnvironmentIdentityId: containerAppEnvUserManagedIdentityId
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
@@ -81,6 +84,7 @@ module moduleContainerAppInventoryApi './containerApp.bicep' = {
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
     acrUserName: resourceKeyVault.getSecret('acrUserName')
     managedEnvironmentId: managedEnvironmentId
+    managedEnvironmentIdentityId: containerAppEnvUserManagedIdentityId
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
@@ -96,49 +100,8 @@ module moduleContainerAppOrdersApi './containerApp.bicep' = {
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
     acrUserName: resourceKeyVault.getSecret('acrUserName')
     managedEnvironmentId: managedEnvironmentId
+    managedEnvironmentIdentityId: containerAppEnvUserManagedIdentityId
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
-  }
-}
-
-module moduleKeyVaultAccessPolicyBasketApi './keyVault.accessPolicies.bicep' = {
-  name: 'keyVaultAccessPolicyBasketApi-${buildId}'
-  dependsOn: [
-    resourceKeyVault
-  ]
-  params: {
-    keyVaultName: keyVaultName
-    objectId: moduleContainerAppBasketApi.outputs.principalId
-    secrets: [
-      'get'
-    ]
-  }
-}
-
-module moduleKeyVaultAccessPolicyInventoryApi './keyVault.accessPolicies.bicep' = {
-  name: 'keyVaultAccessPolicyInventoryApi-${buildId}'
-  dependsOn: [
-    resourceKeyVault
-  ]
-  params: {
-    keyVaultName: keyVaultName
-    objectId: moduleContainerAppInventoryApi.outputs.principalId
-    secrets: [
-      'get'
-    ]
-  }
-}
-
-module moduleKeyVaultAccessPolicyOrdersApi './keyVault.accessPolicies.bicep' = {
-  name: 'keyVaultAccessPolicyOrdersApi-${buildId}'
-  dependsOn: [
-    resourceKeyVault
-  ]
-  params: {
-    keyVaultName: keyVaultName
-    objectId: moduleContainerAppOrdersApi.outputs.principalId
-    secrets: [
-      'get'
-    ]
   }
 }
 

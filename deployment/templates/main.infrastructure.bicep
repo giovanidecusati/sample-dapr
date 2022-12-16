@@ -70,7 +70,11 @@ var serviceBus = {
 }
 
 var containerAppEnvironment = {
-  name: 'cae-${solutionName}-${environmentName}-aue'
+  name: 'cae-${solutionName}-${environmentName}-${appConstants.dataCenterCode}'
+}
+
+var containerAppEnvUserManagedIdentity = {
+  name: 'id-ca-${solutionName}-${environmentName}-${appConstants.dataCenterCode}'
 }
 
 // ##################################################################
@@ -108,6 +112,32 @@ module moduleKeyVault './keyVault.bicep' = {
     constants: appConstants
     keyVault: keyVault
     logAnalyticsWorkspaceId: moduleLogAnalyticsWorkspace.outputs.id
+  }
+}
+
+module moduleUserManagedIdentity './userManagedIdentity.bicep' = {
+  name: 'moduleUserManagedIdentity-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+  ]
+  params: {
+    location: location
+    managedIdentity: containerAppEnvUserManagedIdentity
+    standardTags: standardTags
+  }
+}
+
+module moduleKeyVaultUserManagedIdentity './keyVault.accessPolicies.bicep' = {
+  name: 'keyVaultUserManagedIdentity-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    objectId: moduleUserManagedIdentity.outputs.principalId
+    secrets: [
+      'get'
+    ]
   }
 }
 

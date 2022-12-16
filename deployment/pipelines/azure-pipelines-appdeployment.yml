@@ -39,14 +39,16 @@ steps:
       Import-Module Az.App
       $keyVaultName = (Get-AzKeyVault -ResourceGroupName '$(ResourceGroupName)').VaultName
       $containerRegistryLoginServer  = (Get-AzContainerRegistry -ResourceGroupName '$(ResourceGroupName)').LoginServer
-      $containerAppManagedEnvName = (Get-AzContainerAppManagedEnv -ResourceGroupName '$(ResourceGroupName)').Name
+      $containerAppEnvName = (Get-AzContainerAppManagedEnv -ResourceGroupName '$(ResourceGroupName)').Name
+      $containerAppEnvUsrMngtIdName =  (Get-AzUserAssignedIdentity -ResourceGroupName '$(ResourceGroupName)').Name
       $templateArgs = @{
         SolutionName                = '$(SolutionName)'
         EnvironmentName             = '$(EnvironmentName)'
         KeyVaultName                = $keyVaultName
         imageVersion                = '${{parameters.imageVersion}}'
         containerRegistryLoginServer= $containerRegistryLoginServer
-        containerAppManagedEnvName  = $containerAppManagedEnvName
+        containerAppEnvName         = $containerAppEnvName
+        containerAppEnvUsrMngtIdName= $containerAppEnvUsrMngtIdName
         BuildId                     = '$(Build.BuildId)'          
       }
       $deploymentArgs = @{
