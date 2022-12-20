@@ -38,9 +38,10 @@ builder.Services.SetupApplication();
 
 var app = builder.Build();
 
+await app.SeedIfEmptyAsync();
+
 if (app.Environment.IsDevelopment())
 {
-    await app.SeedIfEmptyAsync();
 
     // Add OpenAPI/Swagger middlewares
     // Serves the registered OpenAPI/Swagger documents by default on `/swagger/{documentName}/swagger.json`
