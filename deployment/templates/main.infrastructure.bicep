@@ -396,3 +396,4 @@ output serviceBusId string = moduleServiceBus.outputs.id
 output serviceBusName string = serviceBus.name
 output containerAppEnvironmentId string = moduleContainerAppEnvironment.outputs.id
 output containerAppEnvironmentName string = containerAppEnvironment.name
+output userManagedIdentityPrincipalId string = moduleUserManagedIdentity.outputs.principalId
