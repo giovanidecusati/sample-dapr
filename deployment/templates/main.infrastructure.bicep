@@ -197,6 +197,7 @@ module moduleContainerAppEnvironment './containerAppEnvironment.bicep' = {
     logAnalyticsPrimarySharedKey: moduleLogAnalyticsWorkspace.outputs.primarySharedKey
     keyvaultName: keyVault.name
     applicationInsightsConnectionString: moduleAppInsights.outputs.ConnectionString
+    managedEnvironmentIdentityClientId: moduleUserManagedIdentity.outputs.clientId
   }
 }
 

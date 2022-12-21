@@ -10,3 +10,4 @@ resource resourceUserManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIden
 
 output id string = resourceUserManagedIdentity.id
 output principalId string = resourceUserManagedIdentity.properties.principalId
+output clientId string = resourceUserManagedIdentity.properties.clientId
