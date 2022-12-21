@@ -2,23 +2,21 @@ param location string
 param standardTags object
 param containerApp object
 param managedEnvironmentId string
+param managedEnvironmentIdentityId string
 @secure()
 param appInsightsConnectionString string
 @secure()
 param acrServer string
-@secure()
-param acrUserName string
-@secure()
-param acrPassword string
-
-var passwordSecretRef = 'acr-password-secret'
 
 resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
   name: containerApp.name
   location: location
   tags: standardTags
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${managedEnvironmentIdentityId}': {}
+    }
   }
   properties: {
     managedEnvironmentId: managedEnvironmentId
@@ -48,17 +46,11 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
       }
       registries: [
         {
-          passwordSecretRef: passwordSecretRef
           server: acrServer
-          username: acrUserName
+          identity: managedEnvironmentIdentityId
         }
       ]
-      secrets: [
-        {
-          name: passwordSecretRef
-          value: acrPassword
-        }
-      ]
+      secrets: []
     }
     template: {
       containers: [ {
@@ -105,4 +97,3 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
 
 output fqdn string = resourceContainerApp.properties.configuration.ingress.fqdn
 output id string = resourceContainerApp.id
-output principalId string = resourceContainerApp.identity.principalId

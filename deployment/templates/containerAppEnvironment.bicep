@@ -5,6 +5,7 @@ param keyvaultName string
 param logAnalyticsCustomerId string
 param logAnalyticsPrimarySharedKey string
 param applicationInsightsConnectionString string
+param managedEnvironmentIdentityClientId string 
 
 resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022-06-01-preview' = {
   name: containerAppEnvironment.name
@@ -38,6 +39,11 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
           name: 'azureTenantId'
           value: subscription().tenantId
         }
+        {
+          // Only required if using user-assigned managed identity
+          name: 'azureClientId' 
+          value: managedEnvironmentIdentityClientId
+        }        
       ]
       scopes: [
         'nwd-inventory-api'

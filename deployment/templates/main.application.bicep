@@ -9,7 +9,8 @@ param solutionName string
 param keyVaultName string
 param imageVersion string
 param containerRegistryLoginserver string
-param containerAppManagedEnvName string
+param containerAppEnvName string
+param containerAppEnvUsrMngtIdName string
 param buildId string
 param location string = resourceGroup().location
 
@@ -26,8 +27,6 @@ var appConstants = {
   diagnosticSettingName: 'defaultDiagnosticSettings'
   dataCenterCode: 'aue'
 }
-
-var managedEnvironmentId = resourceId('Microsoft.App/managedEnvironments', containerAppManagedEnvName)
 
 var containerAppBasketApi = {
   name: 'ca-${solutionName}-${environmentName}-${appConstants.dataCenterCode}-basketapi'
@@ -51,6 +50,14 @@ var containerAppOrdersApi = {
 //  Modules
 // ##################################################################
 
+resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022-06-01-preview' existing = {
+  name: containerAppEnvName
+}
+
+resource moduleUserManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
+  name: containerAppEnvUsrMngtIdName
+}
+
 resource resourceKeyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
 }
@@ -62,10 +69,9 @@ module moduleContainerAppBasketApi './containerApp.bicep' = {
     location: location
     standardTags: standardTags
     containerApp: containerAppBasketApi
-    acrPassword: resourceKeyVault.getSecret('acrPassword')
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
-    acrUserName: resourceKeyVault.getSecret('acrUserName')
-    managedEnvironmentId: managedEnvironmentId
+    managedEnvironmentId: resourceContainerAppEnvironment.id
+    managedEnvironmentIdentityId: moduleUserManagedIdentity.id
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
@@ -77,10 +83,9 @@ module moduleContainerAppInventoryApi './containerApp.bicep' = {
     location: location
     standardTags: standardTags
     containerApp: containerAppInventoryApi
-    acrPassword: resourceKeyVault.getSecret('acrPassword')
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
-    acrUserName: resourceKeyVault.getSecret('acrUserName')
-    managedEnvironmentId: managedEnvironmentId
+    managedEnvironmentId: resourceContainerAppEnvironment.id
+    managedEnvironmentIdentityId: moduleUserManagedIdentity.id
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
@@ -92,53 +97,10 @@ module moduleContainerAppOrdersApi './containerApp.bicep' = {
     location: location
     standardTags: standardTags
     containerApp: containerAppOrdersApi
-    acrPassword: resourceKeyVault.getSecret('acrPassword')
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
-    acrUserName: resourceKeyVault.getSecret('acrUserName')
-    managedEnvironmentId: managedEnvironmentId
+    managedEnvironmentId: resourceContainerAppEnvironment.id
+    managedEnvironmentIdentityId: moduleUserManagedIdentity.id
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
-  }
-}
-
-module moduleKeyVaultAccessPolicyBasketApi './keyVault.accessPolicies.bicep' = {
-  name: 'keyVaultAccessPolicyBasketApi-${buildId}'
-  dependsOn: [
-    resourceKeyVault
-  ]
-  params: {
-    keyVaultName: keyVaultName
-    objectId: moduleContainerAppBasketApi.outputs.principalId
-    secrets: [
-      'get'
-    ]
-  }
-}
-
-module moduleKeyVaultAccessPolicyInventoryApi './keyVault.accessPolicies.bicep' = {
-  name: 'keyVaultAccessPolicyInventoryApi-${buildId}'
-  dependsOn: [
-    resourceKeyVault
-  ]
-  params: {
-    keyVaultName: keyVaultName
-    objectId: moduleContainerAppInventoryApi.outputs.principalId
-    secrets: [
-      'get'
-    ]
-  }
-}
-
-module moduleKeyVaultAccessPolicyOrdersApi './keyVault.accessPolicies.bicep' = {
-  name: 'keyVaultAccessPolicyOrdersApi-${buildId}'
-  dependsOn: [
-    resourceKeyVault
-  ]
-  params: {
-    keyVaultName: keyVaultName
-    objectId: moduleContainerAppOrdersApi.outputs.principalId
-    secrets: [
-      'get'
-    ]
   }
 }
 

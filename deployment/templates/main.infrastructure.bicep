@@ -70,7 +70,11 @@ var serviceBus = {
 }
 
 var containerAppEnvironment = {
-  name: 'cae-${solutionName}-${environmentName}-aue'
+  name: 'cae-${solutionName}-${environmentName}-${appConstants.dataCenterCode}'
+}
+
+var containerAppEnvUserManagedIdentity = {
+  name: 'id-ca-${solutionName}-${environmentName}-${appConstants.dataCenterCode}'
 }
 
 // ##################################################################
@@ -111,6 +115,32 @@ module moduleKeyVault './keyVault.bicep' = {
   }
 }
 
+module moduleUserManagedIdentity './userManagedIdentity.bicep' = {
+  name: 'moduleUserManagedIdentity-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+  ]
+  params: {
+    location: location
+    managedIdentity: containerAppEnvUserManagedIdentity
+    standardTags: standardTags
+  }
+}
+
+module moduleKeyVaultUserManagedIdentity './keyVault.accessPolicies.bicep' = {
+  name: 'keyVaultUserManagedIdentity-${buildId}'
+  dependsOn: [
+    moduleKeyVault
+  ]
+  params: {
+    keyVaultName: keyVault.name
+    objectId: moduleUserManagedIdentity.outputs.principalId
+    secrets: [
+      'get'
+    ]
+  }
+}
+
 module moduleContainerRegistry './containerRegistry.bicep' = {
   name: 'containerRegistry-${buildId}'
   dependsOn: []
@@ -118,6 +148,7 @@ module moduleContainerRegistry './containerRegistry.bicep' = {
     location: location
     standardTags: standardTags
     containerRegistry: containerRegistry
+    userManagedIdentityPrincipalId: moduleUserManagedIdentity.outputs.principalId
   }
 }
 
@@ -166,6 +197,7 @@ module moduleContainerAppEnvironment './containerAppEnvironment.bicep' = {
     logAnalyticsPrimarySharedKey: moduleLogAnalyticsWorkspace.outputs.primarySharedKey
     keyvaultName: keyVault.name
     applicationInsightsConnectionString: moduleAppInsights.outputs.ConnectionString
+    managedEnvironmentIdentityClientId: moduleUserManagedIdentity.outputs.clientId
   }
 }
 
@@ -326,9 +358,8 @@ module moduleAkvSecret_cosmosdbDocumentEndpoint './keyVault.secret.bicep' = {
     tags: {
       CredentialId: 'documentEndpoint'
       ProviderAddress: moduleCosmosDb.outputs.id
-      ValidityPeriodDays: 365
+      ValidityPeriodDays: -1
     }
-    expiryDate: '${dateTimeToEpoch(dateTimeAdd(baseTime, 'P1Y'))}'
   }
 }
 
@@ -366,3 +397,5 @@ output serviceBusId string = moduleServiceBus.outputs.id
 output serviceBusName string = serviceBus.name
 output containerAppEnvironmentId string = moduleContainerAppEnvironment.outputs.id
 output containerAppEnvironmentName string = containerAppEnvironment.name
+output userManagedIdentityName string = containerAppEnvUserManagedIdentity.name
+output userManagedIdentityId string = moduleUserManagedIdentity.outputs.id

@@ -12,6 +12,6 @@ spec:
    - name: redisPassword
      value: ""
    - name: keyPrefix
-     value: basket
+     value: Basket
 scopes:
 - nwd-basket-api

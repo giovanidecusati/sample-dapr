@@ -2,7 +2,7 @@
     "redisXplorer.config": {
         "profiles": [
             {
-                "name": "dapr_redis",
+                "name": "redis-1",
                 "host": "localhost",
                 "accessKey": "",
                 "filter": "*",
