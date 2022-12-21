@@ -7,12 +7,6 @@ param managedEnvironmentIdentityId string
 param appInsightsConnectionString string
 @secure()
 param acrServer string
-@secure()
-param acrUserName string
-@secure()
-param acrPassword string
-
-var passwordSecretRef = 'acr-password-secret'
 
 resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
   name: containerApp.name
@@ -52,17 +46,11 @@ resource resourceContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' =
       }
       registries: [
         {
-          passwordSecretRef: passwordSecretRef
           server: acrServer
-          username: acrUserName
+          identity: managedEnvironmentIdentityId
         }
       ]
-      secrets: [
-        {
-          name: passwordSecretRef
-          value: acrPassword
-        }
-      ]
+      secrets: []
     }
     template: {
       containers: [ {

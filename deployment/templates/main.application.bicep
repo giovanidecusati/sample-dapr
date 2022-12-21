@@ -28,9 +28,6 @@ var appConstants = {
   dataCenterCode: 'aue'
 }
 
-var managedEnvironmentId = resourceId('Microsoft.App/managedEnvironments', containerAppEnvName)
-var containerAppEnvUserManagedIdentityId = resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', containerAppEnvUsrMngtIdName)
-
 var containerAppBasketApi = {
   name: 'ca-${solutionName}-${environmentName}-${appConstants.dataCenterCode}-basketapi'
   appId: 'nwd-basket-api'
@@ -53,6 +50,14 @@ var containerAppOrdersApi = {
 //  Modules
 // ##################################################################
 
+resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022-06-01-preview' existing = {
+  name: containerAppEnvName
+}
+
+resource moduleUserManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
+  name: containerAppEnvUsrMngtIdName
+}
+
 resource resourceKeyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
 }
@@ -64,11 +69,9 @@ module moduleContainerAppBasketApi './containerApp.bicep' = {
     location: location
     standardTags: standardTags
     containerApp: containerAppBasketApi
-    acrPassword: resourceKeyVault.getSecret('acrPassword')
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
-    acrUserName: resourceKeyVault.getSecret('acrUserName')
-    managedEnvironmentId: managedEnvironmentId
-    managedEnvironmentIdentityId: containerAppEnvUserManagedIdentityId
+    managedEnvironmentId: resourceContainerAppEnvironment.id
+    managedEnvironmentIdentityId: moduleUserManagedIdentity.id
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
@@ -80,11 +83,9 @@ module moduleContainerAppInventoryApi './containerApp.bicep' = {
     location: location
     standardTags: standardTags
     containerApp: containerAppInventoryApi
-    acrPassword: resourceKeyVault.getSecret('acrPassword')
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
-    acrUserName: resourceKeyVault.getSecret('acrUserName')
-    managedEnvironmentId: managedEnvironmentId
-    managedEnvironmentIdentityId: containerAppEnvUserManagedIdentityId
+    managedEnvironmentId: resourceContainerAppEnvironment.id
+    managedEnvironmentIdentityId: moduleUserManagedIdentity.id
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
@@ -96,11 +97,9 @@ module moduleContainerAppOrdersApi './containerApp.bicep' = {
     location: location
     standardTags: standardTags
     containerApp: containerAppOrdersApi
-    acrPassword: resourceKeyVault.getSecret('acrPassword')
     acrServer: resourceKeyVault.getSecret('acrLoginServer')
-    acrUserName: resourceKeyVault.getSecret('acrUserName')
-    managedEnvironmentId: managedEnvironmentId
-    managedEnvironmentIdentityId: containerAppEnvUserManagedIdentityId
+    managedEnvironmentId: resourceContainerAppEnvironment.id
+    managedEnvironmentIdentityId: moduleUserManagedIdentity.id
     appInsightsConnectionString: resourceKeyVault.getSecret('appInsightsConnectionString')
   }
 }
