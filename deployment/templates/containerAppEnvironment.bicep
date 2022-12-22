@@ -111,7 +111,7 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
     }
   }
   resource resourceNwdInventoryActorStateStore 'daprComponents@2022-06-01-preview' = {
-    name: 'nwd-inventory-actorStateStore'
+    name: 'nwd-inventory-actorstatestore'
     dependsOn: [
       resourceSecretStore
     ]
@@ -295,7 +295,7 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
     }
   }
   resource resourceNwdOrdersActorStateStore 'daprComponents@2022-06-01-preview' = {
-    name: 'nwd-orders-actorStateStore'
+    name: 'nwd-orders-actorstatestore'
     dependsOn: [
       resourceSecretStore
     ]
