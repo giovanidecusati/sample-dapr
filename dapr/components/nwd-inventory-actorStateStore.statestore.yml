@@ -1,7 +1,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: nwd-inventory-actorStateStore
+  name: nwd-inventory-actorstatestore
   namespace: nwd
 spec:
   type: state.redis
