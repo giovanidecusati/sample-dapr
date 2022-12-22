@@ -28,6 +28,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks()
     .AddCheck<HealthCheck>("System");
 
+// Dapr Actors
+builder.Services.AddDaprActors();
+
 // Setup Infrastructure
 builder.Services.SetupInfrastructure();
 

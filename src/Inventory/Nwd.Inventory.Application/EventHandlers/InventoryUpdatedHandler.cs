@@ -14,11 +14,11 @@ namespace Nwd.Inventory.Application.EventHandlers
         {
             _transactionRepository = transactionRepository;
             _unitOfWork = unitOfWork;
-            _transactionRepository.SetUnitOfWork(_unitOfWork);
         }
 
         public async Task Handle(InventoryUpdatedEvent notification, CancellationToken cancellationToken)
         {
+            // Transactions are immutable (only history)
             if (notification.TransactionType == Domain.TransactionType.AddItem)
                 await _transactionRepository.AddAsync(Transaction.Increase(notification.ProductId, notification.StockLevel - notification.Quantity, notification.Quantity));
             else
