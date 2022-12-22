@@ -13,7 +13,6 @@ namespace Nwd.Orders.Api.Configuration
                 endpoints.MapControllers();
                 endpoints.MapActorsHandlers();
             });
-
         }
 
         public static void AddDaprActors(this IServiceCollection services)

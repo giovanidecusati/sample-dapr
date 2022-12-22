@@ -28,6 +28,9 @@ namespace Nwd.Orders.Application.Actors
         {
             _logger.LogInformation("OrderProcessorActor (UpdateInventoryAsync) has been started for Order {orderId}", orderId);
 
+            await StateManager.SetStateAsync("orderId", orderId);
+            await StateManager.SetStateAsync("isUpdateInventoryCompleted", false);
+
             var order = await _orderRepository.GetByIdAsync(orderId);
 
             order.Status = OrderStatus.Processing;
@@ -51,12 +54,17 @@ namespace Nwd.Orders.Application.Actors
 
             await _daprClient.PublishEventAsync(DaprConstants.DAPR_PUBSUB_NAME, nameof(OrderItemReservedEvent), new OrderItemReservedEvent(order.Id));
 
+            await StateManager.SetStateAsync("isUpdateInventoryCompleted", true);
+
             _logger.LogInformation("OrderProcessorActor (UpdateInventoryAsync) has been completed for Order {orderId}", orderId);
         }
 
         public async Task ProcessPaymentAsync(string orderId)
         {
             _logger.LogInformation("OrderProcessorActor (ProcessPaymentAsync) has been started for Order {orderId}", orderId);
+
+            await StateManager.SetStateAsync("orderId", orderId);
+            await StateManager.SetStateAsync("isProcessPaymentCompleted", false);
 
             var order = await _orderRepository.GetByIdAsync(orderId);
 
@@ -67,6 +75,8 @@ namespace Nwd.Orders.Application.Actors
             await _orderRepository.UpdateAsync(order);
 
             await _daprClient.PublishEventAsync(DaprConstants.DAPR_PUBSUB_NAME, nameof(OrderPaidEvent), new OrderPaidEvent(order.Id));
+
+            await StateManager.SetStateAsync("isProcessPaymentCompleted", true);
 
             _logger.LogInformation("OrderProcessorActor (ProcessPaymentAsync) has been completed for Order {orderId}", orderId);
         }

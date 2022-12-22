@@ -34,6 +34,7 @@ builder.Services.AddDaprActors();
 // Setup Infrastructure
 builder.Services.SetupInfrastructure();
 
+// Setup Application
 builder.Services.SetupApplication();
 
 var app = builder.Build();

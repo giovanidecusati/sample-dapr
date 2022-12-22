@@ -106,9 +106,47 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         }
       ]
       scopes: [
-        'nwd-inventory-api'
-        'nwd-orders-api'
         'nwd-basket-api'
+      ]
+    }
+  }
+  resource resourceNwdInventoryActorStateStore 'daprComponents@2022-06-01-preview' = {
+    name: 'nwd-inventory-actorStateStore'
+    dependsOn: [
+      resourceSecretStore
+    ]
+    properties: {
+      componentType: 'state.azure.cosmosdb'
+      version: 'v1'
+      secretStoreComponent: 'nwd-appsecretstore'
+      metadata: [
+        {
+          name: 'url'
+          secretRef: 'cosmosdbDocumentEndpoint'
+        }
+        {
+          name: 'masterKey'
+          secretRef: 'cosmosdbMasterKey'
+        }
+        {
+          name: 'database'
+          value: 'InventoryDB'
+        }
+        {
+          name: 'collection'
+          value: 'ActorStateStore'
+        }
+        {
+          name: 'partitionKey'
+          value: 'partitionKey'
+        }
+        {
+          name: 'actorStateStore'
+          value: 'true'
+        }
+      ]
+      scopes: [
+        'nwd-inventory-api'
       ]
     }
   }
@@ -145,8 +183,6 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
       ]
       scopes: [
         'nwd-inventory-api'
-        'nwd-orders-api'
-        'nwd-basket-api'
       ]
     }
   }
@@ -183,8 +219,6 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
       ]
       scopes: [
         'nwd-inventory-api'
-        'nwd-orders-api'
-        'nwd-basket-api'
       ]
     }
   }
@@ -221,8 +255,6 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
       ]
       scopes: [
         'nwd-inventory-api'
-        'nwd-orders-api'
-        'nwd-basket-api'
       ]
     }
   }
@@ -259,8 +291,46 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
       ]
       scopes: [
         'nwd-inventory-api'
+      ]
+    }
+  }
+  resource resourceNwdOrdersActorStateStore 'daprComponents@2022-06-01-preview' = {
+    name: 'nwd-orders-actorStateStore'
+    dependsOn: [
+      resourceSecretStore
+    ]
+    properties: {
+      componentType: 'state.azure.cosmosdb'
+      version: 'v1'
+      secretStoreComponent: 'nwd-appsecretstore'
+      metadata: [
+        {
+          name: 'url'
+          secretRef: 'cosmosdbDocumentEndpoint'
+        }
+        {
+          name: 'masterKey'
+          secretRef: 'cosmosdbMasterKey'
+        }
+        {
+          name: 'database'
+          value: 'OrdersDB'
+        }
+        {
+          name: 'collection'
+          value: 'ActorStateStore'
+        }
+        {
+          name: 'partitionKey'
+          value: 'partitionKey'
+        }
+        {
+          name: 'actorStateStore'
+          value: 'true'
+        }
+      ]
+      scopes: [
         'nwd-orders-api'
-        'nwd-basket-api'
       ]
     }
   }
@@ -296,9 +366,7 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         }
       ]
       scopes: [
-        'nwd-inventory-api'
         'nwd-orders-api'
-        'nwd-basket-api'
       ]
     }
   }
@@ -334,9 +402,7 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         }
       ]
       scopes: [
-        'nwd-inventory-api'
         'nwd-orders-api'
-        'nwd-basket-api'
       ]
     }
   }
@@ -372,9 +438,7 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         }
       ]
       scopes: [
-        'nwd-inventory-api'
         'nwd-orders-api'
-        'nwd-basket-api'
       ]
     }
   }
@@ -410,9 +474,7 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         }
       ]
       scopes: [
-        'nwd-inventory-api'
         'nwd-orders-api'
-        'nwd-basket-api'
       ]
     }
   }

@@ -1,5 +1,7 @@
-﻿using MediatR;
-using Nwd.Inventory.Domain;
+﻿using Dapr.Actors;
+using Dapr.Actors.Client;
+using MediatR;
+using Nwd.Inventory.Application.Actors;
 using Nwd.Inventory.Domain.Repositories;
 
 namespace Nwd.Inventory.Application.Commands.UpdateInventory
@@ -8,32 +10,24 @@ namespace Nwd.Inventory.Application.Commands.UpdateInventory
         IRequestHandler<IncreaseInventoryCommand, UpdateInventoryCommandResult>,
         IRequestHandler<DecreaseInventoryCommand, UpdateInventoryCommandResult>
     {
+        private readonly IActorProxyFactory _actorProxyFactory;
         private readonly IInventoryRepository _inventoryRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMediator _mediator;
 
-        public UpdateInventoryCommandHandler(IInventoryRepository inventoryRepository, IMediator mediator, IUnitOfWork unitOfWork)
+        public UpdateInventoryCommandHandler(IActorProxyFactory actorProxyFactory, IInventoryRepository inventoryRepository)
         {
+            _actorProxyFactory = actorProxyFactory;
             _inventoryRepository = inventoryRepository;
-            _mediator = mediator;
-            _unitOfWork = unitOfWork;
-            // Terrible approach. I would use Actor to do it, but as I'm testing, I can.
-            // This implementation should not be used to solve this concurrency scenario or race condition.
-            _inventoryRepository.SetUnitOfWork(_unitOfWork);
         }
 
         public async Task<UpdateInventoryCommandResult> Handle(IncreaseInventoryCommand request, CancellationToken cancellationToken)
         {
             _ = request ?? throw new ArgumentNullException(nameof(request));
+
+            var inventoryProcessorActor = _actorProxyFactory.CreateActorProxy<IInventoryProcessorActor>(new ActorId(request.ProductId), nameof(InventoryProcessorActor));
+
+            await inventoryProcessorActor.IncreaseInventoryAsync(request.ProductId, request.Units);
+
             var inventory = await _inventoryRepository.GetByIdAsync(request.ProductId);
-
-            inventory = inventory ?? new Domain.Entities.Inventory();
-            inventory.StockLevel += request.Units;
-            inventory.Id = request.ProductId;
-
-            await _inventoryRepository.AddAsync(inventory);
-
-            await _mediator.Publish(new InventoryUpdatedEvent(inventory.Id, inventory.StockLevel, request.Units, TransactionType.AddItem));
 
             return new UpdateInventoryCommandResult() { ProductId = inventory.Id, StockLevel = inventory.StockLevel };
         }
@@ -41,15 +35,12 @@ namespace Nwd.Inventory.Application.Commands.UpdateInventory
         public async Task<UpdateInventoryCommandResult> Handle(DecreaseInventoryCommand request, CancellationToken cancellationToken)
         {
             _ = request ?? throw new ArgumentNullException(nameof(request));
+
+            var inventoryProcessorActor = _actorProxyFactory.CreateActorProxy<IInventoryProcessorActor>(new ActorId(request.ProductId), nameof(InventoryProcessorActor));
+
+            await inventoryProcessorActor.DecreaseInventoryAsync(request.ProductId, request.Units);
+
             var inventory = await _inventoryRepository.GetByIdAsync(request.ProductId);
-
-            inventory = inventory ?? new Domain.Entities.Inventory();
-            inventory.StockLevel -= request.Units;
-            inventory.Id = request.ProductId;
-
-            await _inventoryRepository.AddAsync(inventory);
-
-            await _mediator.Publish(new InventoryUpdatedEvent(inventory.Id, inventory.StockLevel, request.Units, TransactionType.RemoveItem));
 
             return new UpdateInventoryCommandResult() { ProductId = inventory.Id, StockLevel = inventory.StockLevel };
         }
