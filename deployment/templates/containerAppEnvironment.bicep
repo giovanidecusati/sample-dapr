@@ -110,8 +110,8 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
       ]
     }
   }
-  resource resourceNwdInventoryActorStateStore 'daprComponents@2022-06-01-preview' = {
-    name: 'nwd-inventory-actorstatestore'
+  resource resourceNwdInventoryInventoryProcessorActor 'daprComponents@2022-06-01-preview' = {
+    name: 'nwd-inventory-inventoryprocessoractor'
     dependsOn: [
       resourceSecretStore
     ]
@@ -134,7 +134,7 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         }
         {
           name: 'collection'
-          value: 'ActorStateStore'
+          value: 'InventoryProcessorActor'
         }
         {
           name: 'partitionKey'
@@ -294,46 +294,6 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
       ]
     }
   }
-  resource resourceNwdOrdersActorStateStore 'daprComponents@2022-06-01-preview' = {
-    name: 'nwd-orders-actorstatestore'
-    dependsOn: [
-      resourceSecretStore
-    ]
-    properties: {
-      componentType: 'state.azure.cosmosdb'
-      version: 'v1'
-      secretStoreComponent: 'nwd-appsecretstore'
-      metadata: [
-        {
-          name: 'url'
-          secretRef: 'cosmosdbDocumentEndpoint'
-        }
-        {
-          name: 'masterKey'
-          secretRef: 'cosmosdbMasterKey'
-        }
-        {
-          name: 'database'
-          value: 'OrdersDB'
-        }
-        {
-          name: 'collection'
-          value: 'ActorStateStore'
-        }
-        {
-          name: 'partitionKey'
-          value: 'partitionKey'
-        }
-        {
-          name: 'actorStateStore'
-          value: 'true'
-        }
-      ]
-      scopes: [
-        'nwd-orders-api'
-      ]
-    }
-  }
   resource resourceNwdOrdersCustomer 'daprComponents@2022-06-01-preview' = {
     name: 'nwd-orders-customer'
     dependsOn: [
@@ -430,7 +390,7 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         }
         {
           name: 'collection'
-          value: 'orderProcessorActor'
+          value: 'OrderProcessorActor'
         }
         {
           name: 'partitionKey'
