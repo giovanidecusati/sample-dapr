@@ -20,7 +20,6 @@ variables:
   - name: tag
     value: '$(Build.BuildId)'
   - group: DAPR-LAB
-  - group: DAPR-LAB-AKV
  
 steps:
 
