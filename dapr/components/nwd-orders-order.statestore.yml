@@ -12,6 +12,6 @@ spec:
   - name: redisPassword
     value: ""
   - name: keyPrefix
-    value: Order
+    value: ordersOrder
 scopes:
 - nwd-orders-api
