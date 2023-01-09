@@ -12,7 +12,7 @@ spec:
   - name: redisPassword
     value: ""
   - name: keyPrefix
-    value: InventoryProcessorActor
+    value: inventoryInventoryProcessorActor
   - name: actorStateStore
     value: "true"
 scopes:
