@@ -109,47 +109,7 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         'nwd-basket-api'
       ]
     }
-  }
-  resource resourceNwdInventoryInventoryProcessorActor 'daprComponents@2022-06-01-preview' = {
-    name: 'nwd-inventory-inventoryprocessoractor'
-    dependsOn: [
-      resourceSecretStore
-    ]
-    properties: {
-      componentType: 'state.azure.cosmosdb'
-      version: 'v1'
-      secretStoreComponent: 'nwd-appsecretstore'
-      metadata: [
-        {
-          name: 'url'
-          secretRef: 'cosmosdbDocumentEndpoint'
-        }
-        {
-          name: 'masterKey'
-          secretRef: 'cosmosdbMasterKey'
-        }
-        {
-          name: 'database'
-          value: 'InventoryDB'
-        }
-        {
-          name: 'collection'
-          value: 'InventoryProcessorActor'
-        }
-        {
-          name: 'partitionKey'
-          value: 'partitionKey'
-        }
-        {
-          name: 'actorStateStore'
-          value: 'true'
-        }
-      ]
-      scopes: [
-        'nwd-inventory-api'
-      ]
-    }
-  }
+  }  
   resource resourceNwdInventoryCategory 'daprComponents@2022-06-01-preview' = {
     name: 'nwd-inventory-category'
     dependsOn: [
@@ -215,6 +175,46 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         {
           name: 'partitionKey'
           value: 'id'
+        }
+      ]
+      scopes: [
+        'nwd-inventory-api'
+      ]
+    }
+  }
+  resource resourceNwdInventoryInventoryProcessorActor 'daprComponents@2022-06-01-preview' = {
+    name: 'nwd-inventory-inventoryprocessoractor'
+    dependsOn: [
+      resourceSecretStore
+    ]
+    properties: {
+      componentType: 'state.azure.cosmosdb'
+      version: 'v1'
+      secretStoreComponent: 'nwd-appsecretstore'
+      metadata: [
+        {
+          name: 'url'
+          secretRef: 'cosmosdbDocumentEndpoint'
+        }
+        {
+          name: 'masterKey'
+          secretRef: 'cosmosdbMasterKey'
+        }
+        {
+          name: 'database'
+          value: 'InventoryDB'
+        }
+        {
+          name: 'collection'
+          value: 'InventoryProcessorActor'
+        }
+        {
+          name: 'partitionKey'
+          value: 'partitionKey'
+        }
+        {
+          name: 'actorStateStore'
+          value: 'true'
         }
       ]
       scopes: [

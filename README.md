@@ -54,22 +54,63 @@ Follow the steps below to setup you development enviroment.
   ```
 
 ### Let's have fun
-Open Visual Studion Solition and run *docker-compose*. Solution will start and attach all application with debugging supporr.
+Open Visual Studion Solition and run *docker-compose*. Solution will start and attach all application with debugging support.
+
+### Deploying from your local
+```
+Login-AzAccount -Subscription "??"
+
+$templateArgs = @{
+	SolutionName      = '??'
+	EnvironmentName   = 'lab'
+	BuildId 		  = ((Get-Date).ToUniversalTime()).ToString('MMddHHmm')
+}
+
+$deploymentArgs = @{
+  TemplateArgs      = $templateArgs
+  SubscriptionId    = '??'
+  ResourceGroupName = '??'
+  BicepFilePath     = '.\templates\main.infrastructure.bicep'
+  TemplateOutFile   = '.\out\main.json'
+}
+
+.\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
+
+$templateArgs = @{
+	SolutionName      			= '??'
+	EnvironmentName   			= 'lab'
+	BuildId 		  			= ((Get-Date).ToUniversalTime()).ToString('MMddHHmm')
+	KeyVaultName                = '??'
+	imageVersion                = '??'
+	containerRegistryLoginServer= '??'
+	containerAppEnvName         = '??'
+	containerAppEnvUsrMngtIdName= '??'
+}
+
+$deploymentArgs = @{
+	TemplateArgs      = $templateArgs
+	SubscriptionId    = '??'
+	ResourceGroupName = '??'
+	BuildId 		      = ((Get-Date).ToUniversalTime()).ToString('MMddHHmm')
+	BicepFilePath     = './templates/main.application.bicep'
+	TemplateOutFile   = './out/main.json'
+}
+
+.\Deploy-Infrastructure.ps1 @deploymentArgs -Verbose
+```
 
 ## Deployment
-* Run *Infrastructure pipeline*.
-* Create an SPN to allow containers app get secrets from AKV.
-* Add the following values into AKV.  
-  * spnDaprClientId
-  * spnDaprClientSecret
-  * spnDaprObjectId: use below command to obtain spn Id
-  ```
-  (Get-AzADServicePrincipal -DisplayName 'spn-giodapr-lab-ause').Id
-  ```
-* Run *build pipeline*.
-* Run *dapr componets pipeline*.
-* Every new build you can run *create revision pipeline* to update containers to latest version.
+This solution uses Azure DevOps pipelines integrated with GH. You can check out YML pipelines into *deployment\pipelines* folder.
+Run the pipelines following:
 
 
 ## References
 1. Getting started - [https:/docs.dapr.io/getting-started/](https://docs.dapr.io/getting-started/)
+2. Dapr Official Web Site - https://dapr.io/
+    * https://learn.microsoft.com/en-us/azure/container-apps/overview
+    * https://learn.microsoft.com/en-us/dotnet/architecture/dapr-for-net-developers/getting-started 
+3. Youtube presentation about Dapr and Container App
+    * https://www.youtube.com/watch?v=zoUcSduCRAE
+    * https://www.youtube.com/watch?v=UWGVT3yyrKw 
+4. MS Dapr Application Example
+    * https://github.com/dotnet-architecture/eShopOnDapr
