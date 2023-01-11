@@ -56,11 +56,11 @@ var cosmosDb = {
     }
     {
       name: 'InventoryDB'
-      containers: [ 'Category', 'Inventory', 'Product', 'Transaction' ]
+      containers: [ 'Category', 'Inventory', 'Product', 'Transaction', 'InventoryProcessorActor' ]
     }
     {
       name: 'OrdersDB'
-      containers: [ 'Customer', 'Order', 'orderProcessorActor', 'Product' ]
+      containers: [ 'Customer', 'Order', 'Product', 'OrderProcessorActor' ]
     }
   ]
 }
