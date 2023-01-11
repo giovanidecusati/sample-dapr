@@ -394,7 +394,11 @@ resource resourceContainerAppEnvironment 'Microsoft.App/managedEnvironments@2022
         }
         {
           name: 'partitionKey'
-          value: 'id'
+          value: 'partitionKey'
+        }
+        {
+          name: 'actorStateStore'
+          value: 'true'
         }
       ]
       scopes: [
