@@ -24,6 +24,7 @@ steps:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
+      Select-AzSubscription -SubscriptionId '$(SubscriptionId)'
       Install-Module -Name Az.App -Force
       Register-AzResourceProvider -ProviderNamespace Microsoft.App
       Register-AzResourceProvider -ProviderNamespace Microsoft.OperationalInsights
@@ -36,6 +37,7 @@ steps:
     azureSubscription: 'azuredevops-giovanidecusati-spn'
     ScriptType: 'InlineScript'
     Inline: |
+      Select-AzSubscription -SubscriptionId '$(SubscriptionId)'
       Import-Module Az.App
       $keyVaultName = (Get-AzKeyVault -ResourceGroupName '$(ResourceGroupName)').VaultName
       $containerRegistryLoginServer  = (Get-AzContainerRegistry -ResourceGroupName '$(ResourceGroupName)').LoginServer
